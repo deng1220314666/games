@@ -1,4 +1,5 @@
 import { gaLogEvent } from "@/utils/event.js";
+import { loadScript } from "@/utils/common.js";
 
 // Adsterra SDK 配置
 export const AdsterraAd = {
@@ -13,7 +14,7 @@ export const AdsterraAd = {
 
   async showSocialBar() {
     try {
-      await window.loadScript("https://pl27893768.profitablecpmratenetwork.com/2e/b8/74/2eb87400c5dffb7412e3616deb63408a.js", "Adsterra");
+      await loadScript("https://pl27893768.profitablecpmratenetwork.com/2e/b8/74/2eb87400c5dffb7412e3616deb63408a.js", "Adsterra");
     } catch(e) {
       console.log("SocialBar", e)
     }
