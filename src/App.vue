@@ -1,6 +1,6 @@
 <template>
   <div class="h-custom-vh max-w-xl m-auto theme-transition bg-theme-bg text-theme-text hide-scrollbar flex flex-col" :data-theme="theme">
-    <Header />
+    <!-- <Header /> -->
     <!-- 主要内容 -->
     <main class="w-full box-border max-w-7xl mx-auto px-2 sm:px-1 lg:px-2 py-2 flex-1 overflow-y-auto hide-scrollbar z-0">
       <router-view />

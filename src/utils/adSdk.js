@@ -1,5 +1,5 @@
 import { gaLogEvent } from "@/utils/event.js";
-import { loadScript } from "@/utils/common.js";
+import { loadScript } from "@/utils/index.js";
 
 // Adsterra SDK 配置
 export const AdsterraAd = {

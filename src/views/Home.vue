@@ -20,8 +20,9 @@
       </div>
       <!-- 游戏网格 -->
       <GameGrild :games="item.games"/>
-
     </div>
+
+    <Footer />
   </div>
 </template>
 
@@ -34,6 +35,7 @@ import {useRouter} from "vue-router";
 import GameGrild from "@/components/GameGrild.vue";
 import { getGames, getCategory} from "@/api/mock.js";
 import AdsterraManager from "@/components/AdsterraManager.vue";
+import Footer from "@/components/Footer.vue";
 
 const router = useRouter()
 
