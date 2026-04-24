@@ -2,11 +2,12 @@
   <div class="home flex flex-col items-start">
     <div v-for="(item, index) in category" :key="index" class="w-full mb-4">
       <AdsterraManager v-if="index === 1" />
+      <ExoclickManager v-if="index === 2" />
 
       <!-- 分类标题栏 -->
       <div
           class="category-header flex items-center justify-between p-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl mb-4 cursor-pointer hover:shadow-lg transition-all duration-300"
-          @click="navigateToCategory(item.id)"
+          @click="navigateToCategory()"
       >
         <div class="flex items-center">
           <img :src="item.img" alt="" class="w-10 h-10 mr-3 bg-white rounded-full p-1">
@@ -35,7 +36,9 @@ import {useRouter} from "vue-router";
 import GameGrild from "@/components/GameGrild.vue";
 import { getGames, getCategory} from "@/api/mock.js";
 import AdsterraManager from "@/components/AdsterraManager.vue";
+import ExoclickManager from "@/components/ExoclickManager.vue";
 import Footer from "@/components/Footer.vue";
+import { smartLink } from "@/config/index.js";
 
 const router = useRouter()
 
@@ -59,8 +62,9 @@ const navigateToGameDetail = (id) => {
 }
 
 // 跳转到分类游戏页面
-const navigateToCategory = (categoryId) => {
-  router.push({path: '/search', query: {categoryId}})
+const navigateToCategory = () => {
+  const item = smartLink[Math.floor(Math.random() * smartLink.length)] || "https://www.profitablecpmratenetwork.com/eet0d835?key=edd631eedc507862650ff626c430b6da";
+  window.open(item, '_blank');
 }
 </script>
 
