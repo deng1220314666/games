@@ -1,0 +1,131 @@
+{
+  "app": {
+    "title": "TTGame",
+    "description": "TTGame"
+  },
+  "header": {
+    "searchGame": "Search games..."
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact",
+    "privacyPolicy": "Privacy Policy"
+  },
+  "home": {
+    "title": "Welcome Home",
+    "description": "This is the home page with lazy-loaded routing.",
+    "features": "Features",
+    "counter": {
+      "title": "Counter Demo",
+      "increment": "Increment",
+      "decrement": "Decrement",
+      "reset": "Reset"
+    },
+    "api": {
+      "title": "API Test",
+      "fetch": "Fetch Data",
+      "loading": "Loading..."
+    }
+  },
+  "about": {
+    "title": "About TTGame",
+    "description": "At TTGame.fun, we believe gaming should be accessible anytime, anywhere, on any device. As a next-generation HTML5 gaming platform, we provide players around the globe with a seamless and engaging experience — no downloads, no installations, just instant fun.",
+    "mission_title": "Our Mission",
+    "mission_desc": "Our mission is simple:",
+    "mission_points": [
+      {
+        "icon": "🌐",
+        "title": "Connect players and games effortlessly"
+      },
+      {
+        "icon": "🎯",
+        "title": "Deliver high-quality, lightweight entertainment"
+      },
+      {
+        "icon": "🤝",
+        "title": "Create a global hub for casual and social gamers"
+      }
+    ],
+    "why_title": "Why Choose TTGame?",
+    "why_points": [
+      { "icon": "🎮", "title": "Play instantly", "desc": "Games launch directly in your browser." },
+      { "icon": "📱", "title": "Cross-platform compatibility", "desc": "Enjoy the same smooth experience on mobile, tablet, or PC." },
+      { "icon": "🌎", "title": "Global community", "desc": "Connect with players from around the world." },
+      { "icon": "🚀", "title": "Continuous innovation", "desc": "We're constantly expanding our library with fresh, exciting titles." }
+    ],
+    "footer": "At TTGame, gaming is more than just playing — it's about sharing joy, building connections, and experiencing endless fun."
+  },
+  "contact": {
+    "title": "WE'D LOVE TO HEAR FROM YOU!",
+    "desc": "Our friendly Help Team can be reached Monday through Friday, from 7 am to 5 pm, Pacific Time.",
+    "email": "Please contact us directly at: "
+  },
+  "footer": {
+    "copyright": "Copyright © {year} TTGame.fun"
+  },
+  "common": {
+    "learnMore": "Learn More",
+    "getSupport": "Get Support",
+    "demo": "Demo",
+    "viewDetails": "View Details",
+    "readMore": "Read More",
+    "success": "Success",
+    "error": "Error",
+    "historyGame": "History",
+    "recommend": "Recommend",
+    "menu": "Menu"
+  },
+  "gameSearch": {
+    "title": "Game Search",
+    "searchLabel": "Search Games",
+    "searchPlaceholder": "Enter game name or description",
+    "gameTypeLabel": "Game Type",
+    "allTypes": "All Types",
+    "searchButton": "Search",
+    "noResults": "No games found matching your criteria",
+    "free": "Free",
+    "viewDetails": "View Details",
+    "more": "More",
+    "shooting": "Shooting",
+    "ball": "Ball",
+    "match3": "Match3",
+    "sort": "Sort",
+    "boom blast": "Boom Blast",
+    "tower defense": "Tower Defense",
+    "puzzle": "Puzzle",
+    "merge": "Merge",
+    "running": "Running",
+    "find difference": "Find Difference",
+    "parking": "Parking",
+    "connect": "Connect",
+    "music": "Music"
+  },
+  "gameDetail": {
+    "title": "Game Details",
+    "backButton": "Back",
+    "startGame": "Start Game",
+    "gameLoading": "Loading Game...",
+    "playingGame": "Now Playing:",
+    "closeGame": "Close Game",
+    "fullscreen": "fullscreen",
+    "tagsLabel": "Tags",
+    "loading": "Loading...",
+    "gameNotFound": "Game Not Found",
+    "loadFailed": "Failed to Load Game Details"
+  },
+  "privacyPolicy": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last Updated",
+    "introduction": "Introduction",
+    "infoCollection": "Information Collection",
+    "adsense": "Google AdSense",
+    "infoUsage": "Information Usage",
+    "infoSharing": "Information Sharing",
+    "dataSecurity": "Data Security",
+    "yourRights": "Your Rights",
+    "childrenPrivacy": "Children's Privacy",
+    "policyChanges": "Policy Changes",
+    "contactUs": "Contact Us"
+  }
+}
