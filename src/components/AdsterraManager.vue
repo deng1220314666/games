@@ -13,7 +13,11 @@ import { AdsterraAd } from "@/utils/adSdk.js";
 
 onMounted(() => {
   if (AdsterraAd) {
-    AdsterraAd.init();
+    AdsterraAd.showBanner();
+
+    setTimeout(() => {
+      AdsterraAd.showSocialBar()
+    }, 2000)
   }
 })
 </script>

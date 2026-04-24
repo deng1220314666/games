@@ -13,10 +13,10 @@ export const AdsterraAd = {
 
   async showSocialBar() {
     try {
-			await window.loadScript("https://pl27893768.profitablecpmratenetwork.com/2e/b8/74/2eb87400c5dffb7412e3616deb63408a.js", "Adsterra");
-		} catch(e) {
-			console.log("SocialBar", e)
-		}
+      await window.loadScript("https://pl27893768.profitablecpmratenetwork.com/2e/b8/74/2eb87400c5dffb7412e3616deb63408a.js", "Adsterra");
+    } catch(e) {
+      console.log("SocialBar", e)
+    }
   },
 
   async showBanner(size) {
@@ -29,10 +29,10 @@ export const AdsterraAd = {
     // 2️⃣ 设置 atOptions 配置
     window.atOptions = {
       'key' : 'd485bca4ce91450e3b58525457ee556a',
-			'format' : 'iframe',
-			'height' : 250,
-			'width' : 300,
-			'params' : {}
+      'format' : 'iframe',
+      'height' : 250,
+      'width' : 300,
+      'params' : {}
     };
 
     // 3️⃣ 动态插入广告脚本
