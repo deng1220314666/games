@@ -7,7 +7,7 @@ export function initGA() {
   // 1. 创建 script
   const script = document.createElement('script');
   script.async = true;
-  script.src = 'https://www.googletagmanager.com/gtag/js?id=G-TVQG0XN7BT';
+  script.src = 'https://www.googletagmanager.com/gtag/js?id=G-92Y764QQW2';
   document.head.appendChild(script);
 
   // 2. 初始化 gtag
@@ -20,7 +20,7 @@ export function initGA() {
   window.gtag = gtag;
 
   gtag('js', new Date());
-  gtag('config', 'G-TVQG0XN7BT', {
+  gtag('config', 'G-92Y764QQW2', {
     send_page_view: false // SPA 必开
   });
 }

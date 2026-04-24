@@ -14,6 +14,7 @@ import { useI18n } from 'vue-i18n'
 import { initVhUnit } from "@/utils/init"
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
+import { initGA } from "@/utils/event.js";
 
 const { locale } = useI18n()
 const currentLocale = ref(locale.value)
@@ -25,6 +26,7 @@ const switchLanguage = () => {
 }
 
 onMounted(() => {
+  initGA();
 	// 从本地存储加载语言设置
 	const savedLocale = localStorage.getItem('locale')
 	if (savedLocale) {

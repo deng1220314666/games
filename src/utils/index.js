@@ -109,3 +109,46 @@ export function getQueryParam(name, url = window.location.href) {
     return null;
   }
 }
+
+export async function loadScript (url, type) {
+  return new Promise((resolve, reject) => {
+    try {
+      // ✅ 判断是否已经加载过同样的脚本
+      const isLoaded = Array.from(document.scripts).some(script => {
+        try {
+          // 去掉参数差异，只比对主域与路径，防止重复加载同一个脚本
+          const normalize = u => u.split('?')[0].replace(/\/+$/, '');
+          return normalize(script.src) === normalize(url);
+        } catch {
+          return false;
+        }
+      });
+
+      if (isLoaded) {
+        resolve();
+        return;
+      }
+
+      // ✅ 创建脚本元素
+      const script = document.createElement('script');
+      script.src = url;
+      script.async = true;
+
+      // ✅ 加载成功
+      script.onload = () => {
+        resolve();
+      };
+
+      // ❌ 加载失败
+      script.onerror = (e) => {
+        reject(e);
+      };
+
+      // ✅ 插入到 <head>
+      document.head.appendChild(script);
+    } catch (err) {
+      console.error(`[loadScript] ❌ 异常: ${url}`, err);
+      reject(err);
+    }
+  });
+}

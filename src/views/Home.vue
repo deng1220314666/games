@@ -1,10 +1,12 @@
 <template>
   <div class="home flex flex-col items-start">
     <div v-for="(item, index) in category" :key="index" class="w-full mb-4">
+      <AdsterraManager v-if="index === 1" />
+
       <!-- 分类标题栏 -->
-      <div 
-        class="category-header flex items-center justify-between p-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl mb-4 cursor-pointer hover:shadow-lg transition-all duration-300"
-        @click="navigateToCategory(item.id)"
+      <div
+          class="category-header flex items-center justify-between p-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl mb-4 cursor-pointer hover:shadow-lg transition-all duration-300"
+          @click="navigateToCategory(item.id)"
       >
         <div class="flex items-center">
           <img :src="item.img" alt="" class="w-10 h-10 mr-3 bg-white rounded-full p-1">
@@ -18,15 +20,12 @@
       </div>
       <!-- 游戏网格 -->
       <GameGrild :games="item.games"/>
+
     </div>
   </div>
 </template>
 
 <script setup>
-
-import GameCard from "@/components/GameCard.vue"
-import HistoryGame from "@/components/HistoryGame.vue"
-import GameGroup from "@/components/GameGroup.vue"
 import {useGameStore} from '@/stores/gameStore'
 import {useI18n} from 'vue-i18n'
 import {computed, onMounted, ref} from 'vue'
@@ -34,6 +33,7 @@ import {getQueryParam} from "@/utils/index.js"
 import {useRouter} from "vue-router";
 import GameGrild from "@/components/GameGrild.vue";
 import { getGames, getCategory} from "@/api/mock.js";
+import AdsterraManager from "@/components/AdsterraManager.vue";
 
 const router = useRouter()
 
