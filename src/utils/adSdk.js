@@ -102,14 +102,16 @@ window.MonetagAd = {
   },
 }
 
-export const ExoClick = {
+export const ExoClickAd = {
   adProvider: {},
   anchorAdProvider: {},
   anchorContainer: {},
   adContainer: {},
+  served: false,
   interstitialAdProvider: {},
   async init() {
     await loadScript("https://a.magsrv.com/ad-provider.js", "ExoClick").then(async () => {
+      this.adContainer = document.getElementById("adContainer");
       (this.adProvider = window.AdProvider || []).push({"serve": {}})
     });
   }
