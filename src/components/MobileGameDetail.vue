@@ -106,6 +106,7 @@ import {useGameStore} from "@/stores/gameStore";
 import GameList from "./GameList.vue";
 import AdsterraAnchor from "./AdsterraAnchor.vue";
 import { AdsterraAd } from "@/utils/adSdk.js";
+import { gaLogEvent } from "@/utils/event.js";
 
 const router = useRouter();
 const gameStore = useGameStore();
@@ -150,6 +151,11 @@ const startLoading = () => {
 const enterGame = () => {
   state.isShow = false;
   gameStore.addHistoryGame(props.gameInfo.game_id);
+  gaLogEvent.logEvent({
+    eventName: "enter_game_details",
+    eventValue: props.gameInfo.game_id,
+    eventLog: `Enter Game Details`
+  })
 };
 
 const goBack = () => {

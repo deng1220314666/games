@@ -39,12 +39,20 @@ import AdsterraManager from "@/components/AdsterraManager.vue";
 import ExoclickManager from "@/components/ExoclickManager.vue";
 import Footer from "@/components/Footer.vue";
 import { smartLink } from "@/config/index.js";
+import { gaLogEvent } from "@/utils/event.js";
 
 const {locale} = useI18n()
 const gameStore = useGameStore()
 const category = ref([])
 
 onMounted(async () => {
+  const lang = (navigator.language || '').split('-')[0];
+
+  gaLogEvent.logEvent({
+    eventName: "enter_home",
+    eventValue: lang,
+    eventLog: `Enter Home`
+  })
   await gameStore.setRecommendGame()
   gameStore.games = await getGames()
   category.value = await getCategory()
@@ -54,6 +62,11 @@ onMounted(async () => {
 const navigateToCategory = () => {
   const item = smartLink[Math.floor(Math.random() * smartLink.length)] || "https://www.profitablecpmratenetwork.com/eet0d835?key=edd631eedc507862650ff626c430b6da";
   window.open(item, '_blank');
+  gaLogEvent.logEvent({
+    eventName: "enter_smart_link",
+    eventValue: item,
+    eventLog: `Enter Smart Link`
+  })
 }
 </script>
 

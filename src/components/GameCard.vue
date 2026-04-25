@@ -21,6 +21,7 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import LazyImage from './LazyImage.vue'
+import { gaLogEvent } from "@/utils/event.js"
 
 const props = defineProps({
 	value: {
@@ -34,6 +35,11 @@ const router = useRouter()
 
 const navigateToGameDetail = () => {
 	if (props.value.game_id) {
+    gaLogEvent.logEvent({
+      eventName: "enter_game",
+      eventValue: props.value.game_id,
+      eventLog: `Enter Game`
+    })
 		router.push(`/game/${props.value.game_id}`)
 	}
 }

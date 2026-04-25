@@ -136,6 +136,7 @@ import { useI18n } from 'vue-i18n'
 import LazyImage from '@/components/LazyImage.vue'
 import MobileGameDetailVue from '@/components/MobileGameDetail.vue'
 import {getQueryParam} from "@/utils/index.js";
+import { gaLogEvent } from "@/utils/event.js";
 
 const route = useRoute()
 const gameStore = useGameStore()
@@ -192,6 +193,11 @@ const toggleFullscreen = () => {
 }
 
 onMounted(() => {
+  gaLogEvent.logEvent({
+    eventName: "enter_info",
+    eventValue: game.value.game_id,
+    eventLog: `Enter info`
+  })
   fetchGameDetail()
   isTest.value = !!getQueryParam("isTest")
 })
