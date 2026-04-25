@@ -1,8 +1,8 @@
 <template>
   <div class="home">
     <div v-for="(item, index) in category" :key="index" class="w-full mb-4">
-      <AdsterraManager v-if="index === 1" />
-      <ExoclickManager v-if="index === 2" />
+      <AdsterraManager v-if="index === 2" />
+      <ExoclickManager v-if="index === 1" />
 
 
       <!-- 分类标题栏 -->
