@@ -45,7 +45,28 @@ const {locale} = useI18n()
 const gameStore = useGameStore()
 const category = ref([])
 
+/**
+ * 1. 获取 cid（Bemob 自动带）
+ */
+function getCid() {
+  const url = new URL(window.location.href);
+  return url.searchParams.get("cid");
+}
+
+/**
+ * 2. 保存 cid（防止丢失）
+ */
+function saveCid(cid) {
+  if (cid) {
+    localStorage.setItem("bemob_cid", cid);
+  }
+}
+
+
 onMounted(async () => {
+  const cid = getCid();
+  saveCid(cid);
+
   const lang = (navigator.language || '').split('-')[0];
 
   gaLogEvent.logEvent({

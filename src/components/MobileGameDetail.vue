@@ -156,7 +156,35 @@ const enterGame = () => {
     eventValue: props.gameInfo.game_id,
     eventLog: `Enter Game Details`
   })
+  startGame();
 };
+
+async function startGame() {
+  const cid = localStorage.getItem("bemob_cid");
+
+  if (!cid) {
+    console.warn("No cid found");
+    return;
+  }
+
+  try {
+    // 👉 回传 Bemob（核心）
+    await fetch(
+        `https://h4imw.bemobtrcks.com/postback?cid=${cid}&status=1`,
+        {
+          method: "GET",
+          mode: "no-cors"
+        }
+    );
+    gaLogEvent.logEvent({
+      eventName: "bemobtrcks_start",
+      eventLog: `Bemobtrcks Start`
+    })
+    console.log("Conversion sent:", cid);
+  } catch (e) {
+    console.error("postback failed", e);
+  }
+}
 
 const goBack = () => {
   router.back();
