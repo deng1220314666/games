@@ -55,12 +55,4 @@ const router = createRouter({
   routes
 })
 
-// 路由守卫 - 设置页面标题
-router.beforeEach((to, from, next) => {
-  if (to.meta.title) {
-    // document.title = `${to.meta.title} - Vue 3 项目`
-  }
-  next()
-})
-
 export default router

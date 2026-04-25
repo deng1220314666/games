@@ -1,8 +1,9 @@
 <template>
-  <div class="home flex flex-col items-start">
+  <div class="home">
     <div v-for="(item, index) in category" :key="index" class="w-full mb-4">
       <AdsterraManager v-if="index === 1" />
       <ExoclickManager v-if="index === 2" />
+
 
       <!-- 分类标题栏 -->
       <div
@@ -30,8 +31,7 @@
 <script setup>
 import {useGameStore} from '@/stores/gameStore'
 import {useI18n} from 'vue-i18n'
-import {computed, onMounted, ref} from 'vue'
-import {getQueryParam} from "@/utils/index.js"
+import {onMounted, ref} from 'vue'
 import {useRouter} from "vue-router";
 import GameGrild from "@/components/GameGrild.vue";
 import { getGames, getCategory} from "@/api/mock.js";
@@ -40,26 +40,15 @@ import ExoclickManager from "@/components/ExoclickManager.vue";
 import Footer from "@/components/Footer.vue";
 import { smartLink } from "@/config/index.js";
 
-const router = useRouter()
-
-const {t, locale} = useI18n()
+const {locale} = useI18n()
 const gameStore = useGameStore()
 const category = ref([])
-
-const isTest = ref(false)
 
 onMounted(async () => {
   await gameStore.setRecommendGame()
   gameStore.games = await getGames()
   category.value = await getCategory()
-  isTest.value = !!getQueryParam("isTest")
-  // 设置首页默认选中
-  gameStore.selectedCategoryIndex = -2
 })
-
-const navigateToGameDetail = (id) => {
-  router.push(`/game/${id}`)
-}
 
 // 跳转到分类游戏页面
 const navigateToCategory = () => {
@@ -72,5 +61,6 @@ const navigateToCategory = () => {
 .home {
   margin: 0 auto;
   width: 100%;
+  height: auto;
 }
 </style>

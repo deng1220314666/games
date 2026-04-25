@@ -24,11 +24,4 @@ app.use(VueLazyload, {
   error: "",     // 设置加载失败时的占位图
 })
 
-// 添加路由守卫，在路由切换后更新选中的分类
-import { useGameStore } from './stores/gameStore'
-router.afterEach(() => {
-  const gameStore = useGameStore()
-  gameStore.updateSelectedCategoryByRoute()
-})
-
 app.mount('#app')

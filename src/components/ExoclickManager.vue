@@ -10,12 +10,10 @@
 </template>
 <script setup>
 import { ExoClickAd } from "@/utils/adSdk.js";
-import {onMounted, nextTick} from "vue";
+import {onMounted} from "vue";
 
 onMounted(async () => {
-  if (ExoClickAd) {
-    ExoClickAd.init();
-  }
+  ExoClickAd.init();
 })
 </script>
 <style scoped>
@@ -25,9 +23,6 @@ onMounted(async () => {
   min-height: 16rem;
   background-color: rgb(229, 231, 235);
   position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 #exclick-banner-1-box .ad-title {
   color: #00aecd;
@@ -38,5 +33,6 @@ onMounted(async () => {
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  z-index: 99999;
 }
 </style>
