@@ -13,10 +13,10 @@ import { AdsterraAd } from "@/utils/adSdk.js";
 
 onMounted(() => {
   if (AdsterraAd) {
-    // AdsterraAd.showBanner();
+    AdsterraAd.showBanner();
 
     setTimeout(() => {
-      // AdsterraAd.showSocialBar()
+      AdsterraAd.showSocialBar()
     }, 2000)
   }
 })
