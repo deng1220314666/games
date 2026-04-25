@@ -80,7 +80,7 @@ export const AdsterraAd = {
 
     // 2️⃣ 设置 atOptions 配置
     window.atOptions = {
-      'key' : 'aa0bcc60051abc8073f5ed414a2caa65',
+      'key' : '5459cbf4cf22d7a2a5cdeb4108417b4d',
       'format' : 'iframe',
       'height' : 50,
       'width' : 320,
@@ -90,10 +90,14 @@ export const AdsterraAd = {
     // 3️⃣ 动态插入广告脚本
     const script = document.createElement("script");
     script.type = "text/javascript";
-    script.src = "https://www.highperformanceformat.com/aa0bcc60051abc8073f5ed414a2caa65/invoke.js";
+    script.src = "https://www.highperformanceformat.com/5459cbf4cf22d7a2a5cdeb4108417b4d/invoke.js";
 
     container.appendChild(script);
   },
+
+  async showNativeBanner () {
+    loadScript("https://pl27894898.profitablecpmratenetwork.com/155789be5aa8a606b97a7d9e19e14adb/invoke.js", "Adsterra");
+  }
 };
 
 window.MonetagAd = {

@@ -5,11 +5,12 @@
     <div class="absolute inset-0 z-10">
       <iframe
         ref="gameIframe"
-        class="w-full h-full"
+        class="w-full h-[calc(100%-50px)]"
         style="border: none"
         allowfullscreen
         allow="autoplay; fullscreen"
       />
+      <AdsterraAnchor />
     </div>
 
     <!-- ========== 顶部信息 + Loading 层 ========== -->
@@ -76,8 +77,11 @@
         </div>
       </div>
 
+
       <!-- 推荐列表 -->
       <div class="flex-1 overflow-auto mt-4">
+        <div id="container-155789be5aa8a606b97a7d9e19e14adb"></div>
+
         <GameList :games="gameStore.recommendList"/>
       </div>
     </div>
@@ -100,6 +104,8 @@ import {onMounted, reactive, ref, defineProps, watch} from "vue";
 import {useRouter} from "vue-router";
 import {useGameStore} from "@/stores/gameStore";
 import GameList from "./GameList.vue";
+import AdsterraAnchor from "./AdsterraAnchor.vue";
+import { AdsterraAd } from "@/utils/adSdk.js";
 
 const router = useRouter();
 const gameStore = useGameStore();
@@ -125,6 +131,9 @@ watch(
 );
 
 onMounted(() => {
+  if (AdsterraAd) {
+    AdsterraAd.showNativeBanner();
+  }
   startLoading();
 });
 
