@@ -10,9 +10,9 @@
 </template>
 <script setup>
 import { ExoClickAd } from "@/utils/adSdk.js";
-import {onMounted} from "vue";
+import {onMounted, nextTick} from "vue";
 
-onMounted(() => {
+onMounted(async () => {
   if (ExoClickAd) {
     ExoClickAd.init();
   }

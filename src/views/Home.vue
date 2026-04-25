@@ -1,6 +1,5 @@
 <template>
   <div class="home flex flex-col items-start">
-<!--    <ins class="eas6a97888e33" data-zoneid="5909676"></ins>-->
     <div v-for="(item, index) in category" :key="index" class="w-full mb-4">
       <AdsterraManager v-if="index === 1" />
       <ExoclickManager v-if="index === 2" />
