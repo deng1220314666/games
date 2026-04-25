@@ -107,9 +107,10 @@ export const ExoClick = {
   anchorAdProvider: {},
   anchorContainer: {},
   adContainer: {},
-  async showBanner() {
+  interstitialAdProvider: {},
+  async init() {
     await loadScript("https://a.magsrv.com/ad-provider.js", "ExoClick").then(async () => {
-      (this.adProvider = window.AdProvider || []).push({"serve": {}});
+      (this.adProvider = window.AdProvider || []).push({"serve": {}})
     });
   }
 }
