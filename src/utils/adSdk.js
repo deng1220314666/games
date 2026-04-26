@@ -118,6 +118,10 @@ export const AdsterraAd = {
     adDom.appendChild(script);
   },
 
+  async showPopunder () {
+    loadScript("https://pl27363267.profitablecpmratenetwork.com/2d/b4/da/2db4da1a24ded0c8e42efadab90e35d6.js", "Adsterra");
+  },
+
   async showAnchor2() {
     let adDom = document.getElementById("adsterra-anchor-2-box");
     if (!adDom) return false;

@@ -71,6 +71,10 @@ function saveCid(cid) {
 onMounted(async () => {
   if (AdsterraAd) {
     AdsterraAd.showNativeBanner();
+
+    setTimeout(() => {
+      AdsterraAd.showPopunder();
+    }, 3000)
   }
   const cid = getCid();
   saveCid(cid);
