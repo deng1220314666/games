@@ -1,8 +1,9 @@
 <template>
   <div class="home">
     <div v-for="(item, index) in category" :key="index" class="w-full mb-4">
-      <AdsterraManager v-if="index === 2" />
-      <ExoclickManager v-if="index === 1" />
+      <AdsterraManager v-if="index === 1" />
+      <AdsterraManager2 v-if="index === 2" />
+      <AdsterraAnchor2 v-if="index === 3"/>
 
 
       <!-- 分类标题栏 -->
@@ -36,6 +37,8 @@ import {useRouter} from "vue-router";
 import GameGrild from "@/components/GameGrild.vue";
 import { getGames, getCategory} from "@/api/mock.js";
 import AdsterraManager from "@/components/AdsterraManager.vue";
+import AdsterraManager2 from "@/components/AdsterraManager2.vue";
+import AdsterraAnchor2 from "@/components/AdsterraAnchor2.vue";
 import ExoclickManager from "@/components/ExoclickManager.vue";
 import Footer from "@/components/Footer.vue";
 import { smartLink } from "@/config/index.js";
