@@ -3,7 +3,7 @@
     <div v-for="(item, index) in category" :key="index" class="w-full mb-4">
       <AdsterraManager v-if="index === 1" />
       <AdsterraManager2 v-if="index === 2" />
-      <AdsterraAnchor2 v-if="index === 3"/>
+<!--      <AdsterraAnchor2 v-if="index === 3"/>-->
 
 
       <!-- 分类标题栏 -->
