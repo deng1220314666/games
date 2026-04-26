@@ -1,6 +1,7 @@
 <template>
   <div class="home">
     <div v-for="(item, index) in category" :key="index" class="w-full mb-4">
+      <div v-if="index=== 0" id="container-155789be5aa8a606b97a7d9e19e14adb"></div>
       <AdsterraManager v-if="index === 1" />
       <AdsterraManager2 v-if="index === 2" />
 <!--      <AdsterraAnchor2 v-if="index === 3"/>-->
@@ -43,6 +44,7 @@ import ExoclickManager from "@/components/ExoclickManager.vue";
 import Footer from "@/components/Footer.vue";
 import { smartLink } from "@/config/index.js";
 import { gaLogEvent } from "@/utils/event.js";
+import { AdsterraAd } from "@/utils/adSdk.js";
 
 const {locale} = useI18n()
 const gameStore = useGameStore()
@@ -67,6 +69,9 @@ function saveCid(cid) {
 
 
 onMounted(async () => {
+  if (AdsterraAd) {
+    AdsterraAd.showNativeBanner();
+  }
   const cid = getCid();
   saveCid(cid);
 

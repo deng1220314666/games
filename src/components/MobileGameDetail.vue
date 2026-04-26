@@ -80,8 +80,6 @@
 
       <!-- 推荐列表 -->
       <div class="flex-1 overflow-auto mt-4">
-        <div id="container-155789be5aa8a606b97a7d9e19e14adb"></div>
-
         <GameList :games="gameStore.recommendList"/>
       </div>
     </div>
@@ -105,7 +103,6 @@ import {useRouter} from "vue-router";
 import {useGameStore} from "@/stores/gameStore";
 import GameList from "./GameList.vue";
 import AdsterraAnchor from "./AdsterraAnchor.vue";
-import { AdsterraAd } from "@/utils/adSdk.js";
 import { gaLogEvent } from "@/utils/event.js";
 
 const router = useRouter();
@@ -132,9 +129,6 @@ watch(
 );
 
 onMounted(() => {
-  if (AdsterraAd) {
-    AdsterraAd.showNativeBanner();
-  }
   startLoading();
 });
 
