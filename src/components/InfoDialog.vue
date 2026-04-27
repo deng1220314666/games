@@ -8,8 +8,7 @@
       <div class="w-[80%] pt-[1rem] pb-[.5rem] mx-auto bg-gradient-to-r text-center">Do you want to exit?</div>
 
       <div class="flex-1 mx-auto w-full max-w-[90%] max-h-[80vh] overflow-auto">
-<!--        <AdsterraManager style="min-height: 250px;" idTxt="adsterra-banner-4-box" :zid="2" />-->
-        <div style="min-height: 250px;" id="container-155789be5aa8a606b97a7d9e19e14adb"></div>
+        <AdsterraManager style="min-height: 250px;" idTxt="adsterra-banner-4-box" :zid="1" />
       </div>
 
       <div @click="jump" class="w-[60%] h-[3rem] mx-auto bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl text-white flex justify-center items-center my-[.5rem]">
@@ -19,7 +18,7 @@
 </template>
 
 <script setup>
-// import AdsterraManager from "./AdsterraManager.vue";
+import AdsterraManager from "./AdsterraManager.vue";
 import {jumpUrl} from "../utils";
 import {onMounted} from "vue";
 import { AdsterraAd } from "@/utils/adSdk.js";
@@ -35,13 +34,12 @@ const { isShow } = defineProps({
 });
 
 onMounted(() => {
-  gaLogEvent.logEvent({
-    eventName: "back_dialog",
-    eventValue: "dialog",
-    eventLog: `back_dialog`
-  })
-  if (AdsterraAd) {
-    AdsterraAd.showNativeBanner("ttgame");
+  if (isShow.value) {
+    gaLogEvent.logEvent({
+      eventName: "back_dialog",
+      eventValue: "dialog",
+      eventLog: `back_dialog`
+    })
   }
 })
 
