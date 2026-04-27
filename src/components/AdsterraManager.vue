@@ -15,7 +15,11 @@ const props = defineProps({
     default: "adsterra-banner-1-box",
     type: String
   },
-  zid: Number
+  zid: Number,
+  immediate: {
+    type: Boolean,
+    default: false // 👈 是否首屏直出
+  }
 })
 
 onMounted(() => {
@@ -25,35 +29,44 @@ onMounted(() => {
 })
 
 const showAd = (type) => {
+  let options;
+  let script;
+
   if (type === 2) {
-    AdsterraAd.showBanner(props.idTxt, {
-      'key' : '8dcf53405071d2838182738cbc9a4c0e',
-      'format' : 'iframe',
-      'height' : 250,
-      'width' : 300,
-      'params' : {}
-    }, "https://www.highperformanceformat.com/8dcf53405071d2838182738cbc9a4c0e/invoke.js");
-    return false;
+    options = {
+      key: '8dcf53405071d2838182738cbc9a4c0e',
+      format: 'iframe',
+      height: 250,
+      width: 300,
+      params: {}
+    };
+    script = "https://www.highperformanceformat.com/8dcf53405071d2838182738cbc9a4c0e/invoke.js";
+  } else if (type === 3) {
+    options = {
+      key: '5459cbf4cf22d7a2a5cdeb4108417b4d',
+      format: 'iframe',
+      height: 50,
+      width: 320,
+      params: {}
+    };
+    script = "https://www.highperformanceformat.com/5459cbf4cf22d7a2a5cdeb4108417b4d/invoke.js";
+  } else {
+    options = {
+      key: 'd485bca4ce91450e3b58525457ee556a',
+      format: 'iframe',
+      height: 250,
+      width: 300,
+      params: {}
+    };
+    script = "https://www.highperformanceformat.com/d485bca4ce91450e3b58525457ee556a/invoke.js";
   }
 
-  if (type === 3) {
-    AdsterraAd.showBanner(props.idTxt, {
-      'key' : '5459cbf4cf22d7a2a5cdeb4108417b4d',
-      'format' : 'iframe',
-      'height' : 50,
-      'width' : 320,
-      'params' : {}
-    }, "https://www.highperformanceformat.com/5459cbf4cf22d7a2a5cdeb4108417b4d/invoke.js");
-    return false;
+  // 👇 关键分支
+  if (props.immediate) {
+    AdsterraAd.showBannerImmediate(props.idTxt, options, script);
+  } else {
+    AdsterraAd.showBanner(props.idTxt, options, script);
   }
-
-  AdsterraAd.showBanner(props.idTxt,{
-    'key' : 'd485bca4ce91450e3b58525457ee556a',
-    'format' : 'iframe',
-    'height' : 250,
-    'width' : 300,
-    'params' : {}
-  }, "https://www.highperformanceformat.com/d485bca4ce91450e3b58525457ee556a/invoke.js");
 }
 </script>
 

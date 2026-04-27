@@ -30,6 +30,35 @@ export const AdsterraAd = {
     }
   },
 
+  async showBannerImmediate(containerId, options, scriptSrc) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    // ⚠️ 如果当前有队列任务在跑，建议不要抢
+    if (this.isLoading) {
+      this.showBanner(containerId, options, scriptSrc);
+      return;
+    }
+
+    this.isLoading = true;
+
+    window.atOptions = options;
+
+    const script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = scriptSrc;
+    script.async = true;
+
+    script.onload = script.onerror = () => {
+      setTimeout(() => {
+        this.isLoading = false;
+        this.runNext(); // 继续队列
+      }, 120); // 比你之前 300 更合理
+    };
+
+    container.appendChild(script);
+  },
+
   async showBanner(containerId, options, scriptSrc) {
     const container = document.getElementById(containerId);
     if (!container) return;
@@ -48,7 +77,7 @@ export const AdsterraAd = {
         setTimeout(() => {
           this.isLoading = false;
           this.runNext();
-        }, 300);
+        }, 120);
       };
 
       container.appendChild(script);
