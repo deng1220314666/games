@@ -49,6 +49,7 @@ const {locale} = useI18n()
 const gameStore = useGameStore()
 const category = ref([])
 const showModal = ref(false);
+const route = useRoute();
 
 watch(() => route.query.p, (val) => {
   console.log('p changed:', val);
