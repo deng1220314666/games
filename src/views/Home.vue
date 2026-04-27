@@ -34,7 +34,6 @@
 import {useGameStore} from '@/stores/gameStore'
 import {useI18n} from 'vue-i18n'
 import {onMounted, ref, watch} from 'vue'
-import {useRouter} from "vue-router";
 import GameGrild from "@/components/GameGrild.vue";
 import { getGames, getCategory} from "@/api/mock.js";
 import AdsterraManager from "@/components/AdsterraManager.vue";
@@ -44,6 +43,7 @@ import { smartLink } from "@/config/index.js";
 import { gaLogEvent } from "@/utils/event.js";
 import { AdsterraAd } from "@/utils/adSdk.js";
 import { pushRouterHistory } from "@/utils/index.js";
+import { useRoute } from 'vue-router';
 
 const {locale} = useI18n()
 const gameStore = useGameStore()
@@ -52,7 +52,6 @@ const showModal = ref(false);
 const route = useRoute();
 
 watch(() => route.query.p, (val) => {
-  console.log('p changed:', val);
   if (val === "two") {
     showModal.value = true;
   }
