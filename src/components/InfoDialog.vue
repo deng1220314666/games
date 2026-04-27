@@ -48,7 +48,7 @@ const closeDialog = () => {
 }
 
 const jump = () => {
-  jumpUrl("https://www.profitablecpmratenetwork.com/fq3key41?key=fc5b02ea1eb8e2a60efbe3e0a4204089")
+  jumpUrl("https://www.profitablecpmratenetwork.com/y5p95qwz?key=60cd56236d8caddc568fdc4744ec1f18")
 }
 </script>
 
