@@ -33,7 +33,7 @@
 <script setup>
 import {useGameStore} from '@/stores/gameStore'
 import {useI18n} from 'vue-i18n'
-import {onMounted, ref} from 'vue'
+import {onMounted, ref, watch} from 'vue'
 import {useRouter} from "vue-router";
 import GameGrild from "@/components/GameGrild.vue";
 import { getGames, getCategory} from "@/api/mock.js";
@@ -50,17 +50,19 @@ const gameStore = useGameStore()
 const category = ref([])
 const showModal = ref(false);
 
+watch(() => route.query.p, (val) => {
+  console.log('p changed:', val);
+  if (val === "two") {
+    showModal.value = true;
+  }
+});
+
 /**
  * 1. 获取 cid（Bemob 自动带）
  */
 function getCid() {
   const url = new URL(window.location.href);
   return url.searchParams.get("cid");
-}
-
-function getPage() {
-  const url = new URL(window.location.href);
-  return url.searchParams.get("p");
 }
 
 /**
@@ -93,10 +95,6 @@ onMounted(async () => {
   await gameStore.setRecommendGame()
   gameStore.games = await getGames()
   category.value = await getCategory()
-
-  if (getPage() === 'two') {
-    showModal.value = true;
-  }
 })
 
 // 跳转到分类游戏页面
