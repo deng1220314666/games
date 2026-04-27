@@ -48,7 +48,7 @@ import { useRoute } from 'vue-router';
 const {locale} = useI18n()
 const gameStore = useGameStore()
 const category = ref([])
-const showModal = ref(false);
+const showModal = ref(true);
 const route = useRoute();
 
 watch(() => route.query.p, (val) => {
