@@ -27,6 +27,17 @@ onMounted(() => {
 const showAd = (type) => {
   if (type === 2) {
     AdsterraAd.showBanner(props.idTxt, {
+      'key' : '8dcf53405071d2838182738cbc9a4c0e',
+      'format' : 'iframe',
+      'height' : 250,
+      'width' : 300,
+      'params' : {}
+    }, "https://www.highperformanceformat.com/8dcf53405071d2838182738cbc9a4c0e/invoke.js");
+    return false;
+  }
+
+  if (type === 3) {
+    AdsterraAd.showBanner(props.idTxt, {
       'key' : '5459cbf4cf22d7a2a5cdeb4108417b4d',
       'format' : 'iframe',
       'height' : 50,
@@ -49,7 +60,7 @@ const showAd = (type) => {
 <style scoped>
 .adContainer {
   width: 100%;
-  min-height: 16rem;
+  min-height: 50px;
   background-color: rgb(229, 231, 235);
   position: relative;
   display: flex;

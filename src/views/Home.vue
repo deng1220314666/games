@@ -4,6 +4,7 @@
       <div v-if="index=== 0" id="container-155789be5aa8a606b97a7d9e19e14adb"></div>
       <AdsterraManager idTxt="adsterra-banner-1-box" :zid="1" v-if="index === 1" />
       <AdsterraManager idTxt="adsterra-banner-2-box" :zid="2" v-if="index === 2" />
+      <AdsterraManager idTxt="adsterra-banner-3-box" :zid="3" v-if="index === 3" />
 
       <!-- 分类标题栏 -->
       <div
@@ -25,6 +26,7 @@
     </div>
 
     <Footer />
+    <InfoDialog v-model:isShow="showModal" />
   </div>
 </template>
 
@@ -37,14 +39,16 @@ import GameGrild from "@/components/GameGrild.vue";
 import { getGames, getCategory} from "@/api/mock.js";
 import AdsterraManager from "@/components/AdsterraManager.vue";
 import Footer from "@/components/Footer.vue";
+import InfoDialog from "@/components/InfoDialog.vue";
 import { smartLink } from "@/config/index.js";
 import { gaLogEvent } from "@/utils/event.js";
 import { AdsterraAd } from "@/utils/adSdk.js";
-import { pushRouterHistory, bachJump } from "@/utils/index.js";
+import { pushRouterHistory } from "@/utils/index.js";
 
 const {locale} = useI18n()
 const gameStore = useGameStore()
 const category = ref([])
+const showModal = ref(false);
 
 /**
  * 1. 获取 cid（Bemob 自动带）
@@ -90,8 +94,8 @@ onMounted(async () => {
   gameStore.games = await getGames()
   category.value = await getCategory()
 
-  if (getPage() === 'one') {
-    bachJump()
+  if (getPage() === 'two') {
+    showModal.value = true;
   }
 })
 

@@ -116,57 +116,9 @@ export const AdsterraAd = {
     }
   },
 
-  async showBanner2(size) {
-    let adDom = document.getElementById("adsterra-banner-2-box");
-    if (!adDom) return false;
-    adDom.style.display = "flex";
-    adDom.style.justifyContent = "center";
-    adDom.style.alignItems = "center";
-
-    // 2️⃣ 设置 atOptions 配置
-    window.atOptions = {
-      'key' : '8dcf53405071d2838182738cbc9a4c0e',
-      'format' : 'iframe',
-      'height' : 250,
-      'width' : 300,
-      'params' : {}
-    };
-
-    // 3️⃣ 动态插入广告脚本
-    const script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src = "https://www.highperformanceformat.com/8dcf53405071d2838182738cbc9a4c0e/invoke.js";
-
-    adDom.appendChild(script);
-  },
-
   async showPopunder () {
     loadScript("https://pl27363267.profitablecpmratenetwork.com/2d/b4/da/2db4da1a24ded0c8e42efadab90e35d6.js", "Adsterra");
-  },
-
-  async showAnchor2() {
-    let adDom = document.getElementById("adsterra-anchor-2-box");
-    if (!adDom) return false;
-    adDom.style.display = "flex";
-    adDom.style.justifyContent = "center";
-    adDom.style.alignItems = "center";
-
-    // 2️⃣ 设置 atOptions 配置
-    window.atOptions = {
-      'key' : '1aa7b5080018fc4c4599ab3be1b2a22a',
-      'format' : 'iframe',
-      'height' : 250,
-      'width' : 300,
-      'params' : {}
-    };
-
-    // 3️⃣ 动态插入广告脚本
-    const script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src = "https://www.highperformanceformat.com/1aa7b5080018fc4c4599ab3be1b2a22a/invoke.js";
-
-    adDom.appendChild(script);
-  },
+  }
 };
 
 window.MonetagAd = {
