@@ -19,7 +19,7 @@
 
 <script setup>
 import AdsterraManager from "./AdsterraManager.vue";
-import { bachJump } from "@/utils/index.js";
+import {jumpUrl} from "../utils";
 
 const emit = defineEmits(['update:isShow']);
 
@@ -35,7 +35,7 @@ const closeDialog = () => {
 }
 
 const jump = () => {
-  bachJump();
+  jumpUrl("https://www.profitablecpmratenetwork.com/fq3key41?key=fc5b02ea1eb8e2a60efbe3e0a4204089")
 }
 </script>
 
