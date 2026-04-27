@@ -133,7 +133,7 @@ watch(
 
 onMounted(() => {
   if (AdsterraAd) {
-    AdsterraAd.showNativeBanner();
+    AdsterraAd.showNativeBanner("ad.ttgame");
   }
   startLoading();
 });

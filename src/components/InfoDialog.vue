@@ -23,6 +23,7 @@
 import {jumpUrl} from "../utils";
 import {onMounted} from "vue";
 import { AdsterraAd } from "@/utils/adSdk.js";
+import {gaLogEvent} from "@/utils/event";
 
 const emit = defineEmits(['update:isShow']);
 
@@ -34,8 +35,13 @@ const { isShow } = defineProps({
 });
 
 onMounted(() => {
+  gaLogEvent.logEvent({
+    eventName: "back_dialog",
+    eventValue: "dialog",
+    eventLog: `back_dialog`
+  })
   if (AdsterraAd) {
-    AdsterraAd.showNativeBanner();
+    AdsterraAd.showNativeBanner("ttgame");
   }
 })
 
