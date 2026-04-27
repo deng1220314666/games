@@ -2,10 +2,8 @@
   <div class="home">
     <div v-for="(item, index) in category" :key="index" class="w-full mb-4">
       <div v-if="index=== 0" id="container-155789be5aa8a606b97a7d9e19e14adb"></div>
-      <AdsterraManager v-if="index === 1" />
-      <AdsterraManager2 v-if="index === 2" />
-<!--      <AdsterraAnchor2 v-if="index === 3"/>-->
-
+      <AdsterraManager idTxt="adsterra-banner-1-box" :zid="1" v-if="index === 1" />
+      <AdsterraManager idTxt="adsterra-banner-2-box" :zid="2" v-if="index === 2" />
 
       <!-- 分类标题栏 -->
       <div
@@ -38,13 +36,11 @@ import {useRouter} from "vue-router";
 import GameGrild from "@/components/GameGrild.vue";
 import { getGames, getCategory} from "@/api/mock.js";
 import AdsterraManager from "@/components/AdsterraManager.vue";
-import AdsterraManager2 from "@/components/AdsterraManager2.vue";
-import AdsterraAnchor2 from "@/components/AdsterraAnchor2.vue";
-import ExoclickManager from "@/components/ExoclickManager.vue";
 import Footer from "@/components/Footer.vue";
 import { smartLink } from "@/config/index.js";
 import { gaLogEvent } from "@/utils/event.js";
 import { AdsterraAd } from "@/utils/adSdk.js";
+import { pushRouterHistory, bachJump } from "@/utils/index.js";
 
 const {locale} = useI18n()
 const gameStore = useGameStore()
@@ -58,6 +54,11 @@ function getCid() {
   return url.searchParams.get("cid");
 }
 
+function getPage() {
+  const url = new URL(window.location.href);
+  return url.searchParams.get("p");
+}
+
 /**
  * 2. 保存 cid（防止丢失）
  */
@@ -67,10 +68,10 @@ function saveCid(cid) {
   }
 }
 
-
 onMounted(async () => {
+  pushRouterHistory();
   if (AdsterraAd) {
-    AdsterraAd.showNativeBanner();
+    AdsterraAd.showSocialBar();
 
     setTimeout(() => {
       AdsterraAd.showPopunder();
@@ -78,7 +79,6 @@ onMounted(async () => {
   }
   const cid = getCid();
   saveCid(cid);
-
   const lang = (navigator.language || '').split('-')[0];
 
   gaLogEvent.logEvent({
@@ -89,6 +89,10 @@ onMounted(async () => {
   await gameStore.setRecommendGame()
   gameStore.games = await getGames()
   category.value = await getCategory()
+
+  if (getPage() === 'one') {
+    bachJump()
+  }
 })
 
 // 跳转到分类游戏页面

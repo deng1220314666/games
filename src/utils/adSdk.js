@@ -3,8 +3,23 @@ import { loadScript } from "@/utils/index.js";
 
 // Adsterra SDK 配置
 export const AdsterraAd = {
+  adQueue: [],
+  isLoading: false,
   init() {
     // await this.showAnchor();
+  },
+
+  runNext() {
+    if (this.isLoading || this.adQueue.length === 0) return;
+
+    this.isLoading = true;
+    const task = this.adQueue.shift();
+    task();
+  },
+
+  enqueue(task) {
+    this.adQueue.push(task);
+    this.runNext();
   },
 
   async showSocialBar() {
@@ -15,28 +30,29 @@ export const AdsterraAd = {
     }
   },
 
-  async showBanner(size) {
-    let adDom = document.getElementById("adsterra-banner-1-box");
-    if (!adDom) return false;
-    adDom.style.display = "flex";
-    adDom.style.justifyContent = "center";
-    adDom.style.alignItems = "center";
+  async showBanner(containerId, options, scriptSrc) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
 
-    // 2️⃣ 设置 atOptions 配置
-    window.atOptions = {
-      'key' : 'd485bca4ce91450e3b58525457ee556a',
-      'format' : 'iframe',
-      'height' : 250,
-      'width' : 300,
-      'params' : {}
-    };
+    this.enqueue(() => {
+      // 每次独立设置（关键）
+      window.atOptions = options;
 
-    // 3️⃣ 动态插入广告脚本
-    const script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src = "https://www.highperformanceformat.com/d485bca4ce91450e3b58525457ee556a/invoke.js";
+      const script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src = scriptSrc;
+      script.async = true;
 
-    adDom.appendChild(script);
+      script.onload = script.onerror = () => {
+        // 防风控缓冲
+        setTimeout(() => {
+          this.isLoading = false;
+          this.runNext();
+        }, 300);
+      };
+
+      container.appendChild(script);
+    });
   },
 
   async showAnchor() {
@@ -90,8 +106,14 @@ export const AdsterraAd = {
     container.appendChild(script);
   },
 
-  async showNativeBanner () {
-    loadScript("https://pl27894898.profitablecpmratenetwork.com/155789be5aa8a606b97a7d9e19e14adb/invoke.js", "Adsterra");
+  async showNativeBanner (type) {
+    if (type === 'ad.ttgame') {
+      loadScript("https://pl29268938.profitablecpmratenetwork.com/d1debede50ec7d8df5940dc07088499f/invoke.js", "Adsterra");
+    }
+
+    if (type === 'ttgame') {
+      loadScript("https://pl27894898.profitablecpmratenetwork.com/155789be5aa8a606b97a7d9e19e14adb/invoke.js", "Adsterra");
+    }
   },
 
   async showBanner2(size) {
