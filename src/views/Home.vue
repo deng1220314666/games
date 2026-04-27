@@ -4,7 +4,7 @@
       <AdsterraManager idTxt="adsterra-banner-1-box" :zid="1" :immediate="true" v-if="index === 1" />
       <AdsterraManager idTxt="adsterra-banner-2-box" :zid="2" v-if="index === 2" />
       <AdsterraManager idTxt="adsterra-banner-3-box" :zid="3" v-if="index === 3" />
-      <div v-if="index === 4" id="container-155789be5aa8a606b97a7d9e19e14adb"></div>
+<!--      <div v-if="index === 4" id="container-155789be5aa8a606b97a7d9e19e14adb"></div>-->
 
       <!-- 分类标题栏 -->
       <div
@@ -78,7 +78,7 @@ onMounted(async () => {
   pushRouterHistory();
   if (AdsterraAd) {
     AdsterraAd.showSocialBar();
-    AdsterraAd.showNativeBanner("ttgame");
+    // AdsterraAd.showNativeBanner("ttgame");
 
     setTimeout(() => {
       AdsterraAd.showPopunder();
