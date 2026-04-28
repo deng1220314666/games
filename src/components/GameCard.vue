@@ -1,5 +1,5 @@
 <template>
-	<div class="w-full h-full relative cursor-pointer group overflow-hidden" @click="navigateToGameDetail">
+	<div class="w-full h-full relative cursor-pointer group overflow-hidden" @click="showDialog">
 		<LazyImage
 			:src="props.value.cover"
 			:alt="props.value.name"
@@ -22,6 +22,8 @@
 import { useRouter } from 'vue-router'
 import LazyImage from './LazyImage.vue'
 import { gaLogEvent } from "@/utils/event.js"
+import {onMounted, ref} from "vue";
+import {useAdUtilsStore} from "@/stores/adsUtils"
 
 const props = defineProps({
 	value: {
@@ -33,15 +35,11 @@ const props = defineProps({
 
 const router = useRouter()
 
-const navigateToGameDetail = () => {
-	if (props.value.game_id) {
-    gaLogEvent.logEvent({
-      eventName: "enter_game",
-      eventValue: props.value.game_id,
-      eventLog: `Enter Game`
-    })
-		router.push(`/game/${props.value.game_id}`)
-	}
+const adsUtilsStore = useAdUtilsStore();
+
+const showDialog = () => {
+  adsUtilsStore.setDialogStatus(true);
+  adsUtilsStore.gameId = props.value.game_id;
 }
 </script>
 

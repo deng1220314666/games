@@ -1,6 +1,8 @@
+import { ENV } from "@/config/index.js";
 let gaLoaded = false;
 
 export function initGA() {
+  if (ENV === "development") return false
   if (gaLoaded) return;
   gaLoaded = true;
 
@@ -37,6 +39,8 @@ export let gaLogEvent = {
     console.log(
         `【events】 【name】:${eventName},【value】:${eventValue},【log】:${eventLog}`,
     );
+    if (ENV === "development") return false;
+
     if (eventName) {
       // 发送事件
       if (window?.gtag) {

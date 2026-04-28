@@ -4,8 +4,6 @@
     <main class="w-full box-border max-w-7xl mx-auto px-2 sm:px-1 lg:px-2 py-2 flex-1 overflow-y-auto hide-scrollbar z-0">
       <router-view />
     </main>
-
-    <InfoDialog v-model:isShow="showModal" />
   </div>
 </template>
 
@@ -16,7 +14,6 @@ import { initVhUnit } from "@/utils/init"
 import { initGA } from "@/utils/event.js";
 import InfoDialog from "@/components/InfoDialog.vue";
 
-const showModal = ref(false);
 const { locale } = useI18n()
 const currentLocale = ref(locale.value)
 const theme = ref('light') // light
