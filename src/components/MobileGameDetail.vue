@@ -1,5 +1,5 @@
 <template>
-  <div class="mobile-item bg-white overflow-hidden">
+  <div class="mobile-item max-w-xl m-auto bg-white overflow-hidden">
 
     <!-- ========== iframe 游戏层（底层） ========== -->
     <div class="absolute inset-0 z-10">

@@ -71,7 +71,7 @@ function saveCid(cid) {
 }
 
 onMounted(async () => {
-  pushRouterHistory();
+  // pushRouterHistory();
 
   if (AdsterraAd) {
     AdsterraAd.showSocialBar();
