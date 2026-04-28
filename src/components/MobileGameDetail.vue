@@ -134,9 +134,9 @@ watch(
 );
 
 onMounted(() => {
-  if (AdsterraAd) {
-    AdsterraAd.showNativeBanner("ttgame");
-  }
+  // if (AdsterraAd) {
+  //   AdsterraAd.showNativeBanner("ttgame");
+  // }
   makeDraggable(closeBtn.value);
   startLoading();
 });

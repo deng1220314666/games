@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen flex  bg-gray-100 py-8">
-    <div class="hidden sm:block container mx-auto px-4 max-w-6xl">
+    <div class="hidden container mx-auto px-4 max-w-6xl">
       <!-- 返回按钮 -->
       <button
         @click="$router.back()"
@@ -124,7 +124,7 @@
 
     </div>
 
-	  <Mobile-GameDetail-Vue class="sm:hidden" :gameInfo="game" :gameUrl="gameUrl" />
+	  <Mobile-GameDetail-Vue :gameInfo="game" :gameUrl="gameUrl" />
   </div>
 </template>
 
