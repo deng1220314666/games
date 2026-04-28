@@ -80,14 +80,14 @@
 
       <!-- 推荐列表 -->
       <div class="flex-1 overflow-auto mt-4">
-        <div id="container-155789be5aa8a606b97a7d9e19e14adb"></div>
+<!--        <AdsterraManager idTxt="adsterra-banner-2-box" :zid="2" />-->
 
         <GameList :games="gameStore.recommendList"/>
       </div>
     </div>
 
     <!-- ========== 关闭按钮（最高层） ========== -->
-    <div class="closeBtn" id="closeBtn" data-v-7e32e512="" title="close" @click="goBack">
+    <div class="closeBtn" id="closeBtn" ref="closeBtn" data-v-7e32e512="" title="close" @click="goBack">
       <svg t="1750155431203" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
            p-id="10848" width="16" height="16">
         <path
@@ -107,10 +107,13 @@ import GameList from "./GameList.vue";
 import AdsterraAnchor from "./AdsterraAnchor.vue";
 import { AdsterraAd } from "@/utils/adSdk.js";
 import { gaLogEvent } from "@/utils/event.js";
+import {makeDraggable} from "../utils/index.js";
+import AdsterraManager from "./AdsterraManager.vue";
 
 const router = useRouter();
 const gameStore = useGameStore();
 const gameIframe = ref(null);
+const closeBtn = ref(null);
 
 const props = defineProps({
   gameInfo: {type: Object, default: ""},
@@ -132,9 +135,10 @@ watch(
 );
 
 onMounted(() => {
-  if (AdsterraAd) {
-    AdsterraAd.showNativeBanner("ttgame");
-  }
+  // if (AdsterraAd) {
+  //   AdsterraAd.showNativeBanner("ttgame");
+  // }
+  makeDraggable(closeBtn.value);
   startLoading();
 });
 

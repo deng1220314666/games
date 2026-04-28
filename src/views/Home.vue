@@ -26,9 +26,9 @@
     </div>
 
     <Footer />
-    <InfoDialog
-        :isShow="adsUtilsStore.dialogStatus"
-        :duration="3"/>
+<!--    <InfoDialog-->
+<!--        :isShow="adsUtilsStore.dialogStatus"-->
+<!--        :duration="3"/>-->
   </div>
 </template>
 
