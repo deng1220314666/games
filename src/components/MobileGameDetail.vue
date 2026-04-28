@@ -80,7 +80,7 @@
 
       <!-- 推荐列表 -->
       <div class="flex-1 overflow-auto mt-4">
-<!--        <AdsterraManager idTxt="adsterra-banner-2-box" :zid="2" />-->
+        <div id="container-155789be5aa8a606b97a7d9e19e14adb"></div>
 
         <GameList :games="gameStore.recommendList"/>
       </div>
@@ -108,7 +108,6 @@ import AdsterraAnchor from "./AdsterraAnchor.vue";
 import { AdsterraAd } from "@/utils/adSdk.js";
 import { gaLogEvent } from "@/utils/event.js";
 import {makeDraggable} from "../utils/index.js";
-import AdsterraManager from "./AdsterraManager.vue";
 
 const router = useRouter();
 const gameStore = useGameStore();
@@ -135,9 +134,9 @@ watch(
 );
 
 onMounted(() => {
-  // if (AdsterraAd) {
-  //   AdsterraAd.showNativeBanner("ttgame");
-  // }
+  if (AdsterraAd) {
+    AdsterraAd.showNativeBanner("ttgame");
+  }
   makeDraggable(closeBtn.value);
   startLoading();
 });
