@@ -8,8 +8,8 @@
       <!-- 分类标题栏 -->
       <div
         class="category-header flex items-center justify-between p-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl mb-4 cursor-pointer hover:shadow-lg transition-all duration-300"
-        @click="navigateToCategory()"
       >
+        <!--        @click="navigateToCategory()"-->
         <div class="flex items-center">
           <img :src="item.img" alt="" class="w-10 h-10 mr-3 bg-white rounded-full p-1">
           <h2 class="text-xl font-bold">
@@ -17,7 +17,7 @@
           </h2>
         </div>
         <div class="font-medium flex items-center">
-          {{ $t('gameSearch.more') }} <span class="ml-1">></span>
+<!--          {{ $t('gameSearch.more') }} <span class="ml-1">></span>-->
         </div>
       </div>
       <AdsterraManager idTxt="adsterra-banner-1-box" :zid="1" :immediate="true" v-if="index === 0" />
