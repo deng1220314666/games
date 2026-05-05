@@ -3,8 +3,10 @@
     <div v-for="(item, index) in category" :key="index" class="w-full mb-4">
 <!--      <AdsterraManager idTxt="adsterra-banner-2-box" :zid="2" v-if="index === 2" />-->
 <!--      <AdsterraManager idTxt="adsterra-banner-3-box" :zid="3" v-if="index === 3" />-->
-<!--      <div v-if="index === 4" id="container-155789be5aa8a606b97a7d9e19e14adb"></div>-->
 
+      <AdContainer v-if="index === 0">
+        <div id="container-155789be5aa8a606b97a7d9e19e14adb"></div>
+      </AdContainer>
       <!-- 分类标题栏 -->
       <div
         class="category-header flex items-center justify-between p-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl mb-4 cursor-pointer hover:shadow-lg transition-all duration-300"
@@ -19,10 +21,11 @@
         <div class="font-medium flex items-center">
 <!--          {{ $t('gameSearch.more') }} <span class="ml-1">></span>-->
         </div>
+
       </div>
-      <AdsterraManager idTxt="adsterra-banner-1-box" :zid="1" :immediate="true" v-if="index === 0" />
       <!-- 游戏网格 -->
       <GameGrild :games="item.games"/>
+      <AdsterraManager idTxt="adsterra-banner-1-box" :zid="1" :immediate="true" v-if="index === 0" />
     </div>
 
     <Footer />
@@ -47,6 +50,7 @@ import { gaLogEvent } from "@/utils/event.js";
 import { AdsterraAd } from "@/utils/adSdk.js";
 import { pushRouterHistory } from "@/utils/index.js";
 import { useRoute } from 'vue-router';
+import AdContainer from "../components/AdContainer.vue";
 
 const {locale} = useI18n()
 const gameStore = useGameStore()
@@ -75,7 +79,6 @@ onMounted(async () => {
 
   if (AdsterraAd) {
     AdsterraAd.showSocialBar();
-    // AdsterraAd.showNativeBanner("ttgame");
 
     // setTimeout(() => {
     //   AdsterraAd.showPopunder();
