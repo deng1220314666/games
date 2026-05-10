@@ -3,7 +3,6 @@
     <div v-for="(item, index) in category" :key="index" class="w-full mb-4">
 <!--      <AdsterraManager idTxt="adsterra-banner-2-box" :zid="2" v-if="index === 2" />-->
 <!--      <AdsterraManager idTxt="adsterra-banner-3-box" :zid="3" v-if="index === 3" />-->
-      <AdsterraManager idTxt="adsterra-banner-1-box" :zid="2" :immediate="true" v-if="index === 0" />
       <!-- 分类标题栏 -->
       <div
         class="category-header flex items-center justify-between p-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl mb-4 cursor-pointer hover:shadow-lg transition-all duration-300"
@@ -20,6 +19,9 @@
         </div>
 
       </div>
+
+      <AdsterraManager idTxt="adsterra-banner-1-box" :zid="2" :immediate="true" v-if="index === 0" />
+
       <!-- 游戏网格 -->
       <GameGrild :games="item.games"/>
 
