@@ -3,14 +3,24 @@
 </template>
 
 <script setup>
-import {onMounted} from "vue";
+import {onMounted, watch} from "vue";
 import { AdsterraAd } from "@/utils/adSdk.js";
 
-onMounted(() => {
-  if (AdsterraAd) {
-    AdsterraAd.showAnchor();
+const props = defineProps({
+  isShow: {
+    type: Boolean,
+    default: false
   }
 })
+
+watch(
+  () => props.isShow,
+  (newValue, oldValue) => {
+    if (newValue) {
+      AdsterraAd.showAnchor();
+    }
+  }
+);
 </script>
 
 <style scoped>

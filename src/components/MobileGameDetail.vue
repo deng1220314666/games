@@ -10,7 +10,7 @@
           allowfullscreen
           allow="autoplay; fullscreen"
       />
-      <AdsterraAnchor />
+      <AdsterraAnchor :isShow="!state.isShow"/>
     </div>
 
     <!-- ========== 顶部信息 + Loading 层 ========== -->
@@ -81,7 +81,7 @@
       <!-- 推荐列表 -->
       <div class="flex-1 overflow-auto mt-4">
 <!--        <div id="container-155789be5aa8a606b97a7d9e19e14adb"></div>-->
-        <AdsterraManager idTxt="adsterra-banner-1-box" :zid="1" :immediate="true" />
+        <AdsterraManager idTxt="adsterra-banner-5-box" :zid="1" :immediate="true" />
         <GameList :games="gameStore.recommendList"/>
       </div>
     </div>
