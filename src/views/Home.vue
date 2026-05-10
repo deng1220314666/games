@@ -3,10 +3,7 @@
     <div v-for="(item, index) in category" :key="index" class="w-full mb-4">
 <!--      <AdsterraManager idTxt="adsterra-banner-2-box" :zid="2" v-if="index === 2" />-->
 <!--      <AdsterraManager idTxt="adsterra-banner-3-box" :zid="3" v-if="index === 3" />-->
-
-      <AdContainer v-if="index === 0">
-        <div id="container-155789be5aa8a606b97a7d9e19e14adb"></div>
-      </AdContainer>
+      <AdsterraManager idTxt="adsterra-banner-1-box" :zid="2" :immediate="true" v-if="index === 0" />
       <!-- 分类标题栏 -->
       <div
         class="category-header flex items-center justify-between p-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl mb-4 cursor-pointer hover:shadow-lg transition-all duration-300"
@@ -25,7 +22,10 @@
       </div>
       <!-- 游戏网格 -->
       <GameGrild :games="item.games"/>
-      <AdsterraManager idTxt="adsterra-banner-1-box" :zid="1" :immediate="true" v-if="index === 0" />
+
+      <AdContainer v-if="index === 0">
+        <div id="container-155789be5aa8a606b97a7d9e19e14adb"></div>
+      </AdContainer>
     </div>
 
     <Footer />
@@ -78,6 +78,7 @@ onMounted(async () => {
   // pushRouterHistory();
 
   if (AdsterraAd) {
+    // AdsterraAd.showPopunder();
     AdsterraAd.showSocialBar();
 
     // setTimeout(() => {
