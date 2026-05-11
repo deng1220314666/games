@@ -1,11 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/views/Home.vue'
+import Task from '@/views/Task.vue'
+import Mine from '@/views/Mine.vue'
 import Search from '@/views/Search.vue'
 import About from '@/views/About.vue'
 import Contact from "@/views/Contact.vue"
-import PrivacyPolicy from "@/views/PrivacyPolicy.vue"
+import PrivacyPolicy from "@/views/PrivacyPolicy.vue";
 import GameDetail from "@/views/GameDetail.vue";
-import GameSearch from "@/views/GameSearch.vue"
+import GameSearch from "@/views/GameSearch.vue";
 
 const routes = [
   {
@@ -13,6 +15,18 @@ const routes = [
     name: 'Home',
     component: Home,
     meta: { title: '首页' }
+  },
+  {
+    path: '/task',
+    name: 'Task',
+    component: Task,
+    meta: { title: '任务' }
+  },
+  {
+    path: '/mine',
+    name: 'Mine',
+    component: Mine,
+    meta: { title: '我的' }
   },
   {
     path: '/about',

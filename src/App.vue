@@ -1,9 +1,15 @@
 <template>
   <div class="h-custom-vh max-w-xl m-auto theme-transition bg-theme-bg text-theme-text hide-scrollbar flex flex-col" :data-theme="theme">
     <!-- 主要内容 -->
-    <main class="w-full box-border max-w-7xl mx-auto px-2 sm:px-1 lg:px-2 py-2 flex-1 overflow-y-auto hide-scrollbar z-0">
+    <main class="w-full box-border max-w-7xl mx-auto px-2 sm:px-1 lg:px-2 py-2 flex-1 overflow-y-auto hide-scrollbar z-0 pb-16">
       <router-view />
     </main>
+    <!-- 安装快捷方式卡片 -->
+    <InstallPrompt />
+    <!-- 底部导航 -->
+<!--    <BottomNav />-->
+    <!-- 通知权限弹窗 -->
+    <NotificationDialog ref="notificationDialog" />
   </div>
 </template>
 
@@ -12,11 +18,14 @@ import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { initVhUnit } from "@/utils/init"
 import { initGA } from "@/utils/event.js";
-import InfoDialog from "@/components/InfoDialog.vue";
+import BottomNav from "@/components/BottomNav.vue";
+import NotificationDialog from "@/components/NotificationDialog.vue";
+import InstallPrompt from "@/components/InstallPrompt.vue";
 
 const { locale } = useI18n()
 const currentLocale = ref(locale.value)
 const theme = ref('light') // light
+const notificationDialog = ref(null)
 initVhUnit();
 const switchLanguage = () => {
   locale.value = currentLocale.value

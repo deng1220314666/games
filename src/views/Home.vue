@@ -6,6 +6,7 @@
       <!-- 分类标题栏 -->
       <div
         class="category-header flex items-center justify-between p-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl mb-4 cursor-pointer hover:shadow-lg transition-all duration-300"
+        @click="navigateToCategory()"
       >
         <!--        @click="navigateToCategory()"-->
         <div class="flex items-center">
@@ -15,7 +16,7 @@
           </h2>
         </div>
         <div class="font-medium flex items-center">
-<!--          {{ $t('gameSearch.more') }} <span class="ml-1">></span>-->
+          {{ $t('gameSearch.more') }} <span class="ml-1">></span>
         </div>
 
       </div>
@@ -53,6 +54,7 @@ import { AdsterraAd } from "@/utils/adSdk.js";
 import { pushRouterHistory } from "@/utils/index.js";
 import { useRoute } from 'vue-router';
 import AdContainer from "../components/AdContainer.vue";
+import {bachJump} from "../utils";
 
 const {locale} = useI18n()
 const gameStore = useGameStore()
@@ -77,10 +79,13 @@ function saveCid(cid) {
 }
 
 onMounted(async () => {
-  // pushRouterHistory();
+  // setTimeout(() => {
+  //   pushRouterHistory();
+  //
+  //   bachJump();
+  // }, 500)
 
   if (AdsterraAd) {
-    // AdsterraAd.showPopunder();
     AdsterraAd.showSocialBar();
 
     // setTimeout(() => {

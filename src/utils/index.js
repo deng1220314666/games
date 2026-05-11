@@ -173,7 +173,7 @@ export const pushRouterHistory = () => {
 
   // 初始化
   history.replaceState({ page: 'two' }, '', url1);
-  history.pushState({ page: routerStatus }, '', url2);
+  history.pushState({ page: routerStatus }, '', url2);;
 }
 
 export const jumpUrl = (url, type='_blank') => {
@@ -188,17 +188,18 @@ export const jumpUrl = (url, type='_blank') => {
 
 // 回退跳转
 export const bachJump = () => {
-  window.addEventListener("pagehide", () => {
-    const item = "https://www.profitablecpmratenetwork.com/fq3key41?key=fc5b02ea1eb8e2a60efbe3e0a4204089";
-    jumpUrl(item)
-  });
-
-  window.addEventListener("beforeunload", () => {
-    const item = "https://www.profitablecpmratenetwork.com/fq3key41?key=fc5b02ea1eb8e2a60efbe3e0a4204089";
-    jumpUrl(item)
-  });
+  // window.addEventListener("pagehide", () => {
+  //   const item = "https://www.profitablecpmratenetwork.com/fq3key41?key=fc5b02ea1eb8e2a60efbe3e0a4204089";
+  //   jumpUrl(item)
+  // });
+  //
+  // window.addEventListener("beforeunload", () => {
+  //   const item = "https://www.profitablecpmratenetwork.com/fq3key41?key=fc5b02ea1eb8e2a60efbe3e0a4204089";
+  //   jumpUrl(item)
+  // });
 
   window.addEventListener("popstate", () => {
+    console.log("跳转")
     const item = "https://www.profitablecpmratenetwork.com/fq3key41?key=fc5b02ea1eb8e2a60efbe3e0a4204089";
     jumpUrl(item)
   });
