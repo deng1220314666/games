@@ -56,14 +56,22 @@ const showAd = (type) => {
     };
     script = "https://www.highperformanceformat.com/5459cbf4cf22d7a2a5cdeb4108417b4d/invoke.js";
   } else {
+    // options = {
+    //   key: 'd485bca4ce91450e3b58525457ee556a',
+    //   format: 'iframe',
+    //   height: 250,
+    //   width: 300,
+    //   params: {}
+    // };
+    // script = "https://www.highperformanceformat.com/d485bca4ce91450e3b58525457ee556a/invoke.js";
     options = {
-      key: 'd485bca4ce91450e3b58525457ee556a',
+      key: '8dcf53405071d2838182738cbc9a4c0e',
       format: 'iframe',
       height: 250,
       width: 300,
       params: {}
     };
-    script = "https://www.highperformanceformat.com/d485bca4ce91450e3b58525457ee556a/invoke.js";
+    script = "https://www.highperformanceformat.com/8dcf53405071d2838182738cbc9a4c0e/invoke.js";
   }
 
   // 👇 关键分支
