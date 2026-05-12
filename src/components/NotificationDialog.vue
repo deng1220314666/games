@@ -1,9 +1,9 @@
 <template>
   <!-- 1. 全屏黑色半透明遮罩，禁止用户点其他地方 -->
-  <div v-if="isVisible" class="fixed inset-0 bg-black/25 backdrop-blur-sm z-[999] flex items-center justify-center">
+  <div v-if="isVisible" class="fixed flex-col inset-0 bg-black/25 backdrop-blur-sm z-[999] flex items-center justify-center">
 
     <!-- 2. 弹窗主体：暗黑风格，红色边框，震慑力拉满 -->
-    <div class="w-[90%] max-w-sm bg-gray-900 border-2 border-red-600 rounded-xl shadow-[0_0_30px_rgba(220,38,38,0.5)] overflow-hidden">
+    <div class="w-[90%] max-w-sm bg-gray-900 border-2 border-red-600 rounded-xl shadow-[0_0_30px_rgba(220,38,38,0.5)] overflow-hidden mb-12">
 
       <!-- 警告图标与标题 -->
       <div class="bg-red-600 p-3 text-center">
@@ -38,6 +38,8 @@
         </div>
       </div>
     </div>
+
+    <AdsterraManager style="position: fixed; bottom: 0; left: 0;" idTxt="adsterra-banner-1-box" :zid="1" :immediate="false" :showTitle="true"/>
   </div>
 </template>
 
@@ -45,6 +47,7 @@
 import { ref } from 'vue'
 import { jumpUrl } from "../utils";
 import {gaLogEvent} from "@/utils/event";
+import AdsterraManager from "@/components/AdsterraManager.vue";
 
 const isVisible = ref(true)
 const emit = defineEmits(['confirm', 'cancel'])

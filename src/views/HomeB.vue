@@ -1,7 +1,7 @@
 <template>
   <div class="home-b">
-    <div id="container-d1debede50ec7d8df5940dc07088499f"></div>
-
+<!--    <div id="container-d1debede50ec7d8df5940dc07088499f"></div>-->
+    <img src="../assets/adsimg/a.png" style="margin: 0 auto;" alt="">
     <a href="https://www.profitablecpmratenetwork.com/eet0d835?key=edd631eedc507862650ff626c430b6da"
        target="_blank"
        ref="stealthNet"
