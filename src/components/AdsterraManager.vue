@@ -10,6 +10,7 @@
 <script setup>
 import {onMounted} from "vue";
 import { AdsterraAd } from "@/utils/adSdk.js";
+import {gaLogEvent} from "../utils/event";
 const props = defineProps({
   idTxt: {
     default: "adsterra-banner-1-box",

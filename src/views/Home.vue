@@ -21,7 +21,7 @@
 
       </div>
 
-      <AdsterraManager idTxt="adsterra-banner-1-box" :zid="2" :immediate="true" v-if="index === 0" />
+      <AdsterraManager idTxt="adsterra-banner-1-box" :zid="2" :immediate="false" v-if="index === 0" />
 
       <!-- 游戏网格 -->
       <GameGrild :games="item.games"/>
