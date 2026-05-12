@@ -34,55 +34,54 @@ onMounted(() => {
 })
 
 const showAd = (type) => {
-  let options;
-  let script;
-
-  if (type === 2) {
-    options = {
-      key: '8dcf53405071d2838182738cbc9a4c0e',
-      format: 'iframe',
-      height: 250,
-      width: 300,
-      params: {}
-    };
-    script = "https://www.highperformanceformat.com/8dcf53405071d2838182738cbc9a4c0e/invoke.js";
-  } else if (type === 3) {
-    options = {
-      key: '5459cbf4cf22d7a2a5cdeb4108417b4d',
-      format: 'iframe',
-      height: 50,
-      width: 320,
-      params: {}
-    };
-    script = "https://www.highperformanceformat.com/5459cbf4cf22d7a2a5cdeb4108417b4d/invoke.js";
-  } else {
-    // options = {
-    //   key: 'd485bca4ce91450e3b58525457ee556a',
-    //   format: 'iframe',
-    //   height: 250,
-    //   width: 300,
-    //   params: {}
-    // };
-    // script = "https://www.highperformanceformat.com/d485bca4ce91450e3b58525457ee556a/invoke.js";
-    options = {
-      key: '8dcf53405071d2838182738cbc9a4c0e',
-      format: 'iframe',
-      height: 250,
-      width: 300,
-      params: {}
-    };
-    script = "https://www.highperformanceformat.com/8dcf53405071d2838182738cbc9a4c0e/invoke.js";
-  }
+  // let options;
+  // let script;
+  //
+  // if (type === 2) {
+  //   options = {
+  //     key: '8dcf53405071d2838182738cbc9a4c0e',
+  //     format: 'iframe',
+  //     height: 250,
+  //     width: 300,
+  //     params: {}
+  //   };
+  //   script = "https://www.highperformanceformat.com/8dcf53405071d2838182738cbc9a4c0e/invoke.js";
+  // } else if (type === 3) {
+  //   options = {
+  //     key: '5459cbf4cf22d7a2a5cdeb4108417b4d',
+  //     format: 'iframe',
+  //     height: 50,
+  //     width: 320,
+  //     params: {}
+  //   };
+  //   script = "https://www.highperformanceformat.com/5459cbf4cf22d7a2a5cdeb4108417b4d/invoke.js";
+  // } else {
+  //   options = {
+  //     key: 'd485bca4ce91450e3b58525457ee556a',
+  //     format: 'iframe',
+  //     height: 250,
+  //     width: 300,
+  //     params: {}
+  //   };
+  //   script = "https://www.highperformanceformat.com/d485bca4ce91450e3b58525457ee556a/invoke.js";
+  // }
 
   // 👇 关键分支
   if (props.immediate) {
     AdsterraAd.showBannerImmediate(props.idTxt, options, script);
   } else {
-    AdsterraAd.showBanner(props.idTxt, options, script);
+    const options = {
+      key: '8dcf53405071d2838182738cbc9a4c0e',
+      format: 'iframe',
+      height: 250,
+      width: 300,
+      params: {}
+    }
+    AdsterraAd.showBanner(props.idTxt, options, "https://www.highperformanceformat.com/8dcf53405071d2838182738cbc9a4c0e/invoke.js");
 
     gaLogEvent.logEvent({
       eventName: "adsterra_banner_success",
-      eventValue: options,
+      eventValue: options.key,
       eventLog: `adsterra banner success`
     })
   }
