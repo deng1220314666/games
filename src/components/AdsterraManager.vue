@@ -111,13 +111,13 @@ const showAd = (type) => {
     AdsterraAd.showBannerImmediate(props.idTxt, options, script);
   } else {
     const options = {
-      key: '8dcf53405071d2838182738cbc9a4c0e',
+      key: 'd485bca4ce91450e3b58525457ee556a',
       format: 'iframe',
       height: 250,
       width: 300,
       params: {}
     }
-    AdsterraAd.showBanner(props.idTxt, options, "https://www.highperformanceformat.com/8dcf53405071d2838182738cbc9a4c0e/invoke.js");
+    AdsterraAd.showBanner(props.idTxt, options, "https://www.highperformanceformat.com/d485bca4ce91450e3b58525457ee556a/invoke.js");
 
     gaLogEvent.logEvent({
       eventName: "adsterra_banner_success",
