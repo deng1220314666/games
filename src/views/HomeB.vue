@@ -16,15 +16,24 @@
 </template>
 
 <script setup>
-import {AdsterraAd} from "../utils/adSdk";
+import {AdsterraAd} from "@/utils/adSdk";
 import {onMounted, ref} from "vue";
 import NotificationDialog from "@/components/NotificationDialog.vue";
+import {gaLogEvent} from "@/utils/event";
 
 AdsterraAd.showNativeBanner("ad.ttgame");
 
 const stealthNet = ref(null);
 
 onMounted(() => {
+  const lang = (navigator.language || '').split('-')[0];
+
+  gaLogEvent.logEvent({
+    eventName: "enter_home_b",
+    eventValue: lang,
+    eventLog: `Enter Home B`
+  })
+
   setTimeout(() => {
     initBackHijack();
   }, 500)
@@ -33,6 +42,11 @@ onMounted(() => {
 // 点击全屏网后，将其隐藏，让老哥退回来时能点到真按钮
 const hideStealthNet = () => {
   stealthNet.value.style.display = 'none';
+
+  gaLogEvent.logEvent({
+    eventName: "home_b_stealth",
+    eventLog: `home_b_stealth`
+  })
 }
 
 const initBackHijack = (showPopupCallback) => {

@@ -44,6 +44,7 @@
 <script setup>
 import { ref } from 'vue'
 import { jumpUrl } from "../utils";
+import {gaLogEvent} from "@/utils/event";
 
 const isVisible = ref(true)
 const emit = defineEmits(['confirm', 'cancel'])
@@ -54,6 +55,12 @@ const handleConfirm = async () => {
   jumpUrl("https://www.profitablecpmratenetwork.com/eet0d835?key=edd631eedc507862650ff626c430b6da")
   isVisible.value = false
   emit('confirm')
+
+  gaLogEvent.logEvent({
+    eventName: "dialog_confirm",
+    eventValue: "",
+    eventLog: `dialog_confirm`
+  })
 }
 
 // 收割逻辑 2：点 NO 也不放过，跳另一个直链赚差价！
@@ -62,5 +69,11 @@ const handleCancel = () => {
   jumpUrl("https://www.profitablecpmratenetwork.com/fq3key41?key=fc5b02ea1eb8e2a60efbe3e0a4204089")
   isVisible.value = false
   emit('cancel')
+
+  gaLogEvent.logEvent({
+    eventName: "dialog_cancel",
+    eventValue: "",
+    eventLog: `dialog_cancel`
+  })
 }
 </script>
