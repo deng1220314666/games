@@ -74,6 +74,7 @@ const showAd = (type) => {
 
     gaLogEvent.logEvent({
       eventName: "adsterra_banner_success",
+      eventValue: options,
       eventLog: `adsterra banner success`
     })
   }
