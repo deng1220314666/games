@@ -4,8 +4,6 @@
     <main class="w-full box-border max-w-7xl mx-auto px-2 sm:px-1 lg:px-2 py-2 flex-1 overflow-y-auto hide-scrollbar z-0 pb-16">
       <router-view />
     </main>
-    <!-- 安装快捷方式卡片 -->
-    <InstallPrompt />
     <!-- 底部导航 -->
 <!--    <BottomNav />-->
   </div>
@@ -17,7 +15,6 @@ import { useI18n } from 'vue-i18n'
 import { initVhUnit } from "@/utils/init"
 import { initGA } from "@/utils/event.js";
 import BottomNav from "@/components/BottomNav.vue";
-import InstallPrompt from "@/components/InstallPrompt.vue";
 
 const { locale } = useI18n()
 const currentLocale = ref(locale.value)

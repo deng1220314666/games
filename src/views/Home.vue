@@ -38,6 +38,9 @@
 
     <!-- 通知权限弹窗 -->
 <!--    <NotificationDialog ref="notificationDialog" />-->
+
+    <!-- 安装快捷方式卡片 -->
+    <InstallPrompt />
   </div>
 </template>
 
@@ -59,6 +62,7 @@ import { useRoute } from 'vue-router';
 import AdContainer from "../components/AdContainer.vue";
 import {bachJump} from "../utils";
 import NotificationDialog from "@/components/NotificationDialog.vue";
+import InstallPrompt from "@/components/InstallPrompt.vue";
 
 const {locale} = useI18n()
 const gameStore = useGameStore()
