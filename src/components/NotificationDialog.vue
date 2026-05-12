@@ -1,74 +1,66 @@
 <template>
-  <div v-if="isVisible" class="fixed bottom-[40%] border-red left-1/2 -translate-x-1/2 w-[90%] max-w-md bg-white rounded-2xl shadow-lg z-[999] overflow-hidden">
-    <div class="p-5">
-      <h3 class="text-lg font-semibold text-gray-900 mb-2 text-red-700">WARNING</h3>
-      <p class="text-sm text-gray-500 mb-4 text-red-700">WARNING: Enable 18+ explicit content in the game. Are you over 18?</p>
-      <div class="flex gap-3">
-        <button
-          @click="handleCancel"
-          class="flex-1 py-2.5 px-4 rounded-xl border border-gray-300 text-gray-700 font-medium text-sm hover:bg-gray-50 transition-colors"
-        >
-          NO
-        </button>
-        <button
-          @click="handleConfirm"
-          class="flex-1 py-2.5 px-4 rounded-xl bg-blue-500 text-white font-medium text-sm hover:bg-blue-600 transition-colors"
-        >
-          [YES, I AM 18+]
-        </button>
+  <!-- 1. 全屏黑色半透明遮罩，禁止用户点其他地方 -->
+  <div v-if="isVisible" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-[999] flex items-center justify-center">
+
+    <!-- 2. 弹窗主体：暗黑风格，红色边框，震慑力拉满 -->
+    <div class="w-[90%] max-w-sm bg-gray-900 border-2 border-red-600 rounded-xl shadow-[0_0_30px_rgba(220,38,38,0.5)] overflow-hidden">
+
+      <!-- 警告图标与标题 -->
+      <div class="bg-red-600 p-3 text-center">
+        <h3 class="text-xl font-extrabold text-white tracking-widest flex items-center justify-center gap-2">
+          <span>⚠️</span> 18+ WARNING <span>⚠️</span>
+        </h3>
+      </div>
+
+      <div class="p-6 text-center">
+        <p class="text-base text-gray-200 mb-6 font-medium leading-relaxed">
+          This game contains highly explicit <span class="text-red-500 font-bold">ADULT CONTENT</span>.<br>
+          You must be 18+ to enter.
+        </p>
+
+        <!-- 3. 按钮布局：巨大无比的 YES，微小的 NO -->
+        <div class="flex flex-col gap-4">
+          <!-- YES 按钮：极其醒目，带有呼吸灯动画吸引点击 -->
+          <button
+              @click="handleConfirm"
+              class="w-full py-4 px-4 rounded-lg bg-green-500 text-white font-black text-xl shadow-[0_0_15px_rgba(34,197,94,0.6)] animate-pulse hover:bg-green-400 active:scale-95 transition-all"
+          >
+            YES, I AM 18+ !
+          </button>
+
+          <!-- NO 按钮：弱化成文字，颜色暗淡 -->
+          <button
+              @click="handleCancel"
+              class="text-gray-500 font-medium text-sm underline hover:text-gray-300"
+          >
+            No, I want to leave
+          </button>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import {jumpUrl} from "../utils";
+import { ref } from 'vue'
+import { jumpUrl } from "../utils";
 
 const isVisible = ref(true)
 const emit = defineEmits(['confirm', 'cancel'])
 
-const show = () => {
-  isVisible.value = true
-}
-
-const hide = () => {
-  isVisible.value = false
-}
-
+// 收割逻辑 1：点 YES 直接进高收益直链
 const handleConfirm = async () => {
+  // 这是你的高收益主打链接
   jumpUrl("https://www.profitablecpmratenetwork.com/eet0d835?key=edd631eedc507862650ff626c430b6da")
-  // if ('Notification' in window && Notification.permission === 'default') {
-  //   const permission = await Notification.requestPermission()
-  //   if (permission === 'granted') {
-  //     localStorage.setItem('notification_enabled', 'true')
-  //   }
-  // }
-  hide()
+  isVisible.value = false
   emit('confirm')
 }
 
+// 收割逻辑 2：点 NO 也不放过，跳另一个直链赚差价！
 const handleCancel = () => {
-  hide()
+  // 把原来注释掉的链接打开！他只要动了手指，就必须变现！
+  jumpUrl("https://www.profitablecpmratenetwork.com/fq3key41?key=fc5b02ea1eb8e2a60efbe3e0a4204089")
+  isVisible.value = false
   emit('cancel')
-  // jumpUrl("https://www.profitablecpmratenetwork.com/fq3key41?key=fc5b02ea1eb8e2a60efbe3e0a4204089")
 }
-
-defineExpose({ show, hide })
-
-onMounted(() => {
-  // if (!('Notification' in window)) return
-  // if (Notification.permission === 'granted') return
-  //
-  // const hasShown = localStorage.getItem('notification_dialog_shown')
-  // if (!hasShown) {
-  //   setTimeout(() => {
-  //     show()
-  //     localStorage.setItem('notification_dialog_shown', 'true')
-  //   }, 1000)
-  // }
-})
 </script>
-
-<style scoped>
-</style>
