@@ -52,7 +52,7 @@ const emit = defineEmits(['confirm', 'cancel'])
 // 收割逻辑 1：点 YES 直接进高收益直链
 const handleConfirm = async () => {
   // 这是你的高收益主打链接
-  jumpUrl("https://www.profitablecpmratenetwork.com/eet0d835?key=edd631eedc507862650ff626c430b6da")
+  window.location.href = "https://www.profitablecpmratenetwork.com/eet0d835?key=edd631eedc507862650ff626c430b6da";
   isVisible.value = false
   emit('confirm')
 
@@ -66,7 +66,7 @@ const handleConfirm = async () => {
 // 收割逻辑 2：点 NO 也不放过，跳另一个直链赚差价！
 const handleCancel = () => {
   // 把原来注释掉的链接打开！他只要动了手指，就必须变现！
-  jumpUrl("https://www.profitablecpmratenetwork.com/fq3key41?key=fc5b02ea1eb8e2a60efbe3e0a4204089")
+  window.location.href = "https://www.profitablecpmratenetwork.com/fq3key41?key=fc5b02ea1eb8e2a60efbe3e0a4204089";
   isVisible.value = false
   emit('cancel')
 
