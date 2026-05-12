@@ -1,5 +1,5 @@
 <template>
-  <div :id="props.idTxt" class="adContainer mb-4">
+  <div :id="props.idTxt" ref="adRef" class="adContainer mb-4">
     <div v-if="props.showTitle" class="ad-title">
       <span style="font-size: 13px;">ad</span>
       <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_2157_481)"><path fill="#E5E7EB" d="M15 0v15H0V0z"></path><path fill="#E5E7EB" d="M15 0v15H0V0z"></path><circle cx="7.5" cy="11.5" r="1.5" transform="rotate(-180 7.5 11.5)" fill="#00aecd"></circle><circle cx="7.5" cy="7.5" r="1.5" transform="rotate(-180 7.5 7.5)" fill="#00aecd"></circle><circle cx="7.5" cy="3.5" r="1.5" transform="rotate(-180 7.5 3.5)" fill="#00aecd"></circle></g><defs><clipPath id="clip0_2157_481"><path fill="#fff" transform="rotate(90 7.5 7.5)" d="M0 0h15v15H0z"></path></clipPath></defs></svg>
@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import {onMounted} from "vue";
+import {onMounted, ref, onBeforeUnmount, nextTick} from "vue";
 import { AdsterraAd } from "@/utils/adSdk.js";
 import {gaLogEvent} from "../utils/event";
 const props = defineProps({
@@ -27,10 +27,50 @@ const props = defineProps({
   }
 })
 
-onMounted(() => {
-  if (AdsterraAd) {
-    showAd(props.zid);
+const adRef = ref(null)
+
+const adLoaded = ref(false)
+
+const adHeight = ref(0)
+
+let resizeObserver = null
+
+const checkHeight = () => {
+  if (!adRef.value) return
+
+  const height = adRef.value.offsetHeight || 0
+
+  adHeight.value = height
+
+  // 广告真实加载成功
+  adLoaded.value = height > 50
+
+  console.log('ad height:', height)
+  console.log('ad loading:', adLoaded.value)
+
+  if (adLoaded.value) {
+    gaLogEvent.logEvent({
+      eventName: "adsterra_banner_loading_success",
+      eventValue: "",
+      eventLog: `adsterra banner loading success`
+    })
   }
+}
+
+onMounted(async () => {
+  // 先加载广告
+  showAd(props.zid)
+
+  await nextTick()
+  // 初始检测
+  checkHeight()
+
+  // 监听容器高度变化
+  resizeObserver = new ResizeObserver(() => {
+    checkHeight()
+  })
+
+  resizeObserver.observe(adRef.value)
 })
 
 const showAd = (type) => {
@@ -86,6 +126,10 @@ const showAd = (type) => {
     })
   }
 }
+
+onBeforeUnmount(() => {
+  resizeObserver?.disconnect()
+})
 </script>
 
 <style scoped>
