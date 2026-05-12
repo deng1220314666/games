@@ -8,8 +8,6 @@
     <InstallPrompt />
     <!-- 底部导航 -->
 <!--    <BottomNav />-->
-    <!-- 通知权限弹窗 -->
-    <NotificationDialog ref="notificationDialog" />
   </div>
 </template>
 
@@ -19,7 +17,6 @@ import { useI18n } from 'vue-i18n'
 import { initVhUnit } from "@/utils/init"
 import { initGA } from "@/utils/event.js";
 import BottomNav from "@/components/BottomNav.vue";
-import NotificationDialog from "@/components/NotificationDialog.vue";
 import InstallPrompt from "@/components/InstallPrompt.vue";
 
 const { locale } = useI18n()

@@ -26,15 +26,18 @@
       <!-- 游戏网格 -->
       <GameGrild :games="item.games"/>
 
-      <AdContainer v-if="index === 0">
-        <div id="container-155789be5aa8a606b97a7d9e19e14adb"></div>
-      </AdContainer>
+<!--      <AdContainer v-if="index === 0">-->
+<!--        <div id="container-155789be5aa8a606b97a7d9e19e14adb"></div>-->
+<!--      </AdContainer>-->
     </div>
 
     <Footer />
 <!--    <InfoDialog-->
 <!--        :isShow="adsUtilsStore.dialogStatus"-->
 <!--        :duration="3"/>-->
+
+    <!-- 通知权限弹窗 -->
+    <NotificationDialog ref="notificationDialog" />
   </div>
 </template>
 
@@ -55,6 +58,7 @@ import { pushRouterHistory } from "@/utils/index.js";
 import { useRoute } from 'vue-router';
 import AdContainer from "../components/AdContainer.vue";
 import {bachJump} from "../utils";
+import NotificationDialog from "@/components/NotificationDialog.vue";
 
 const {locale} = useI18n()
 const gameStore = useGameStore()

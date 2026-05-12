@@ -8,12 +8,19 @@ import Contact from "@/views/Contact.vue"
 import PrivacyPolicy from "@/views/PrivacyPolicy.vue";
 import GameDetail from "@/views/GameDetail.vue";
 import GameSearch from "@/views/GameSearch.vue";
+import HomeB from "@/views/HomeB.vue";
 
 const routes = [
   {
     path: '/',
     name: 'Home',
     component: Home,
+    meta: { title: '首页' }
+  },
+  {
+    path: '/homeb',
+    name: 'Home-B',
+    component: HomeB,
     meta: { title: '首页' }
   },
   {
