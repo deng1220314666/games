@@ -37,7 +37,7 @@
 <!--        :duration="3"/>-->
 
     <!-- 通知权限弹窗 -->
-    <NotificationDialog ref="notificationDialog" />
+<!--    <NotificationDialog ref="notificationDialog" />-->
   </div>
 </template>
 
