@@ -3,7 +3,7 @@
   <div v-if="isVisible" class="fixed flex-col inset-0 bg-black/25 backdrop-blur-sm z-[999] flex items-center justify-start">
 
     <!-- 2. 弹窗主体：暗黑风格，红色边框，震慑力拉满 -->
-    <div class="w-[90%] max-w-sm bg-gray-900 border-2 border-red-600 rounded-xl shadow-[0_0_30px_rgba(220,38,38,0.5)] overflow-hidden mt-[11rem]">
+    <div class="w-[90%] max-w-sm bg-gray-900 border-2 border-red-600 rounded-xl shadow-[0_0_30px_rgba(220,38,38,0.5)] overflow-hidden mt-[8rem]">
 
       <!-- 警告图标与标题 -->
       <div class="bg-red-600 p-3 text-center">
