@@ -70,6 +70,11 @@ const showAd = (type) => {
     AdsterraAd.showBannerImmediate(props.idTxt, options, script);
   } else {
     AdsterraAd.showBanner(props.idTxt, options, script);
+
+    gaLogEvent.logEvent({
+      eventName: "adsterra_banner_success",
+      eventLog: `adsterra banner success`
+    })
   }
 }
 </script>
