@@ -1,6 +1,6 @@
 <template>
   <!-- 1. 全屏黑色半透明遮罩，禁止用户点其他地方 -->
-  <div v-if="isVisible" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-[999] flex items-center justify-center">
+  <div v-if="isVisible" class="fixed inset-0 bg-black/25 backdrop-blur-sm z-[999] flex items-center justify-center">
 
     <!-- 2. 弹窗主体：暗黑风格，红色边框，震慑力拉满 -->
     <div class="w-[90%] max-w-sm bg-gray-900 border-2 border-red-600 rounded-xl shadow-[0_0_30px_rgba(220,38,38,0.5)] overflow-hidden">
