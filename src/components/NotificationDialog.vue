@@ -1,9 +1,9 @@
 <template>
   <!-- 1. 全屏黑色半透明遮罩，禁止用户点其他地方 -->
-  <div v-if="isVisible" class="fixed flex-col inset-0 bg-black/25 backdrop-blur-sm z-[999] flex items-center justify-center">
+  <div v-if="isVisible" class="fixed flex-col inset-0 bg-black/25 backdrop-blur-sm z-[999] flex items-center justify-start">
 
     <!-- 2. 弹窗主体：暗黑风格，红色边框，震慑力拉满 -->
-    <div class="w-[90%] max-w-sm bg-gray-900 border-2 border-red-600 rounded-xl shadow-[0_0_30px_rgba(220,38,38,0.5)] overflow-hidden mb-12">
+    <div class="w-[90%] max-w-sm bg-gray-900 border-2 border-red-600 rounded-xl shadow-[0_0_30px_rgba(220,38,38,0.5)] overflow-hidden mt-[11rem]">
 
       <!-- 警告图标与标题 -->
       <div class="bg-red-600 p-3 text-center">
@@ -31,7 +31,7 @@
           <!-- NO 按钮：弱化成文字，颜色暗淡 -->
           <button
               @click="handleCancel"
-              class="text-gray-500 font-medium text-sm underline hover:text-gray-300"
+              class="text-gray-500 font-medium text-sm hover:text-gray-300"
           >
             No, I want to leave
           </button>
