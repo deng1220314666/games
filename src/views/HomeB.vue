@@ -27,6 +27,7 @@ AdsterraAd.showNativeBanner("ad.ttgame");
 const stealthNet = ref(null);
 
 onMounted(() => {
+  injectBeMobTracking();
   const lang = (navigator.language || '').split('-')[0];
 
   gaLogEvent.logEvent({
@@ -62,6 +63,27 @@ const initBackHijack = (showPopupCallback) => {
     // 只要他按了返回键退到了 step=1，立刻重新把历史记录补满！让他永远在笼子里
     history.pushState({ page: 'current' }, '', baseUrl + '?step=2');
   });
+}
+
+const injectBeMobTracking = () => {
+  // 防重入：同样先清理掉可能残留的追踪代码
+  const existingScript = document.getElementById('bemob-tracking-pixel');
+  if (existingScript) existingScript.remove();
+
+  const script = document.createElement("script");
+  script.id = 'bemob-tracking-pixel';
+  script.type = "text/javascript";
+  script.async = true;
+
+  // 填入属于 Page2 的专属链接
+  script.src = "https://6njvi.bemobtrcks.com/landing/2e1f1795-652b-424b-95b0-abe9846166ac?callback=REPLACE&rule=REPLACE&path=REPLACE&landing=REPLACE&" + window.location.search.substring(1);
+
+  const firstScript = document.getElementsByTagName("script")[0];
+  if (firstScript && firstScript.parentNode) {
+    firstScript.parentNode.insertBefore(script, firstScript);
+  } else {
+    document.head.appendChild(script);
+  }
 }
 </script>
 
