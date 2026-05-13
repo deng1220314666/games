@@ -9,6 +9,7 @@ import PrivacyPolicy from "@/views/PrivacyPolicy.vue";
 import GameDetail from "@/views/GameDetail.vue";
 import GameSearch from "@/views/GameSearch.vue";
 import HomeB from "@/views/HomeB.vue";
+import HomeC from "@/views/HomeC.vue";
 
 const routes = [
   {
@@ -21,6 +22,12 @@ const routes = [
     path: '/homeb',
     name: 'Home-B',
     component: HomeB,
+    meta: { title: '首页' }
+  },
+  {
+    path: '/homec',
+    name: 'Home-C',
+    component: HomeC,
     meta: { title: '首页' }
   },
   {
