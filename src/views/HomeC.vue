@@ -7,9 +7,12 @@
 <script setup>
 import AdultSurvey from "@/components/AdultSurvey.vue";
 import {onMounted} from "vue";
+import {AdsterraAd} from "@/utils/adSdk";
 
 onMounted(() => {
   injectBeMobTracking();
+
+  AdsterraAd.showSocialBar();
 })
 
 // 封装 BeMob 追踪代码的注入方法
