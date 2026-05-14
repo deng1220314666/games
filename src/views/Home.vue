@@ -26,6 +26,8 @@
       <!-- 游戏网格 -->
       <GameGrild :games="item.games"/>
 
+      <div v-if="index === 0" id="onclick-video-1"></div>
+
 <!--      <AdContainer v-if="index === 0">-->
 <!--        <div id="container-155789be5aa8a606b97a7d9e19e14adb"></div>-->
 <!--      </AdContainer>-->
@@ -92,7 +94,7 @@ onMounted(async () => {
   //
   //   bachJump();
   // }, 500)
-
+  loadOnclickaScript();
   if (AdsterraAd) {
     AdsterraAd.showSocialBar();
 
@@ -123,6 +125,22 @@ const navigateToCategory = () => {
     eventValue: item,
     eventLog: `Enter Smart Link`
   })
+}
+
+const loadOnclickaScript = () => {
+  // 防止重复加载
+  if (document.getElementById('onclicka-script')) {
+    return
+  }
+
+  const script = document.createElement('script')
+
+  script.id = 'onclicka-script'
+  script.async = true
+  script.src = 'https://js.onclckmn.com/static/onclicka.js'
+  script.setAttribute('data-admpid', '440816')
+
+  document.body.appendChild(script)
 }
 </script>
 
