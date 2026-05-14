@@ -204,3 +204,8 @@ export const bachJump = () => {
     jumpUrl(item)
   });
 }
+
+// 生成随机数
+export const randomNum = () => {
+  return Math.floor(Math.random() * (800 - 500 + 1)) + 500
+}

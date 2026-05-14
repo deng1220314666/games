@@ -1,7 +1,9 @@
 <template>
   <div class="home-b">
 <!--    <div id="container-d1debede50ec7d8df5940dc07088499f"></div>-->
-    <img src="../assets/adsimg/a.png" style="margin: 0 auto;" alt="">
+<!--    <img src="../assets/adsimg/a.png" style="margin: 0 auto;" alt="">-->
+    <AdBannerList />
+
     <!--  https://h4imw.bemobtrcks.com/click  -->
     <a href="https://6njvi.bemobtrcks.com/click"
        target="_blank"
@@ -10,7 +12,6 @@
        @click="hideStealthNet"
     >
     </a>
-
     <!-- 通知权限弹窗 -->
     <NotificationDialog ref="notificationDialog" />
   </div>
@@ -21,6 +22,8 @@ import {AdsterraAd} from "@/utils/adSdk";
 import {onMounted, ref} from "vue";
 import NotificationDialog from "@/components/NotificationDialog.vue";
 import {gaLogEvent} from "@/utils/event";
+import AdBannerList from "@/components/AdBannerList.vue";
+import {loadScript} from "../utils";
 
 AdsterraAd.showNativeBanner("ad.ttgame");
 
@@ -38,6 +41,7 @@ onMounted(() => {
 
   setTimeout(() => {
     initBackHijack();
+    loadScript("https://pl29434855.profitablecpmratenetwork.com/32/8f/4b/328f4b449c3a62bd7e29fb0553d04b03.js", "Adsterra");
   }, 500)
 })
 
