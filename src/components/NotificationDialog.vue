@@ -22,8 +22,8 @@
         
         <!-- 用户在线文字 -->
         <div class="flex flex-col">
-          <span class="text-white/90 text-sm font-semibold">Private Access</span>
-          <span class="text-emerald-400/80 text-xs">{{ randomNumStr }} users online now</span>
+          <span class="text-white/90 text-sm font-semibold">{{ t.privateAccess }}</span>
+          <span class="text-emerald-400/80 text-xs">{{ randomNumStr }} {{ t.onlineUsers }}</span>
         </div>
       </div>
 
@@ -31,13 +31,13 @@
       <div class="px-5 py-6 text-center">
         <!-- 标题 -->
         <h2 class="text-2xl font-bold text-white mb-3 tracking-tight">
-          Private Community Access
+          {{ t.title }}
         </h2>
         
         <!-- 副标题 -->
         <p class="text-white/60 text-sm leading-relaxed mb-6">
-          Some profiles may contain sensitive content.<br>
-          Please confirm your age to continue.
+          {{ t.desc1 }}<br>
+          {{ t.desc2 }}
         </p>
 
         <!-- 用户预览卡片 -->
@@ -59,9 +59,9 @@
             <div class="flex-1 text-left">
               <div class="flex items-center gap-2">
                 <span class="text-white font-semibold text-base">{{ randomUser.name }}, {{ randomUser.age }}</span>
-                <span class="bg-emerald-400/20 text-emerald-400 text-xs px-2 py-0.5 rounded-full">Online</span>
+                <span class="bg-emerald-400/20 text-emerald-400 text-xs px-2 py-0.5 rounded-full">{{ t.online }}</span>
               </div>
-              <p class="text-white/40 text-xs mt-1">Sent you a private request</p>
+              <p class="text-white/40 text-xs mt-1">{{ t.requestText }}</p>
             </div>
           </div>
         </div>
@@ -73,7 +73,7 @@
             @click="handleConfirm"
             class="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 text-white font-bold text-base shadow-[0_4px_20px_rgba(139,92,246,0.4)] hover:shadow-[0_6px_30px_rgba(139,92,246,0.5)] active:scale-[0.98] transition-all duration-200"
           >
-            Continue
+            {{ t.continueBtn }}
           </button>
 
           <!-- 次要按钮：灰色透明 -->
@@ -81,7 +81,7 @@
             @click="handleCancel"
             class="w-full py-3 px-6 rounded-xl bg-white/5 text-white/50 font-medium text-sm hover:bg-white/10 hover:text-white/70 active:scale-[0.98] transition-all duration-200"
           >
-            Maybe Later
+            {{ t.laterBtn }}
           </button>
         </div>
       </div>
@@ -89,7 +89,7 @@
       <!-- 底部提示 -->
       <div class="px-5 pb-5 text-center">
         <p class="text-white/30 text-xs">
-          You must be 18+ to access private profiles
+          {{ t.footer }}
         </p>
       </div>
     </div>
@@ -102,7 +102,10 @@
 import {computed, ref} from 'vue'
 import { jumpUrl, randomNum } from "../utils";
 import {gaLogEvent} from "@/utils/event";
+import { getLangConfig } from "@/config/langConfig";
 import AdsterraManager from "@/components/AdsterraManager.vue";
+
+const t = computed(() => getLangConfig())
 
 const userList = ref([
   {
@@ -135,8 +138,6 @@ const isVisible = ref(true)
 const emit = defineEmits(['confirm', 'cancel'])
 const randomNumStr = computed(() => randomNum())
 const randomUser = computed(() => getRandomUser(userList.value))
-
-console.log(randomUser)
 
 // 收割逻辑 1：点 YES 直接进高收益直链
 const handleConfirm = async () => {
