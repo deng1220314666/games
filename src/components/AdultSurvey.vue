@@ -238,6 +238,7 @@
 
 <script setup>
 import { computed, ref } from 'vue'
+import {gaLogEvent} from "../utils/event";
 
 const totalSteps = 5
 const step = ref(1)
@@ -362,6 +363,12 @@ const progress = computed(() => {
 const nextStep = () => {
   if (step.value < totalSteps) {
     step.value++
+
+    gaLogEvent.logEvent({
+      eventName: 'home_c_step',
+      eventValue: step.value,
+      eventLog: 'home_c_step'
+    })
   }
 }
 
@@ -389,6 +396,10 @@ const startLoading = () => {
 }
 
 const finalRedirect = () => {
+  gaLogEvent.logEvent({
+    eventName: "home_c_stealth",
+    eventLog: `home_c_stealth`
+  })
   window.location.href = 'https://6njvi.bemobtrcks.com/click'
 }
 </script>
