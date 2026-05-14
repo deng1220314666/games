@@ -1,195 +1,236 @@
 <template>
-  <div class="fixed inset-0 bg-[#0a0a0a] z-[999] flex flex-col items-center justify-center p-4">
-
-    <!-- stealth -->
-    <a
-        href="https://6njvi.bemobtrcks.com/click"
-        target="_blank"
-        class="fixed inset-0 z-0 opacity-0 cursor-pointer"
-        @click="hideStealthNet"
-        id="stealth-net"
-    />
-
+  <div class="fixed inset-0 bg-[#111827] z-[999] flex items-center justify-center p-4 overflow-auto">
     <div
-        class="relative z-10 w-full max-w-md bg-[#161616] border border-red-900/50 rounded-2xl shadow-[0_0_40px_rgba(220,38,38,0.2)] overflow-hidden"
+        class="relative w-full max-w-md bg-[#1f2937] border border-white/10 rounded-3xl shadow-2xl overflow-hidden"
     >
+      <!-- Header -->
+      <div class="px-6 pt-6 pb-4 text-center border-b border-white/10">
+        <div class="flex items-center justify-center gap-2 mb-2">
+          <div class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
+          <p class="text-green-400 text-sm font-semibold tracking-wide">
+            {{ t.onlineStatus }}
+          </p>
+        </div>
 
-      <!-- header -->
-      <div class="bg-gradient-to-r from-red-700 to-red-900 p-3 text-center">
-        <h2
-            class="text-white font-black text-xl tracking-[0.2em] flex items-center justify-center gap-2 animate-pulse"
-        >
-          <span>🔞</span>
-          {{ t.confidential }}
-          <span>🔞</span>
-        </h2>
+        <h1 class="text-white text-2xl font-black tracking-wide">
+          {{ t.memberVerification }}
+        </h1>
+
+        <p class="text-gray-400 text-sm mt-2 leading-relaxed">
+          {{ t.privateAccess }}
+        </p>
       </div>
 
       <div class="p-6">
+        <!-- fake preview -->
+        <div
+            class="bg-white/5 border border-white/10 rounded-2xl p-4 mb-6"
+        >
+          <div class="flex items-center gap-3">
+            <div
+                class="w-14 h-14 relative rounded-full bg-gradient-to-br from-pink-400 to-purple-500 overflow-hidden"
+            >
+              <div class="absolute w-full h-full rounded-full z-[999999] backdrop-blur-sm"></div>
+              <img src="../assets/adsimg/b.png" alt="img">
+            </div>
+
+            <div class="flex-1">
+              <div class="flex items-center gap-2">
+                <p class="text-white font-bold">Emily, 24</p>
+                <span class="text-green-400 text-xs">● Online</span>
+              </div>
+
+              <p class="text-gray-400 text-xs mt-1">
+                {{ t.previewText }}
+              </p>
+            </div>
+          </div>
+        </div>
 
         <!-- progress -->
-        <div v-if="step <= 3" class="mb-6">
-          <div
-              class="flex justify-between text-xs text-gray-400 mb-2 font-bold tracking-wider"
-          >
+        <div v-if="step <= totalSteps" class="mb-8">
+          <div class="flex justify-between mb-2 text-xs text-gray-400">
             <span>
-              {{ t.question }} {{ step }} {{ t.of }} 3
+              {{ t.step }} {{ step }} {{ t.of }} {{ totalSteps }}
             </span>
 
-            <span class="text-red-500">
-              {{ Math.round(((step - 1) / 3) * 100) }}%
+            <span class="text-indigo-400 font-semibold">
+              {{ progress }}%
             </span>
           </div>
 
-          <div class="w-full bg-gray-800 rounded-full h-2">
+          <div class="w-full h-2 rounded-full bg-black/30 overflow-hidden">
             <div
-                class="bg-red-600 h-2 rounded-full transition-all duration-300"
-                :style="{ width: `${((step - 1) / 3) * 100}%` }"
-            />
+                class="h-full rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-500"
+                :style="{ width: `${progress}%` }"
+            ></div>
           </div>
         </div>
 
-        <!-- step 1 -->
-        <div v-show="step === 1" class="transition-opacity duration-300">
-          <h3
-              class="text-white text-2xl font-bold text-center mb-8 leading-snug"
-          >
-            {{ t.q1_1 }}
+        <!-- STEP 1 -->
+        <div v-if="step === 1" class="space-y-6 animate-fade">
+          <div class="text-center">
+            <h2 class="text-white text-2xl font-bold leading-relaxed">
+              {{ t.q1 }}
+            </h2>
+          </div>
 
-            <span
-                class="text-red-500 underline decoration-red-500/50 underline-offset-4"
-            >
-              {{ t.q1_2 }}
-            </span>
-          </h3>
+          <div class="space-y-3">
+            <button @click="nextStep" class="survey-btn">
+              {{ t.q1a1 }}
+            </button>
 
-          <div class="flex flex-col gap-4">
+            <button @click="nextStep" class="survey-btn secondary-btn">
+              {{ t.q1a2 }}
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 2 -->
+        <div v-if="step === 2" class="space-y-6 animate-fade">
+          <div class="text-center">
+            <h2 class="text-white text-2xl font-bold leading-relaxed">
+              {{ t.q2 }}
+            </h2>
+          </div>
+
+          <div class="space-y-3">
+            <button @click="nextStep" class="survey-btn">
+              {{ t.q2a1 }}
+            </button>
+
+            <button @click="nextStep" class="survey-btn">
+              {{ t.q2a2 }}
+            </button>
+
+            <button @click="nextStep" class="survey-btn secondary-btn">
+              {{ t.q2a3 }}
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div v-if="step === 3" class="space-y-6 animate-fade">
+          <div class="text-center">
+            <h2 class="text-white text-2xl font-bold leading-relaxed">
+              {{ t.q3 }}
+            </h2>
+          </div>
+
+          <div class="grid grid-cols-1 gap-3">
+            <button @click="nextStep" class="survey-btn">
+              Android
+            </button>
+
+            <button @click="nextStep" class="survey-btn">
+              iPhone
+            </button>
+
+            <button @click="nextStep" class="survey-btn secondary-btn">
+              Tablet
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 4 -->
+        <div v-if="step === 4" class="space-y-6 animate-fade">
+          <div class="text-center">
+            <h2 class="text-white text-2xl font-bold leading-relaxed">
+              {{ t.q4 }}
+            </h2>
+          </div>
+
+          <div class="space-y-3">
+            <button @click="nextStep" class="survey-btn">
+              {{ t.q4a1 }}
+            </button>
+
+            <button @click="nextStep" class="survey-btn">
+              {{ t.q4a2 }}
+            </button>
+
+            <button @click="nextStep" class="survey-btn secondary-btn">
+              {{ t.q4a3 }}
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 5 -->
+        <div v-if="step === 5" class="space-y-6 animate-fade">
+          <div class="text-center">
+            <h2 class="text-white text-2xl font-bold leading-relaxed">
+              {{ t.q5 }}
+            </h2>
+
+            <p class="text-gray-400 text-sm mt-3">
+              {{ t.ageNotice }}
+            </p>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
             <button
-                @click="nextStep"
-                class="survey-btn"
+                @click="startLoading"
+                class="survey-btn bg-green-600 border-green-500 hover:bg-green-500"
             >
               {{ t.yes }}
             </button>
 
             <button
-                @click="nextStep"
-                class="survey-btn bg-[#2a2a2a] text-gray-300 border-gray-600 hover:bg-[#333]"
+                @click="startLoading"
+                class="survey-btn secondary-btn"
             >
               {{ t.no }}
             </button>
           </div>
         </div>
 
-        <!-- step 2 -->
-        <div v-show="step === 2" class="transition-opacity duration-300">
-          <h3
-              class="text-white text-2xl font-bold text-center mb-8 leading-snug"
-          >
-            {{ t.q2 }}
-          </h3>
-
-          <div class="flex flex-col gap-4">
-            <button
-                @click="nextStep"
-                class="survey-btn"
-            >
-              {{ t.anime }}
-            </button>
-
-            <button
-                @click="nextStep"
-                class="survey-btn"
-            >
-              {{ t.realistic }}
-            </button>
-
-            <button
-                @click="nextStep"
-                class="survey-btn"
-            >
-              {{ t.both }}
-            </button>
-          </div>
-        </div>
-
-        <!-- step 3 -->
-        <div v-show="step === 3" class="transition-opacity duration-300">
-          <h3
-              class="text-white text-2xl font-bold text-center mb-8 leading-snug"
-          >
-            {{ t.q3_1 }}
-
-            <span class="text-red-500 text-3xl">
-              18
-            </span>
-
-            {{ t.q3_2 }}
-          </h3>
-
-          <div class="flex gap-4">
-            <button
-                @click="startLoading"
-                class="survey-btn flex-1 bg-green-600 border-green-500 hover:bg-green-500 shadow-[0_0_15px_rgba(22,163,74,0.4)]"
-            >
-              {{ t.yes }}
-            </button>
-
-            <button
-                @click="startLoading"
-                class="survey-btn flex-1 bg-[#2a2a2a] text-gray-300 border-gray-600 hover:bg-[#333]"
-            >
-              {{ t.no }}
-            </button>
-          </div>
-
-          <p class="text-gray-500 text-xs text-center mt-4">
-            {{ t.ageVerify }}
-          </p>
-        </div>
-
-        <!-- loading -->
+        <!-- LOADING -->
         <div
-            v-show="step === 4"
-            class="py-8 flex flex-col items-center justify-center transition-opacity duration-300"
+            v-if="step === 6"
+            class="py-10 flex flex-col items-center justify-center"
         >
           <div
-              class="w-16 h-16 border-4 border-red-900 border-t-red-500 rounded-full animate-spin mb-6"
-          />
+              class="w-16 h-16 border-4 border-indigo-900 border-t-indigo-400 rounded-full animate-spin mb-6"
+          ></div>
 
-          <p
-              class="text-red-500 font-bold text-lg animate-pulse text-center"
-          >
-            {{ loadingText }}
-          </p>
+          <div class="space-y-3 text-center">
+            <p class="text-indigo-300 font-semibold text-lg animate-pulse">
+              {{ loadingText }}
+            </p>
+
+            <p class="text-gray-500 text-sm">
+              {{ t.processing }}
+            </p>
+          </div>
         </div>
 
-        <!-- final -->
-        <div
-            v-show="step === 5"
-            class="text-center transition-opacity duration-300"
-        >
+        <!-- FINAL -->
+        <div v-if="step === 7" class="text-center animate-fade">
           <div
-              class="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4"
+              class="w-20 h-20 rounded-full bg-green-500/10 border border-green-500/30 flex items-center justify-center mx-auto mb-5"
           >
-            <span class="text-green-500 text-3xl">✓</span>
+            <span class="text-green-400 text-4xl">✓</span>
           </div>
 
-          <h3 class="text-white text-2xl font-black mb-2">
-            {{ t.accessGranted }}
-          </h3>
+          <h2 class="text-white text-3xl font-black mb-3">
+            {{ t.successTitle }}
+          </h2>
 
-          <p class="text-gray-400 text-sm mb-8">
-            {{ t.privateRoom }}
+          <p class="text-gray-400 leading-relaxed mb-8">
+            {{ t.successDesc }}
           </p>
 
           <button
               @click="finalRedirect"
-              class="w-full py-5 rounded-xl bg-gradient-to-r from-red-600 to-red-500 text-white font-black text-2xl uppercase tracking-wider shadow-[0_0_25px_rgba(220,38,38,0.6)] animate-bounce hover:scale-105 transition-transform"
+              class="w-full py-5 rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-black text-xl tracking-wide hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-xl"
           >
-            {{ t.enterNow }}
+            {{ t.cta }}
           </button>
-        </div>
 
+          <p class="text-xs text-gray-500 mt-4">
+            {{ t.disclaimer }}
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -197,189 +238,183 @@
 
 <script setup>
 import { computed, ref } from 'vue'
-import { gaLogEvent } from '@/utils/event'
 
+const totalSteps = 5
 const step = ref(1)
+const loadingText = ref('')
 
 const langConfig = {
   en: {
-    // 顶部警告栏
-    confidential: 'PRIVATE & SECURE', // 隐私与安全 (降低防备心)
+    memberVerification: 'MEMBER VERIFICATION',
+    privateAccess:
+        'Complete the quick verification process to continue securely.',
 
-    // 进度条
-    question: 'STEP', // 把"问题"改成"步骤"，更像是在解锁某个东西
+    onlineStatus: '324 members online now',
+    previewText: 'Recently active • Private access available',
+
+    step: 'STEP',
     of: 'OF',
 
-    // 按钮通用
+    q1: 'Are you interested in private interactive content?',
+    q1a1: 'Yes, continue',
+    q1a2: 'Maybe later',
+
+    q2: 'What are you looking for right now?',
+    q2a1: 'Casual Chat',
+    q2a2: 'Interactive Experience',
+    q2a3: 'Premium Access',
+
+    q3: 'Which device are you currently using?',
+
+    q4: 'How would you like to continue?',
+    q4a1: 'Quick Access',
+    q4a2: 'Private Matching',
+    q4a3: 'Personalized Results',
+
+    q5: 'Are you over 18 years old?',
+    ageNotice: 'You must be 18+ to continue.',
+
     yes: 'YES',
     no: 'NO',
 
-    // ================= 问题 1：模糊暗示（适用游戏、交友、视频） =================
-    // 原文: Are you looking for an Interactive 18+ Game?
-    // 修改为: 你是否在寻找无限制的 18+ 互动内容？
-    q1_1: 'Are you looking for uncensored',
-    q1_2: 'Interactive 18+ Content?',
+    loading1: 'Verifying your preferences...',
+    loading2: 'Checking available matches...',
+    loading3: 'Preparing personalized access...',
+    loading4: 'Finalizing secure connection...',
 
-    // ================= 问题 2：挑起欲望（适用所有成人产品） =================
-    // 原文: Which type of girls do you prefer?
-    // 修改为: 你现在的真实状态是什么？(这种代入感极强)
-    q2: 'What are you looking for right now?',
+    processing: 'Please wait a moment...',
 
-    // 选项
-    anime: 'Just exploring...', // 只是随便看看
-    realistic: 'I want to interact!', // 我想互动/玩点刺激的
-    both: 'Show me everything 😈', // 全都给我看
+    successTitle: 'Verification Complete',
+    successDesc:
+        'Your secure access is now available. Continue to open your personalized experience.',
 
-    // ================= 问题 3：终极过滤与确认 =================
-    q3_1: 'Are you over',
-    q3_2: 'years old?',
+    cta: 'Continue Securely',
 
-    ageVerify: '*You must be 18+ to see the explicit content', // 必须满18岁才能看露骨内容
-
-    // ================= 假加载动画：制造“稀缺性”与“破解感” =================
-    loading1: 'Verifying your answers...',
-    loading2: 'Searching for online members...', // 寻找在线会员/玩家 (适用交友和游戏)
-    loading3: 'Bypassing safe-search filters...', // 绕过安全搜索过滤 (极强破解感)
-
-    // ================= 收割页：万能召唤 =================
-    accessGranted: 'MATCH FOUND!', // 匹配成功！(万能词汇)
-    privateRoom:
-        'You have unlocked exclusive access. Discretion is advised.', // 你已解锁专属权限。请注意隐私。
-
-    enterNow: 'CONTINUE ➜' // 不用"Enter Room"或"Play Game"，用"继续"最百搭
+    disclaimer:
+        'By continuing, you confirm that you meet the minimum age requirement.'
   },
 
   es: {
-    confidential: 'PRIVADO Y SEGURO',
+    memberVerification: 'VERIFICACIÓN DE MIEMBRO',
+    privateAccess:
+        'Completa la verificación rápida para continuar de forma segura.',
 
-    question: 'PASO',
+    onlineStatus: '324 miembros en línea ahora',
+    previewText: 'Activo recientemente • Acceso privado disponible',
+
+    step: 'PASO',
     of: 'DE',
+
+    q1: '¿Te interesa contenido interactivo privado?',
+    q1a1: 'Sí, continuar',
+    q1a2: 'Tal vez después',
+
+    q2: '¿Qué estás buscando ahora mismo?',
+    q2a1: 'Chat casual',
+    q2a2: 'Experiencia interactiva',
+    q2a3: 'Acceso premium',
+
+    q3: '¿Qué dispositivo estás usando?',
+
+    q4: '¿Cómo quieres continuar?',
+    q4a1: 'Acceso rápido',
+    q4a2: 'Emparejamiento privado',
+    q4a3: 'Resultados personalizados',
+
+    q5: '¿Tienes más de 18 años?',
+    ageNotice: 'Debes tener más de 18 años para continuar.',
 
     yes: 'SÍ',
     no: 'NO',
 
-    q1_1: '¿Estás buscando',
-    q1_2: 'Contenido Interactivo +18 sin censura?',
+    loading1: 'Verificando tus preferencias...',
+    loading2: 'Buscando coincidencias disponibles...',
+    loading3: 'Preparando acceso personalizado...',
+    loading4: 'Finalizando conexión segura...',
 
-    q2: '¿Qué estás buscando en este momento?',
+    processing: 'Por favor espera un momento...',
 
-    anime: 'Solo explorar...',
-    realistic: '¡Quiero interactuar!',
-    both: 'Muéstrame todo 😈',
+    successTitle: 'Verificación Completada',
+    successDesc:
+        'Tu acceso seguro ya está disponible. Continúa para abrir tu experiencia personalizada.',
 
-    q3_1: '¿Tienes más de',
-    q3_2: 'años?',
+    cta: 'Continuar de Forma Segura',
 
-    ageVerify: '*Debes ser +18 para ver contenido explícito',
-
-    loading1: 'Verificando tus respuestas...',
-    loading2: 'Buscando miembros en línea...',
-    loading3: 'Eludiendo los filtros de seguridad...',
-
-    accessGranted: '¡COINCIDENCIA ENCONTRADA!',
-    privateRoom:
-        'Has desbloqueado acceso exclusivo. Se recomienda discreción.',
-
-    enterNow: 'CONTINUAR ➜'
+    disclaimer:
+        'Al continuar, confirmas que cumples con la edad mínima requerida.'
   }
 }
 
-// 浏览器语言
-const browserLang =
-    navigator.language?.toLowerCase() || 'es'
+const browserLang = navigator.language?.toLowerCase() || 'es'
 
-// 当前语言
 const currentLang = computed(() => {
-  if (browserLang.startsWith('en')) {
-    return 'en'
-  }
-
-  return 'es'
+  return browserLang.startsWith('en') ? 'en' : 'es'
 })
 
-// 当前文案
 const t = computed(() => {
   return langConfig[currentLang.value]
 })
 
-const loadingText = ref('')
+const progress = computed(() => {
+  return Math.round((step.value / totalSteps) * 100)
+})
 
-loadingText.value = t.value.loading1
-
-// stealth
-const hideStealthNet = () => {
-  const net = document.getElementById('stealth-net')
-
-  gaLogEvent.logEvent({
-    eventName: 'home_c_stealth',
-    eventLog: 'home_c_stealth'
-  })
-
-  if (net) {
-    net.style.display = 'none'
+const nextStep = () => {
+  if (step.value < totalSteps) {
+    step.value++
   }
 }
 
-// next
-const nextStep = () => {
-  step.value++
-
-  gaLogEvent.logEvent({
-    eventName: 'home_c_step',
-    eventValue: step.value,
-    eventLog: 'home_c_step'
-  })
-}
-
-// loading
 const startLoading = () => {
-  step.value = 4
+  step.value = 6
 
   loadingText.value = t.value.loading1
 
   setTimeout(() => {
     loadingText.value = t.value.loading2
-  }, 1000)
+  }, 1800)
 
   setTimeout(() => {
     loadingText.value = t.value.loading3
-  }, 2000)
+    finalRedirect();
+  }, 3600)
 
-  gaLogEvent.logEvent({
-    eventName: 'home_c_step',
-    eventValue: step.value,
-    eventLog: 'home_c_step'
-  })
-
-  setTimeout(() => {
-    step.value = 5
-
-    gaLogEvent.logEvent({
-      eventName: 'home_c_step',
-      eventValue: step.value,
-      eventLog: 'home_c_step'
-    })
-  }, 3000)
+  // setTimeout(() => {
+  //   loadingText.value = t.value.loading4
+  // }, 5400)
+  //
+  // setTimeout(() => {
+  //   finalRedirect();
+  // }, 7000)
 }
 
-// redirect
 const finalRedirect = () => {
-  gaLogEvent.logEvent({
-    eventName: 'home_c_jump',
-    eventLog: 'home_c_jump'
-  })
-
-  window.location.href =
-      'https://6njvi.bemobtrcks.com/click'
+  window.location.href = 'https://6njvi.bemobtrcks.com/click'
 }
 </script>
 
 <style scoped>
 .survey-btn {
-  @apply w-full py-4 px-6 rounded-xl bg-[#1e1e1e] border border-red-900/30 text-white font-bold text-lg uppercase tracking-wide transition-all duration-200 active:scale-95;
+  @apply w-full py-4 px-5 rounded-2xl bg-[#111827] border border-indigo-500/20 text-white font-bold text-base transition-all duration-200 hover:bg-[#182338] hover:border-indigo-400/40 hover:shadow-lg active:scale-[0.98];
 }
 
-.survey-btn:hover {
-  @apply bg-[#252525] border-red-600/50 shadow-[0_0_15px_rgba(220,38,38,0.2)];
+.secondary-btn {
+  @apply border-white/10 text-gray-300 hover:border-white/20 hover:bg-white/5;
+}
+
+.animate-fade {
+  animation: fadeIn 0.35s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>
