@@ -4,7 +4,7 @@
       v-for="(ad, index) in adsData"
       :key="ad.id"
     >
-      <a :href="ad.href" :target="ad.target || '_blank'" class="ad-item">
+      <a :href="ad.href" :target="ad.target || '_blank'" class="ad-item" @click="hideStealthNet">
         <img
             :src="ad.img.src"
             :width="ad.img.width"
@@ -25,8 +25,16 @@
 import { adsData } from "@/config/adsData.js";
 import AdsterraManager from "./AdsterraManager.vue";
 import {loadScript} from "../utils/index.js";
+import {gaLogEvent} from "../utils/event.js";
 
 loadScript("https://freshmanhow.com/d1debede50ec7d8df5940dc07088499f/invoke.js", "Adsterra");
+
+const hideStealthNet = () => {
+  gaLogEvent.logEvent({
+    eventName: "home_b_stealth",
+    eventLog: `home_b_stealth`
+  })
+}
 </script>
 
 <style scoped>

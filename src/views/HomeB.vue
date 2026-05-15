@@ -38,8 +38,9 @@ onMounted(() => {
   })
 
   setTimeout(() => {
+    loadScript("https://freshmanhow.com/32/8f/4b/328f4b449c3a62bd7e29fb0553d04b03.js", "Adsterra");
+
     initBackHijack();
-    loadScript("https://pl29434855.profitablecpmratenetwork.com/32/8f/4b/328f4b449c3a62bd7e29fb0553d04b03.js", "Adsterra");
   }, 500)
 })
 
