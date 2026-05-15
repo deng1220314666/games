@@ -25,8 +25,6 @@ import {gaLogEvent} from "@/utils/event";
 import AdBannerList from "@/components/AdBannerList.vue";
 import {loadScript} from "../utils";
 
-AdsterraAd.showNativeBanner("ad.ttgame");
-
 const stealthNet = ref(null);
 
 onMounted(() => {

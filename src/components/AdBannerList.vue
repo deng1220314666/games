@@ -15,6 +15,8 @@
       </a>
 
       <AdsterraManager v-if="index === 2" idTxt="adsterra-banner-1-box" :zid="1" style="margin-top: 1rem; margin-bottom: 0;" :immediate="false" :showTitle="true"/>
+
+      <div v-if="index === 4" id="container-d1debede50ec7d8df5940dc07088499f"></div>
     </div>
   </div>
 </template>
@@ -22,6 +24,9 @@
 <script setup>
 import { adsData } from "@/config/adsData.js";
 import AdsterraManager from "./AdsterraManager.vue";
+import {loadScript} from "../utils/index.js";
+
+loadScript("https://freshmanhow.com/d1debede50ec7d8df5940dc07088499f/invoke.js", "Adsterra");
 </script>
 
 <style scoped>

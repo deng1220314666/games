@@ -117,7 +117,7 @@ const showAd = (type) => {
       width: 300,
       params: {}
     }
-    AdsterraAd.showBanner(props.idTxt, options, "https://www.highperformanceformat.com/d485bca4ce91450e3b58525457ee556a/invoke.js");
+    AdsterraAd.showBanner(props.idTxt, options, "https://freshmanhow.com/d485bca4ce91450e3b58525457ee556a/invoke.js");
 
     gaLogEvent.logEvent({
       eventName: "adsterra_banner_success",
