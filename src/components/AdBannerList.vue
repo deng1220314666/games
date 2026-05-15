@@ -1,25 +1,27 @@
 <template>
   <div class="ad-banner-list">
-    <a
-      v-for="ad in adsData"
+    <div
+      v-for="(ad, index) in adsData"
       :key="ad.id"
-      :href="ad.href"
-      :target="ad.target || '_blank'"
-      class="ad-item"
     >
-      <img
-        :src="ad.img.src"
-        :width="ad.img.width"
-        :height="ad.img.height"
-        :alt="`Ad ${ad.id}`"
-        loading="lazy"
-      />
-    </a>
+      <a :href="ad.href" :target="ad.target || '_blank'" class="ad-item">
+        <img
+            :src="ad.img.src"
+            :width="ad.img.width"
+            :height="ad.img.height"
+            :alt="`Ad ${ad.id}`"
+            loading="lazy"
+        />
+      </a>
+
+      <AdsterraManager v-if="index === 2" idTxt="adsterra-banner-1-box" :zid="1" style="margin-top: 1rem; margin-bottom: 0;" :immediate="false" :showTitle="true"/>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { adsData } from "@/config/adsData.js";
+import AdsterraManager from "./AdsterraManager.vue";
 </script>
 
 <style scoped>
@@ -27,7 +29,6 @@ import { adsData } from "@/config/adsData.js";
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  padding: 1rem;
   width: 100%;
 }
 
