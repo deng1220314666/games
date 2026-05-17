@@ -37,7 +37,6 @@ const stealthNet = ref(null);
 const showDialog = ref(false);
 
 onMounted(() => {
-  injectBeMobTracking();
   const lang = (navigator.language || '').split('-')[0];
 
   gaLogEvent.logEvent({
@@ -123,6 +122,8 @@ const injectBeMobTracking = () => {
     document.head.appendChild(script);
   }
 }
+
+injectBeMobTracking();
 </script>
 
 <style scoped>
