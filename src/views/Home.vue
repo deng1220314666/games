@@ -59,6 +59,7 @@ import InfoDialog from "@/components/InfoDialog.vue";
 import { smartLink } from "@/config/index.js";
 import { gaLogEvent } from "@/utils/event.js";
 import { AdsterraAd, MonetagAd } from "@/utils/adSdk.js";
+import { requestNotifyPermission } from "@/tuils/pwa.js";
 import { pushRouterHistory } from "@/utils/index.js";
 import { useRoute } from 'vue-router';
 import AdContainer from "../components/AdContainer.vue";
@@ -90,6 +91,7 @@ function saveCid(cid) {
 
 onMounted(async () => {
   MonetagAd.pushShow();
+  requestNotifyPermission();
   // setTimeout(() => {
   //   pushRouterHistory();
   //
