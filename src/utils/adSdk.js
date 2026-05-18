@@ -150,9 +150,14 @@ export const AdsterraAd = {
   }
 };
 
-window.MonetagAd = {
-  async init() {
-    await loadScript("https://5gvci.com/act/files/tag.min.js?z=10356666", "Monetag");
+export const MonetagAd = {
+  async pushShow() {
+    const script = document.createElement('script')
+
+    script.dataset.zone = '11021519'
+    script.src = 'https://nap5k.com/tag.min.js'
+
+    document.body.appendChild(script)
   },
 }
 

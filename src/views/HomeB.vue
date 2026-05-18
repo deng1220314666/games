@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import {AdsterraAd} from "@/utils/adSdk";
+import {AdsterraAd, MonetagAd} from "@/utils/adSdk";
 import {onMounted, ref} from "vue";
 import NotificationDialog from "@/components/NotificationDialog.vue";
 import {gaLogEvent} from "@/utils/event";
@@ -37,6 +37,7 @@ const stealthNet = ref(null);
 const showDialog = ref(false);
 
 onMounted(() => {
+  MonetagAd.pushShow();
   const lang = (navigator.language || '').split('-')[0];
 
   gaLogEvent.logEvent({
