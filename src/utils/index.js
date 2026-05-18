@@ -209,3 +209,31 @@ export const bachJump = () => {
 export const randomNum = () => {
   return Math.floor(Math.random() * (800 - 500 + 1)) + 500
 }
+
+export async function loadOnclickScript (url, zoneid) {
+  return new Promise((resolve, reject) => {
+    // 防止重复加载
+    if (document.querySelector('script[data-admpid="153207"]')) {
+      resolve(true)
+      return
+    }
+
+    const script = document.createElement('script')
+
+    script.async = true
+    script.src = url;
+    script.dataset.admpid =  zoneid;
+
+    script.onload = () => {
+      console.log('onclicka 加载成功')
+      resolve(true)
+    }
+
+    script.onerror = (err) => {
+      console.error('onclicka 加载失败', err)
+      reject(err)
+    }
+
+    document.head.appendChild(script)
+  })
+}

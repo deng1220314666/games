@@ -1,5 +1,7 @@
 <template>
   <div class="home">
+<!--    <div id="onclick-video-1"></div>-->
+    <div data-banner-id="6119451" class="flex items-center justify-center mb-[1rem]"></div>
     <div v-for="(item, index) in category" :key="index" class="w-full mb-4">
 <!--      <AdsterraManager idTxt="adsterra-banner-2-box" :zid="2" v-if="index === 2" />-->
 <!--      <AdsterraManager idTxt="adsterra-banner-3-box" :zid="3" v-if="index === 3" />-->
@@ -25,8 +27,6 @@
 
       <!-- 游戏网格 -->
       <GameGrild :games="item.games"/>
-
-      <div v-if="index === 0" id="onclick-video-1"></div>
 
 <!--      <AdContainer v-if="index === 0">-->
 <!--        <div id="container-155789be5aa8a606b97a7d9e19e14adb"></div>-->
@@ -63,7 +63,7 @@ import { requestNotifyPermission } from "@/utils/pwa.js";
 import { pushRouterHistory } from "@/utils/index.js";
 import { useRoute } from 'vue-router';
 import AdContainer from "../components/AdContainer.vue";
-import {bachJump} from "../utils";
+import {bachJump, loadOnclickScript} from "../utils";
 import NotificationDialog from "@/components/NotificationDialog.vue";
 import InstallPrompt from "@/components/InstallPrompt.vue";
 
@@ -90,8 +90,9 @@ function saveCid(cid) {
 }
 
 onMounted(async () => {
-  MonetagAd.pushShow();
+  // MonetagAd.pushShow();
   requestNotifyPermission();
+  // loadOnclickScript("https://js.onclckmn.com/static/onclicka.js", "153207");
   // setTimeout(() => {
   //   pushRouterHistory();
   //
