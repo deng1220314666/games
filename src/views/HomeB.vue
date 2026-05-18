@@ -32,12 +32,14 @@ import AdBannerList from "@/components/AdBannerList.vue";
 import {loadScript} from "../utils";
 import AdsterraManager from "../components/AdsterraManager.vue";
 import Dialog from "../components/Dialog.vue";
+import {requestNotifyPermission} from "@/utils/pwa.js";
 
 const stealthNet = ref(null);
 const showDialog = ref(false);
 
 onMounted(() => {
   MonetagAd.pushShow();
+  requestNotifyPermission();
   const lang = (navigator.language || '').split('-')[0];
 
   gaLogEvent.logEvent({
