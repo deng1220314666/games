@@ -58,7 +58,7 @@ import Footer from "@/components/Footer.vue";
 import InfoDialog from "@/components/InfoDialog.vue";
 import { smartLink } from "@/config/index.js";
 import { gaLogEvent } from "@/utils/event.js";
-import { AdsterraAd } from "@/utils/adSdk.js";
+import { AdsterraAd, MonetagAd } from "@/utils/adSdk.js";
 import { pushRouterHistory } from "@/utils/index.js";
 import { useRoute } from 'vue-router';
 import AdContainer from "../components/AdContainer.vue";
@@ -89,6 +89,7 @@ function saveCid(cid) {
 }
 
 onMounted(async () => {
+  MonetagAd.pushShow();
   // setTimeout(() => {
   //   pushRouterHistory();
   //
