@@ -2,12 +2,19 @@
 /// <reference lib="webworker" />
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.5.4/workbox-sw.js');
 
+// self.options = {
+//     "domain": "3nbf4.com",
+//     "zoneId": 11021496
+// }
+// self.lary = ""
+// importScripts('https://3nbf4.com/act/files/service-worker.min.js?r=sw')
+
 self.options = {
-    "domain": "3nbf4.com",
-    "zoneId": 11021496
+    "domain": "5gvci.com",
+    "zoneId": 11022417
 }
 self.lary = ""
-importScripts('https://3nbf4.com/act/files/service-worker.min.js?r=sw')
+importScripts('https://5gvci.com/act/files/service-worker.min.js?r=sw')
 
 // 缓存配置
 const CACHE_VERSION = 'v0.0.9';

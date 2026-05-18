@@ -152,13 +152,40 @@ export const AdsterraAd = {
 
 export const MonetagAd = {
   async pushShow() {
+    return new Promise((resolve, reject) => {
+      // 防止重复加载
+      if (document.querySelector('script[src*="5gvci.com/act/files/tag.min.js"]')) {
+        resolve(true)
+        return
+      }
+
+      const script = document.createElement('script')
+
+      script.async = true
+      script.src = 'https://5gvci.com/act/files/tag.min.js?z=11022417'
+
+      script.onload = () => {
+        console.log('广告脚本加载成功')
+        resolve(true)
+      }
+
+      script.onerror = (err) => {
+        console.error('广告脚本加载失败', err)
+        reject(err)
+      }
+
+      document.body.appendChild(script)
+    })
+  },
+
+  inPagePush() {
     const script = document.createElement('script')
 
     script.dataset.zone = '11021519'
     script.src = 'https://nap5k.com/tag.min.js'
 
     document.body.appendChild(script)
-  },
+  }
 }
 
 export const ExoClickAd = {
