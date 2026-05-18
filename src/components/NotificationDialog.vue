@@ -1,9 +1,9 @@
 <template>
   <!-- 全屏遮罩背景 -->
-  <div v-if="isVisible" class="fixed inset-0 backdrop-blur-sm z-[999] flex items-center justify-center p-4">
+  <div v-if="isVisible" class="fixed inset-0 backdrop-blur-sm z-[999] flex items-start justify-center p-4">
     
     <!-- 主卡片 -->
-    <div class="w-full max-w-[340px] bg-gradient-to-b from-[#1a1f35] to-[#12162a] rounded-3xl shadow-[0_8px_40px_rgba(99,102,241,0.15),0_0_80px_rgba(139,92,246,0.1)] border border-white/10 overflow-hidden">
+    <div class="w-full mt-[5rem] max-w-[340px] bg-gradient-to-b from-[#1a1f35] to-[#12162a] rounded-3xl shadow-[0_8px_40px_rgba(99,102,241,0.15),0_0_80px_rgba(139,92,246,0.1)] border border-white/10 overflow-hidden">
       
       <!-- 顶部状态栏 -->
       <div class="px-5 pt-6 pb-4 flex items-center gap-3 border-b border-white/5">
@@ -94,7 +94,7 @@
       </div>
     </div>
 
-<!--    <AdsterraManager style="position: fixed; bottom: 0; left: 0;" idTxt="adsterra-banner-1-box" :zid="1" :immediate="false" :showTitle="true"/>-->
+    <AdsterraManager style="position: fixed; bottom: 0; left: 0;" idTxt="adsterra-banner-1-box" :zid="1" :immediate="false" :showTitle="true"/>
   </div>
 </template>
 

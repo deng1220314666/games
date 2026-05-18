@@ -19,6 +19,26 @@ export const langConfig = {
     footer: 'You must be 18+ to access private profiles'
   },
 
+  pt: {
+    privateAccess: 'Acesso Privado',
+    onlineUsers: 'usuários online agora',
+
+    title: 'Acesso à Comunidade Privada',
+
+    desc1: 'Alguns perfis podem conter conteúdo sensível.',
+    desc2: 'Por favor, confirme sua idade para continuar.',
+
+    online: 'Online',
+
+    requestText: 'Enviou uma solicitação privada para você',
+
+    continueBtn: 'Continuar',
+
+    laterBtn: 'Talvez Mais Tarde',
+
+    footer: 'Você deve ter mais de 18 anos para acessar perfis privados'
+  },
+
   bi: {
     privateAccess: 'Akses Pribadi',
     onlineUsers: 'pengguna sedang online',
@@ -81,19 +101,19 @@ export const langConfig = {
 }
 
 export const getLang = () => {
-  const navLang = navigator.language || navigator.userLanguage || 'en'
-  const shortLang = navLang.split('-')[0].toLowerCase()
+  // const navLang = navigator.language || navigator.userLanguage || 'pt'
+  // const shortLang = navLang.split('-')[0].toLowerCase()
+  //
+  // if (langConfig[shortLang]) {
+  //   return shortLang
+  // }
   
-  if (langConfig[shortLang]) {
-    return shortLang
-  }
-  
-  return 'en'
+  return 'pt'
 }
 
 export const getLangConfig = () => {
   const lang = getLang()
-  return langConfig[lang] || langConfig['en']
+  return langConfig[lang] || langConfig['pt']
 }
 
 export default { langConfig, getLang, getLangConfig }

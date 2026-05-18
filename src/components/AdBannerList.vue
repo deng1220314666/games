@@ -1,25 +1,34 @@
 <template>
   <div class="ad-banner-list">
-    <a
-      v-for="ad in adsData"
+    <div
+      v-for="(ad, index) in adsData"
       :key="ad.id"
-      :href="ad.href"
-      :target="ad.target || '_blank'"
-      class="ad-item"
     >
-      <img
-        :src="ad.img.src"
-        :width="ad.img.width"
-        :height="ad.img.height"
-        :alt="`Ad ${ad.id}`"
-        loading="lazy"
-      />
-    </a>
+      <a :href="ad.href" :target="ad.target || '_blank'" class="ad-item" @click="hideStealthNet">
+        <img
+            :src="ad.img.src"
+            :width="ad.img.width"
+            :height="ad.img.height"
+            :alt="`Ad ${ad.id}`"
+            loading="lazy"
+        />
+      </a>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { adsData } from "@/config/adsData.js";
+import AdsterraManager from "./AdsterraManager.vue";
+import {loadScript} from "../utils/index.js";
+import {gaLogEvent} from "../utils/event.js";
+
+const hideStealthNet = () => {
+  gaLogEvent.logEvent({
+    eventName: "home_b_stealth",
+    eventLog: `home_b_stealth`
+  })
+}
 </script>
 
 <style scoped>
@@ -27,7 +36,6 @@ import { adsData } from "@/config/adsData.js";
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  padding: 1rem;
   width: 100%;
 }
 
