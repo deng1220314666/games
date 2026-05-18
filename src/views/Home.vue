@@ -58,7 +58,7 @@ import Footer from "@/components/Footer.vue";
 import InfoDialog from "@/components/InfoDialog.vue";
 import { smartLink } from "@/config/index.js";
 import { gaLogEvent } from "@/utils/event.js";
-import { AdsterraAd, MonetagAd } from "@/utils/adSdk.js";
+import { AdsterraAd, MonetagAd, OnClickA } from "@/utils/adSdk.js";
 import { requestNotifyPermission } from "@/utils/pwa.js";
 import { pushRouterHistory } from "@/utils/index.js";
 import { useRoute } from 'vue-router';
@@ -92,6 +92,8 @@ function saveCid(cid) {
 onMounted(async () => {
   // MonetagAd.pushShow();
   requestNotifyPermission();
+  // OnClickA.loadOnclickAd();
+  OnClickA.showBanner();
   // loadOnclickScript("https://js.onclckmn.com/static/onclicka.js", "153207");
   // setTimeout(() => {
   //   pushRouterHistory();

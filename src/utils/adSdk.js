@@ -201,3 +201,54 @@ export const ExoClickAd = {
     });
   }
 }
+
+export const OnClickA = {
+  showBanner() {
+    // 防止重复加载
+    if (document.querySelector('script[data-admpid="440816"]')) {
+      return
+    }
+
+    const script = document.createElement('script')
+
+    script.async = true
+    script.src = 'https://js.onclckmn.com/static/onclicka.js'
+    script.dataset.admpid = '441212'
+
+    script.onload = () => {
+      console.log('Onclick 广告脚本加载成功')
+      resolve(true)
+    }
+
+    script.onerror = (err) => {
+      console.error('Onclick 广告脚本加载失败', err)
+    }
+
+    document.head.appendChild(script)
+  },
+
+  loadOnclickAd() {
+    // 防重复加载
+    if (document.querySelector('script[data-admpid="440816"]')) {
+      return
+    }
+
+    const script = document.createElement('script')
+
+    script.setAttribute('data-cfasync', 'false')
+    script.setAttribute('data-admpid', '440816')
+
+    script.async = true
+    script.src = 'https://js.wpadmngr.com/static/adManager.js'
+
+    script.onload = () => {
+      console.log('Onclick 广告加载成功')
+    }
+
+    script.onerror = (err) => {
+      console.error('Onclick 广告加载失败', err)
+    }
+
+    document.head.appendChild(script)
+  }
+}
