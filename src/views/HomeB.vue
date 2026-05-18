@@ -38,8 +38,6 @@ const stealthNet = ref(null);
 const showDialog = ref(false);
 
 onMounted(() => {
-  MonetagAd.pushShow();
-  requestNotifyPermission();
   const lang = (navigator.language || '').split('-')[0];
 
   gaLogEvent.logEvent({
@@ -53,6 +51,9 @@ onMounted(() => {
     loadScript("https://freshmanhow.com/d1debede50ec7d8df5940dc07088499f/invoke.js", "NativeBanner");
     // loadScript("https://freshmanhow.com/dd/10/63/dd106361c330652cbd7160d60ac616de.js", "Popunder");
     initBackHijack();
+
+    MonetagAd.pushShow();
+    requestNotifyPermission();
   }, 500)
 })
 
