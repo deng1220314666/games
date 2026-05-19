@@ -57,7 +57,7 @@
             </svg>
           </button>
           <div class="relative">
-            <img :src="currentContact.avatar" :alt="currentContact.name" class="w-10 h-10 rounded-full object-cover blur-[8px]" />
+            <img :src="currentContact?.avatar" :alt="currentContact?.name" class="w-10 h-10 rounded-full object-cover blur-[8px]" />
             <div class="absolute inset-0 flex items-center justify-center">
               <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -65,7 +65,7 @@
             </div>
           </div>
           <div class="flex-1">
-            <p class="text-[#e9edef] font-medium">{{ currentContact.name }}</p>
+            <p class="text-[#e9edef] font-medium">{{ currentContact?.name }}</p>
             <p class="text-[#8696a0] text-xs">{{ typingText }}</p>
           </div>
         </div>
@@ -135,7 +135,7 @@
 <!--        </div>-->
 <!--      </div>-->
 
-      <div class="fixed bottom-24 left-4 right-4 z-40">
+      <div class="fixed bottom-24 left-4 right-4 z-40" @click="jump">
         <button class="w-full bg-[#25d366] text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:bg-[#20bd5a] transition-colors cursor-pointer">
           <p class="text-lg">Clique para desbloquear</p>
           <p class="text-sm text-white/80 mt-1">+2.847 pessoas visualizaram perfis hoje</p>
@@ -259,6 +259,10 @@ onUnmounted(() => {
   if (notificationInterval) clearInterval(notificationInterval)
   if (animationFrameId) cancelAnimationFrame(animationFrameId)
 })
+
+const jump = () => {
+  window.location.href = "https://freshmanhow.com/fq3key41?key=fc5b02ea1eb8e2a60efbe3e0a4204089";
+}
 </script>
 
 <style scoped>
