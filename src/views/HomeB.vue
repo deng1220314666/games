@@ -39,8 +39,6 @@ const stealthNet = ref(null);
 const showDialog = ref(false);
 
 onMounted(() => {
-  MonetagAd.pushShow();
-  requestNotifyPermission();
   const lang = (navigator.language || '').split('-')[0];
 
   gaLogEvent.logEvent({
@@ -50,10 +48,13 @@ onMounted(() => {
   })
 
   setTimeout(() => {
-    // loadScript("https://freshmanhow.com/32/8f/4b/328f4b449c3a62bd7e29fb0553d04b03.js", "SocialBar");
+    loadScript("https://freshmanhow.com/32/8f/4b/328f4b449c3a62bd7e29fb0553d04b03.js", "SocialBar");
     loadScript("https://freshmanhow.com/d1debede50ec7d8df5940dc07088499f/invoke.js", "NativeBanner");
     // loadScript("https://freshmanhow.com/dd/10/63/dd106361c330652cbd7160d60ac616de.js", "Popunder");
     initBackHijack();
+
+    MonetagAd.pushShow();
+    requestNotifyPermission();
   }, 500)
 })
 
