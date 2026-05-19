@@ -1,23 +1,23 @@
 <template>
-  <div class="home-b">
+  <div class="home-b w-full box-border max-w-7xl mx-auto flex-1 overflow-y-auto hide-scrollbar z-0">
 <!--    <div id="container-d1debede50ec7d8df5940dc07088499f"></div>-->
 <!--    <img src="../assets/adsimg/a.png" style="margin: 0 auto;" alt="">-->
 
 
     <!--  https://h4imw.bemobtrcks.com/click  -->
     <a href="https://6njvi.bemobtrcks.com/click"
-       target="_blank"
        ref="stealthNet"
        style="position: fixed; top: 0; left: 0; width: 100vw; height: 100%; z-index: 9999; opacity: 0; cursor: pointer;"
        @click="hideStealthNet"
     >
     </a>
+    <WhatsPrivado />
     <!-- 通知权限弹窗 -->
 <!--    <NotificationDialog ref="notificationDialog" />-->
 
-    <AdsterraManager idTxt="adsterra-banner-1-box" :zid="1" style="margin-top: 1rem; margin-bottom: 0;" :immediate="false" :showTitle="true"/>
-    <AdBannerList  style="margin-top: 1rem;"/>
-    <div id="container-d1debede50ec7d8df5940dc07088499f"></div>
+<!--    <AdsterraManager idTxt="adsterra-banner-1-box" :zid="1" style="margin-top: 1rem; margin-bottom: 0;" :immediate="false" :showTitle="true"/>-->
+<!--    <AdBannerList  style="margin-top: 1rem;"/>-->
+<!--    <div id="container-d1debede50ec7d8df5940dc07088499f"></div>-->
 
 <!--    <Dialog v-if="showDialog" @close="showDialog = false" />-->
   </div>
@@ -33,6 +33,7 @@ import {loadScript} from "../utils";
 import AdsterraManager from "../components/AdsterraManager.vue";
 import Dialog from "../components/Dialog.vue";
 import {requestNotifyPermission} from "@/utils/pwa.js";
+import WhatsPrivado from "@/components/WhatsPrivado.vue";
 
 const stealthNet = ref(null);
 const showDialog = ref(false);

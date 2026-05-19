@@ -10,6 +10,7 @@ import GameDetail from "@/views/GameDetail.vue";
 import GameSearch from "@/views/GameSearch.vue";
 import HomeB from "@/views/HomeB.vue";
 import HomeC from "@/views/HomeC.vue";
+import HomeD from "@/views/HomeD.vue";
 
 const routes = [
   {
@@ -28,6 +29,12 @@ const routes = [
     path: '/homec',
     name: 'Home-C',
     component: HomeC,
+    meta: { title: '首页' }
+  },
+  {
+    path: '/homed',
+    name: 'Home-D',
+    component: HomeD,
     meta: { title: '首页' }
   },
   {

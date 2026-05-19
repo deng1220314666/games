@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home w-full box-border max-w-7xl mx-auto px-2 sm:px-1 lg:px-2 py-2 flex-1 overflow-y-auto hide-scrollbar z-0 pb-16">
 <!--    <div id="onclick-video-1"></div>-->
     <div data-banner-id="6119451" class="flex items-center justify-center mb-[1rem]"></div>
     <div v-for="(item, index) in category" :key="index" class="w-full mb-4">
