@@ -217,7 +217,6 @@ export const OnClickA = {
 
     script.onload = () => {
       console.log('Onclick 广告脚本加载成功')
-      resolve(true)
     }
 
     script.onerror = (err) => {
