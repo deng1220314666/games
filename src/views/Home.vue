@@ -6,7 +6,6 @@
       <!-- 分类标题栏 -->
       <div
         class="category-header flex items-center justify-between p-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl mb-4 cursor-pointer hover:shadow-lg transition-all duration-300"
-        @click="navigateToCategory()"
       >
         <!--        @click="navigateToCategory()"-->
         <div class="flex items-center">
@@ -15,9 +14,9 @@
             {{ $t('gameSearch.' + item.name.toLowerCase()) || (locale === 'zh' ? item.cn_name : item.name) }}
           </h2>
         </div>
-        <div class="font-medium flex items-center">
-          {{ $t('gameSearch.more') }} <span class="ml-1">></span>
-        </div>
+<!--        <div class="font-medium flex items-center">-->
+<!--          {{ $t('gameSearch.more') }} <span class="ml-1">></span>-->
+<!--        </div>-->
 
       </div>
 
@@ -32,10 +31,6 @@
     </div>
 
     <Footer />
-<!--    <InfoDialog-->
-<!--        :isShow="adsUtilsStore.dialogStatus"-->
-<!--        :duration="3"/>-->
-
     <!-- 通知权限弹窗 -->
 <!--    <NotificationDialog ref="notificationDialog" />-->
 
@@ -58,16 +53,12 @@ import { smartLink } from "@/config/index.js";
 import { gaLogEvent } from "@/utils/event.js";
 import { AdsterraAd } from "@/utils/adSdk.js";
 import { requestNotifyPermission } from "@/utils/pwa.js";
-import { pushRouterHistory } from "@/utils/index.js";
-import { useRoute } from 'vue-router';
 import AdContainer from "../components/AdContainer.vue";
-import {bachJump, loadOnclickScript} from "../utils";
 import NotificationDialog from "@/components/NotificationDialog.vue";
 import InstallPrompt from "@/components/InstallPrompt.vue";
 
 const {locale} = useI18n()
 const gameStore = useGameStore()
-const adsUtilsStore = useAdUtilsStore();
 const category = ref([])
 
 /**
@@ -89,13 +80,9 @@ function saveCid(cid) {
 
 onMounted(async () => {
   requestNotifyPermission();
-  // setTimeout(() => {
-  //   pushRouterHistory();
-  //
-  //   bachJump();
-  // }, 500)
+
   if (AdsterraAd) {
-    AdsterraAd.showSocialBar();
+    // AdsterraAd.showSocialBar();
 
     // setTimeout(() => {
     //   AdsterraAd.showPopunder();
@@ -124,22 +111,6 @@ const navigateToCategory = () => {
     eventValue: item,
     eventLog: `Enter Smart Link`
   })
-}
-
-const loadOnclickaScript = () => {
-  // 防止重复加载
-  if (document.getElementById('onclicka-script')) {
-    return
-  }
-
-  const script = document.createElement('script')
-
-  script.id = 'onclicka-script'
-  script.async = true
-  script.src = 'https://js.onclckmn.com/static/onclicka.js'
-  script.setAttribute('data-admpid', '440816')
-
-  document.body.appendChild(script)
 }
 </script>
 
