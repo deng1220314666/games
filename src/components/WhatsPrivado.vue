@@ -134,9 +134,10 @@
 <!--          </button>-->
 <!--        </div>-->
 <!--      </div>-->
+      <div class="fixed w-full bottom-0 z-40" @click="jump">
+        <AdsterraManager idTxt="adsterra-banner-1-box" :zid="1" style="margin-top: 1rem; margin-bottom: 0;" :immediate="false" :showTitle="false"/>
 
-      <div class="fixed bottom-24 left-4 right-4 z-40" @click="jump">
-        <button class="w-full bg-[#25d366] text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:bg-[#20bd5a] transition-colors cursor-pointer">
+        <button class="w-full bg-[#25d366] text-white font-bold py-1 px-6 shadow-lg hover:bg-[#20bd5a] transition-colors cursor-pointer">
           <p class="text-lg">Clique para desbloquear</p>
           <p class="text-sm text-white/80 mt-1">+2.847 pessoas visualizaram perfis hoje</p>
         </button>
@@ -147,6 +148,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue'
+import AdsterraManager from "../components/AdsterraManager.vue"
 
 const showChat = ref(false)
 const showNotification = ref(false)
