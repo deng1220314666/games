@@ -21,14 +21,9 @@
 
       </div>
 
-      <AdsterraManager idTxt="adsterra-banner-1-box" :zid="2" :immediate="false" v-if="index === 0" />
-
       <!-- 游戏网格 -->
       <GameGrild :games="item.games"/>
-
-<!--      <AdContainer v-if="index === 0">-->
-<!--        <div id="container-155789be5aa8a606b97a7d9e19e14adb"></div>-->
-<!--      </AdContainer>-->
+      <div v-show="index === 0" id="adsterra-banner-1-box" class="w-full flex items-center justify-center"></div>
     </div>
 
     <Footer />
@@ -64,6 +59,7 @@ import AdContainer from "../components/AdContainer.vue";
 import {bachJump, loadOnclickScript} from "../utils";
 import NotificationDialog from "@/components/NotificationDialog.vue";
 import InstallPrompt from "@/components/InstallPrompt.vue";
+import {TTGameSdk} from "@/utils/ttgame-sdk.js";
 
 const {locale} = useI18n()
 const gameStore = useGameStore()
@@ -88,7 +84,8 @@ function saveCid(cid) {
 }
 
 onMounted(async () => {
-  requestNotifyPermission();
+  TTGameSdk.init();
+  // requestNotifyPermission();
   // setTimeout(() => {
   //   pushRouterHistory();
   //
@@ -117,30 +114,36 @@ onMounted(async () => {
 
 // 跳转到分类游戏页面
 const navigateToCategory = () => {
-  const item = smartLink[Math.floor(Math.random() * smartLink.length)] || "https://www.profitablecpmratenetwork.com/eet0d835?key=edd631eedc507862650ff626c430b6da";
-  window.open(item, '_blank');
   gaLogEvent.logEvent({
     eventName: "enter_smart_link",
-    eventValue: item,
     eventLog: `Enter Smart Link`
   })
+
+  window.location.href = "https://6njvi.bemobtrcks.com/click";
 }
 
-const loadOnclickaScript = () => {
-  // 防止重复加载
-  if (document.getElementById('onclicka-script')) {
-    return
+const injectBeMobTracking = () => {
+  // 防重入：同样先清理掉可能残留的追踪代码
+  const existingScript = document.getElementById('bemob-tracking-pixel');
+  if (existingScript) existingScript.remove();
+
+  const script = document.createElement("script");
+  script.id = 'bemob-tracking-pixel';
+  script.type = "text/javascript";
+  script.async = true;
+
+  // 填入属于 Page2 的专属链接
+  script.src = "https://6njvi.bemobtrcks.com/landing/2e1f1795-652b-424b-95b0-abe9846166ac?callback=REPLACE&rule=REPLACE&path=REPLACE&landing=REPLACE&" + window.location.search.substring(1);
+
+  const firstScript = document.getElementsByTagName("script")[0];
+  if (firstScript && firstScript.parentNode) {
+    firstScript.parentNode.insertBefore(script, firstScript);
+  } else {
+    document.head.appendChild(script);
   }
-
-  const script = document.createElement('script')
-
-  script.id = 'onclicka-script'
-  script.async = true
-  script.src = 'https://js.onclckmn.com/static/onclicka.js'
-  script.setAttribute('data-admpid', '440816')
-
-  document.body.appendChild(script)
 }
+
+injectBeMobTracking();
 </script>
 
 <style scoped>

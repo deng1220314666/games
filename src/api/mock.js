@@ -4074,6 +4074,196 @@ export const getGames = async () => {
 
 export const category = [
   {
+    "id": 11,
+    "name": "Boom Blast",
+    "cn_name": "Boom Blast",
+    "img": new URL("@/assets/icons/boomBlast.png", import.meta.url).href,
+    "games": [
+      {
+        "categoryList": [
+          {
+            "id": 11,
+            "name": "Boom Blast",
+            "cn_name": "Boom Blast",
+            "GameCategoryMap.game_id": "equalz",
+            "GameCategoryMap.category_id": 11
+          }
+        ],
+        "game_id": "equalz",
+        "name": "Equalz",
+        "cover": "https://img.ttgame.fun/game-img/equalz.jpg",
+        "url": "https://res.ttgame.fun/equalz/index.html",
+        "desc": "Discover the fun of Equalz!",
+        "tags": "11",
+        "base": {
+          "star": 4.4,
+          "plays": 59199
+        }
+      },
+      {
+        "categoryList": [
+          {
+            "id": 11,
+            "name": "Boom Blast",
+            "cn_name": "Boom Blast",
+            "GameCategoryMap.game_id": "halloween-knife",
+            "GameCategoryMap.category_id": 11
+          }
+        ],
+        "game_id": "halloween-knife",
+        "name": "Halloween Knife",
+        "cover": "https://img.ttgame.fun/game-img/halloween-knife.jpg",
+        "url": "https://res.ttgame.fun/halloween-knife/index.html",
+        "desc": "Fun Christmas Eve",
+        "tags": "11",
+        "base": {
+          "star": 4.3,
+          "plays": 77084
+        }
+      },
+      {
+        "categoryList": [
+          {
+            "id": 11,
+            "name": "Boom Blast",
+            "cn_name": "Boom Blast",
+            "GameCategoryMap.game_id": "zoo-boom",
+            "GameCategoryMap.category_id": 11
+          }
+        ],
+        "game_id": "zoo-boom",
+        "name": "Zoo Boom",
+        "cover": "https://img.ttgame.fun/game-img/zoo-boom.jpg",
+        "url": "https://res.ttgame.fun/zoo-boom/index.html",
+        "desc": "Get ready for explosive fun in this wild zoo adventure! Match and blast colorful animal blocks, complete challenging levels, and build the most amazing zoo in this exciting puzzle game that's fun for all ages!",
+        "tags": "11",
+        "base": {
+          "star": 4.8,
+          "plays": 79361
+        }
+      },
+      {
+        "categoryList": [
+          {
+            "id": 11,
+            "name": "Boom Blast",
+            "cn_name": "Boom Blast",
+            "GameCategoryMap.game_id": "shootero",
+            "GameCategoryMap.category_id": 11
+          }
+        ],
+        "game_id": "shootero",
+        "name": "Shootero",
+        "cover": "https://img.ttgame.fun/game-img/shootero.jpg",
+        "url": "https://res.ttgame.fun/shootero/index.html",
+        "desc": "Challenge yourself with Shootero!",
+        "tags": "11",
+        "base": {
+          "star": 4.7,
+          "plays": 89270
+        }
+      },
+      {
+        "categoryList": [
+          {
+            "id": 11,
+            "name": "Boom Blast",
+            "cn_name": "Boom Blast",
+            "GameCategoryMap.game_id": "jewels-blitz6",
+            "GameCategoryMap.category_id": 11
+          },
+          {
+            "id": 14,
+            "name": "Match3",
+            "cn_name": "消消乐游戏",
+            "GameCategoryMap.game_id": "jewels-blitz6",
+            "GameCategoryMap.category_id": 14
+          }
+        ],
+        "game_id": "jewels-blitz6",
+        "name": "Jewels Blitz6",
+        "cover": "https://img.ttgame.fun/game-img/jewels-blitz-6.jpg",
+        "url": "https://res.ttgame.fun/jewels-blitz6/index.html",
+        "desc": "Exercise your brain with this challenging puzzle experience!",
+        "tags": "11,14",
+        "base": {
+          "star": 4.7,
+          "plays": 43518
+        }
+      },
+      {
+        "categoryList": [
+          {
+            "id": 11,
+            "name": "Boom Blast",
+            "cn_name": "Boom Blast",
+            "GameCategoryMap.game_id": "dd-blastify",
+            "GameCategoryMap.category_id": 11
+          }
+        ],
+        "game_id": "dd-blastify",
+        "name": "Dd Blastify",
+        "cover": "https://img.ttgame.fun/game-img/dd-blastify.jpg",
+        "url": "https://res.ttgame.fun/dd-blastify/index.html",
+        "desc": "Experience the excitement of Dd Blastify!",
+        "tags": "11",
+        "base": {
+          "star": 4.7,
+          "plays": 89273
+        }
+      },
+      {
+        "categoryList": [
+          {
+            "id": 11,
+            "name": "Boom Blast",
+            "cn_name": "Boom Blast",
+            "GameCategoryMap.game_id": "butterfly-shimai",
+            "GameCategoryMap.category_id": 11
+          },
+          {
+            "id": 18,
+            "name": "Puzzle",
+            "cn_name": "解密游戏",
+            "GameCategoryMap.game_id": "butterfly-shimai",
+            "GameCategoryMap.category_id": 18
+          }
+        ],
+        "game_id": "butterfly-shimai",
+        "name": "Butterfly Shimai",
+        "cover": "https://img.ttgame.fun/game-img/butterfly-shimai.jpg",
+        "url": "https://res.ttgame.fun/butterfly-shimai/index.html",
+        "desc": "Embark on a magical journey with the Butterfly Sisters in this enchanting puzzle adventure! Solve beautiful match-3 puzzles, collect colorful butterflies, and restore the garden's lost magic in this delightful game!",
+        "tags": "11,18",
+        "base": {
+          "star": 4.2,
+          "plays": 71737
+        }
+      },
+      {
+        "categoryList": [
+          {
+            "id": 11,
+            "name": "Boom Blast",
+            "cn_name": "Boom Blast",
+            "GameCategoryMap.game_id": "bubble-up",
+            "GameCategoryMap.category_id": 11
+          }
+        ],
+        "game_id": "bubble-up",
+        "name": "Bubble Up",
+        "cover": "https://img.ttgame.fun/game-img/bubble-up.jpg",
+        "url": "https://res.ttgame.fun/bubble-up/index.html",
+        "desc": "Embark on a bubbly adventure in this colorful puzzle game! Match and pop bubbles, complete challenging levels, and discover power-ups that will help you become the ultimate bubble popper!",
+        "tags": "11",
+        "base": {
+          "star": 4.9,
+          "plays": 77242
+        }
+      }
+    ]
+  },
+  {
     "id": 9,
     "name": "Shooting",
     "cn_name": "射击游戏",
@@ -4463,196 +4653,6 @@ export const category = [
         "base": {
           "star": 4.9,
           "plays": 46011
-        }
-      }
-    ]
-  },
-  {
-    "id": 11,
-    "name": "Boom Blast",
-    "cn_name": "Boom Blast",
-    "img": new URL("@/assets/icons/boomBlast.png", import.meta.url).href,
-    "games": [
-      {
-        "categoryList": [
-          {
-            "id": 11,
-            "name": "Boom Blast",
-            "cn_name": "Boom Blast",
-            "GameCategoryMap.game_id": "equalz",
-            "GameCategoryMap.category_id": 11
-          }
-        ],
-        "game_id": "equalz",
-        "name": "Equalz",
-        "cover": "https://img.ttgame.fun/game-img/equalz.jpg",
-        "url": "https://res.ttgame.fun/equalz/index.html",
-        "desc": "Discover the fun of Equalz!",
-        "tags": "11",
-        "base": {
-          "star": 4.4,
-          "plays": 59199
-        }
-      },
-      {
-        "categoryList": [
-          {
-            "id": 11,
-            "name": "Boom Blast",
-            "cn_name": "Boom Blast",
-            "GameCategoryMap.game_id": "halloween-knife",
-            "GameCategoryMap.category_id": 11
-          }
-        ],
-        "game_id": "halloween-knife",
-        "name": "Halloween Knife",
-        "cover": "https://img.ttgame.fun/game-img/halloween-knife.jpg",
-        "url": "https://res.ttgame.fun/halloween-knife/index.html",
-        "desc": "Fun Christmas Eve",
-        "tags": "11",
-        "base": {
-          "star": 4.3,
-          "plays": 77084
-        }
-      },
-      {
-        "categoryList": [
-          {
-            "id": 11,
-            "name": "Boom Blast",
-            "cn_name": "Boom Blast",
-            "GameCategoryMap.game_id": "zoo-boom",
-            "GameCategoryMap.category_id": 11
-          }
-        ],
-        "game_id": "zoo-boom",
-        "name": "Zoo Boom",
-        "cover": "https://img.ttgame.fun/game-img/zoo-boom.jpg",
-        "url": "https://res.ttgame.fun/zoo-boom/index.html",
-        "desc": "Get ready for explosive fun in this wild zoo adventure! Match and blast colorful animal blocks, complete challenging levels, and build the most amazing zoo in this exciting puzzle game that's fun for all ages!",
-        "tags": "11",
-        "base": {
-          "star": 4.8,
-          "plays": 79361
-        }
-      },
-      {
-        "categoryList": [
-          {
-            "id": 11,
-            "name": "Boom Blast",
-            "cn_name": "Boom Blast",
-            "GameCategoryMap.game_id": "shootero",
-            "GameCategoryMap.category_id": 11
-          }
-        ],
-        "game_id": "shootero",
-        "name": "Shootero",
-        "cover": "https://img.ttgame.fun/game-img/shootero.jpg",
-        "url": "https://res.ttgame.fun/shootero/index.html",
-        "desc": "Challenge yourself with Shootero!",
-        "tags": "11",
-        "base": {
-          "star": 4.7,
-          "plays": 89270
-        }
-      },
-      {
-        "categoryList": [
-          {
-            "id": 11,
-            "name": "Boom Blast",
-            "cn_name": "Boom Blast",
-            "GameCategoryMap.game_id": "jewels-blitz6",
-            "GameCategoryMap.category_id": 11
-          },
-          {
-            "id": 14,
-            "name": "Match3",
-            "cn_name": "消消乐游戏",
-            "GameCategoryMap.game_id": "jewels-blitz6",
-            "GameCategoryMap.category_id": 14
-          }
-        ],
-        "game_id": "jewels-blitz6",
-        "name": "Jewels Blitz6",
-        "cover": "https://img.ttgame.fun/game-img/jewels-blitz-6.jpg",
-        "url": "https://res.ttgame.fun/jewels-blitz6/index.html",
-        "desc": "Exercise your brain with this challenging puzzle experience!",
-        "tags": "11,14",
-        "base": {
-          "star": 4.7,
-          "plays": 43518
-        }
-      },
-      {
-        "categoryList": [
-          {
-            "id": 11,
-            "name": "Boom Blast",
-            "cn_name": "Boom Blast",
-            "GameCategoryMap.game_id": "dd-blastify",
-            "GameCategoryMap.category_id": 11
-          }
-        ],
-        "game_id": "dd-blastify",
-        "name": "Dd Blastify",
-        "cover": "https://img.ttgame.fun/game-img/dd-blastify.jpg",
-        "url": "https://res.ttgame.fun/dd-blastify/index.html",
-        "desc": "Experience the excitement of Dd Blastify!",
-        "tags": "11",
-        "base": {
-          "star": 4.7,
-          "plays": 89273
-        }
-      },
-      {
-        "categoryList": [
-          {
-            "id": 11,
-            "name": "Boom Blast",
-            "cn_name": "Boom Blast",
-            "GameCategoryMap.game_id": "butterfly-shimai",
-            "GameCategoryMap.category_id": 11
-          },
-          {
-            "id": 18,
-            "name": "Puzzle",
-            "cn_name": "解密游戏",
-            "GameCategoryMap.game_id": "butterfly-shimai",
-            "GameCategoryMap.category_id": 18
-          }
-        ],
-        "game_id": "butterfly-shimai",
-        "name": "Butterfly Shimai",
-        "cover": "https://img.ttgame.fun/game-img/butterfly-shimai.jpg",
-        "url": "https://res.ttgame.fun/butterfly-shimai/index.html",
-        "desc": "Embark on a magical journey with the Butterfly Sisters in this enchanting puzzle adventure! Solve beautiful match-3 puzzles, collect colorful butterflies, and restore the garden's lost magic in this delightful game!",
-        "tags": "11,18",
-        "base": {
-          "star": 4.2,
-          "plays": 71737
-        }
-      },
-      {
-        "categoryList": [
-          {
-            "id": 11,
-            "name": "Boom Blast",
-            "cn_name": "Boom Blast",
-            "GameCategoryMap.game_id": "bubble-up",
-            "GameCategoryMap.category_id": 11
-          }
-        ],
-        "game_id": "bubble-up",
-        "name": "Bubble Up",
-        "cover": "https://img.ttgame.fun/game-img/bubble-up.jpg",
-        "url": "https://res.ttgame.fun/bubble-up/index.html",
-        "desc": "Embark on a bubbly adventure in this colorful puzzle game! Match and pop bubbles, complete challenging levels, and discover power-ups that will help you become the ultimate bubble popper!",
-        "tags": "11",
-        "base": {
-          "star": 4.9,
-          "plays": 77242
         }
       }
     ]
