@@ -11,7 +11,7 @@ export const TTGameSdk = {
         if (this.ttSdk == null) return false;
 
         this.showBanner();
-        // this.showSplash();
+        this.showSplash();
         this.showOnclickaBanner();
     },
 
