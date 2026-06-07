@@ -12,7 +12,7 @@ export const TTGameSdk = {
 
         this.showOnclickaVideo();
         this.showBanner();
-        this.showSplash();
+        // this.showSplash();
         this.showOnclickaBanner();
     },
 
