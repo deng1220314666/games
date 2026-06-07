@@ -9,7 +9,7 @@ export function initGA() {
   // 1. 创建 script
   const script = document.createElement('script');
   script.async = true;
-  script.src = 'https://www.googletagmanager.com/gtag/js?id=G-92Y764QQW2';
+  script.src = 'https://www.googletagmanager.com/gtag/js?id=G-JNMVKZ8RCM';
   document.head.appendChild(script);
 
   // 2. 初始化 gtag
@@ -22,8 +22,8 @@ export function initGA() {
   window.gtag = gtag;
 
   gtag('js', new Date());
-  gtag('config', 'G-92Y764QQW2', {
-    send_page_view: false // SPA 必开
+  gtag('config', 'G-JNMVKZ8RCM', {
+    send_page_view: true // SPA 必开
   });
 }
 
