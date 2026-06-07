@@ -1,5 +1,7 @@
 <template>
   <div class="home w-full box-border max-w-7xl mx-auto px-2 sm:px-1 lg:px-2 py-2 flex-1 overflow-y-auto hide-scrollbar z-0 pb-16">
+
+    <div id="ttgame-out-stream" class="w-full h-auto min-h-[250px]"></div>
     <div v-for="(item, index) in category" :key="index" class="w-full mb-4">
 <!--      <AdsterraManager idTxt="adsterra-banner-2-box" :zid="2" v-if="index === 2" />-->
 <!--      <AdsterraManager idTxt="adsterra-banner-3-box" :zid="3" v-if="index === 3" />-->
