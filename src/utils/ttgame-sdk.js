@@ -12,6 +12,7 @@ export const TTGameSdk = {
 
         this.showBanner();
         this.showSplash();
+        this.showOnclickaBanner();
     },
 
     showBanner: function() {
@@ -73,4 +74,28 @@ export const TTGameSdk = {
             }
         }, 1000)
     },
+
+    showOnclickaBanner: async function() {
+        if (window.__onclickaBannerLoaded) {
+            return;
+        }
+
+        window.__onclickaBannerLoaded = true;
+
+        const script = document.createElement("script");
+        script.async = true;
+        script.src = "https://js.onclckmn.com/static/onclicka.js";
+        script.setAttribute("data-admpid", "441212");
+
+        script.onload = () => {
+            console.log("OnClickA banner loaded");
+        };
+
+        script.onerror = (err) => {
+            console.error("OnClickA banner load failed", err);
+            window.__onclickaBannerLoaded = false;
+        };
+
+        document.head.appendChild(script);
+    }
 }
