@@ -23,9 +23,9 @@
 
       <!-- 游戏网格 -->
       <GameGrild :games="item.games"/>
-      <div v-show="index === 0" id="adsterra-banner-1-box" class="w-full flex items-center justify-center"></div>
+      <div v-if="index === 0" id="adsterra-banner-1-box" class="w-full flex items-center justify-center"></div>
 
-      <div v-show="index === 1" data-banner-id="6119451" class="w-full flex items-center justify-center"></div>
+      <div v-if="index === 1" data-banner-id="6119451" class="w-full flex items-center justify-center"></div>
     </div>
 
     <Footer />
@@ -94,7 +94,7 @@ onMounted(async () => {
   //   bachJump();
   // }, 500)
   if (AdsterraAd) {
-    AdsterraAd.showSocialBar();
+    // AdsterraAd.showSocialBar();
 
     // setTimeout(() => {
     //   AdsterraAd.showPopunder();
