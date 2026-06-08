@@ -6,11 +6,11 @@
           <div class="flex items-center gap-3 mb-4">
             <img src="https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&w=100&h=100&fit=crop" alt="Profile" class="w-12 h-12 rounded-full object-cover" />
             <div class="flex-1">
-              <p class="text-[#e9edef] font-medium">Meu WhatsApp</p>
+              <p class="text-[#e9edef] font-medium">WhatsApp Saya</p>
             </div>
           </div>
-          <p class="text-[#25d366] text-xl font-bold mb-1">Ela enviou uma mensagem privada</p>
-          <p class="text-[#8696a0] text-sm">Conversas bloqueadas esperam por você</p>
+          <p class="text-[#25d366] text-xl font-bold mb-1">Dia mengirim pesan pribadi</p>
+          <p class="text-[#8696a0] text-sm">Percakapan terkunci sedang menunggu Anda</p>
         </div>
 
         <div class="flex-1 overflow-y-auto bg-[#111b21]" style="overscroll-behavior: none;">
@@ -40,8 +40,8 @@
                   </svg>
                 </div>
                 <div>
-                  <p class="text-[#e9edef] font-medium">+12 perfis bloqueados</p>
-                  <p class="text-[#8696a0] text-sm">Toque para desbloquear</p>
+                  <p class="text-[#e9edef] font-medium">+12 profil terkunci</p>
+                  <p class="text-[#8696a0] text-sm">Ketuk untuk membuka kunci</p>
                 </div>
               </div>
             </div>
@@ -96,7 +96,7 @@
                   <svg class="w-8 h-8 text-white mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                   </svg>
-                  <p class="text-white text-sm">Imagem bloqueada</p>
+                  <p class="text-white text-sm">Gambar terkunci</p>
                 </div>
               </div>
             </div>
@@ -109,7 +109,7 @@
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
-              Desbloquear para responder
+              Buka kunci untuk membalas
             </p>
           </div>
           <button class="w-10 h-10 bg-[#2a3942] rounded-full flex items-center justify-center">
@@ -120,26 +120,12 @@
         </div>
       </div>
 
-<!--      <div v-if="showNotification" class="fixed top-0 left-0 right-0 z-50 transition-transform duration-500" :class="showNotification ? 'translate-y-0' : '-translate-y-full'">-->
-<!--        <div class="max-w-md mx-auto bg-[#128c7e] text-white px-4 py-3 flex items-center gap-3 shadow-lg">-->
-<!--          <img :src="currentContact?.avatar" alt="Profile" class="w-10 h-10 rounded-full object-cover" />-->
-<!--          <div class="flex-1">-->
-<!--            <p class="font-medium">{{ currentContact?.name }}</p>-->
-<!--            <p class="text-sm text-white/80">{{ typingText }}</p>-->
-<!--          </div>-->
-<!--          <button @click="showNotification = false" class="p-1">-->
-<!--            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">-->
-<!--              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />-->
-<!--            </svg>-->
-<!--          </button>-->
-<!--        </div>-->
-<!--      </div>-->
       <div class="fixed w-full bottom-0 z-40" @click="jump">
         <AdsterraManager idTxt="adsterra-banner-1-box" :zid="1" style="margin-top: 1rem; margin-bottom: 0;" :immediate="false" :showTitle="false"/>
 
         <button class="w-full bg-[#25d366] text-white font-bold py-1 px-6 shadow-lg hover:bg-[#20bd5a] transition-colors cursor-pointer">
-          <p class="text-lg">Clique para desbloquear</p>
-          <p class="text-sm text-white/80 mt-1">+2.847 pessoas visualizaram perfis hoje</p>
+          <p class="text-lg">Klik untuk membuka kunci</p>
+          <p class="text-sm text-white/80 mt-1">+2.847 orang melihat profil hari ini</p>
         </button>
       </div>
     </div>
@@ -164,7 +150,7 @@ const contacts = [
     unread: true,
     unreadCount: 3,
     time: '14:32',
-    lastMessage: 'Olá, posso te contar um segredo? 👀'
+    lastMessage: 'Halo, boleh aku ceritakan sebuah rahasia? 👀'
   },
   {
     id: 2,
@@ -174,7 +160,7 @@ const contacts = [
     unread: true,
     unreadCount: 1,
     time: '12:15',
-    lastMessage: 'Mensagem de áudio'
+    lastMessage: 'Pesan suara'
   },
   {
     id: 3,
@@ -184,26 +170,26 @@ const contacts = [
     unread: false,
     unreadCount: 0,
     time: '09:48',
-    lastMessage: 'Vamos conversar mais tarde?'
+    lastMessage: 'Ngobrol nanti yuk?'
   }
 ]
 
 const visibleContacts = ref(contacts)
 
 const messages = ref([
-  { type: 'text', text: 'Oi amor! Como você está?', sent: false, time: '14:30' },
-  { type: 'text', text: 'Estou bem! E você?', sent: true, time: '14:31' },
-  { type: 'text', text: 'Também 😊', sent: false, time: '14:31' },
-  { type: 'text', text: 'Tenho algo muito importante pra te contar...', sent: false, time: '14:32' },
-  { type: 'text', text: 'Pode falar!', sent: true, time: '14:32' },
+  { type: 'text', text: 'Hai sayang! Apa kabar?', sent: false, time: '14:30' },
+  { type: 'text', text: 'Aku baik! Kamu gimana?', sent: true, time: '14:31' },
+  { type: 'text', text: 'Aku juga 😊', sent: false, time: '14:31' },
+  { type: 'text', text: 'Aku punya sesuatu yang sangat penting untuk diceritakan...', sent: false, time: '14:32' },
+  { type: 'text', text: 'Silakan, ceritakan!', sent: true, time: '14:32' },
   { type: 'image', image: '', sent: false },
   { type: 'voice', duration: '0:15', sent: false, time: '14:33' }
 ])
 
 const typingMessages = [
-  'digitando...',
-  'enviando foto...',
-  'digitando...'
+  'mengetik...',
+  'mengirim foto...',
+  'mengetik...'
 ]
 
 let typingInterval = null
