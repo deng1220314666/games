@@ -11,7 +11,7 @@
        @click="hideStealthNet"
     >
     </a>
-    <WhatsPrivado />
+    <WhatsPrivadoID />
     <!-- 通知权限弹窗 -->
 <!--    <NotificationDialog ref="notificationDialog" />-->
 
@@ -33,7 +33,7 @@ import {loadScript} from "../utils";
 import AdsterraManager from "../components/AdsterraManager.vue";
 import Dialog from "../components/Dialog.vue";
 import {requestNotifyPermission} from "@/utils/pwa.js";
-import WhatsPrivado from "@/components/WhatsPrivado.vue";
+import WhatsPrivadoID from "@/components/WhatsPrivadoID.vue";
 
 const stealthNet = ref(null);
 const showDialog = ref(false);

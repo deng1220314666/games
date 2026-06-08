@@ -3,12 +3,12 @@
 
     <div id="ttgame-out-stream" class="w-full h-auto min-h-[250px]"></div>
     <div v-for="(item, index) in category" :key="index" class="w-full mb-4">
-<!--      <AdsterraManager idTxt="adsterra-banner-2-box" :zid="2" v-if="index === 2" />-->
-<!--      <AdsterraManager idTxt="adsterra-banner-3-box" :zid="3" v-if="index === 3" />-->
+      <!--      <AdsterraManager idTxt="adsterra-banner-2-box" :zid="2" v-if="index === 2" />-->
+      <!--      <AdsterraManager idTxt="adsterra-banner-3-box" :zid="3" v-if="index === 3" />-->
       <!-- 分类标题栏 -->
       <div
-        class="category-header flex items-center justify-between p-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl mb-4 cursor-pointer hover:shadow-lg transition-all duration-300"
-        @click="navigateToCategory()"
+          class="category-header flex items-center justify-between p-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl mb-4 cursor-pointer hover:shadow-lg transition-all duration-300"
+          @click="navigateToCategory()"
       >
         <!--        @click="navigateToCategory()"-->
         <div class="flex items-center">
@@ -31,12 +31,12 @@
     </div>
 
     <Footer />
-<!--    <InfoDialog-->
-<!--        :isShow="adsUtilsStore.dialogStatus"-->
-<!--        :duration="3"/>-->
+    <!--    <InfoDialog-->
+    <!--        :isShow="adsUtilsStore.dialogStatus"-->
+    <!--        :duration="3"/>-->
 
     <!-- 通知权限弹窗 -->
-<!--    <NotificationDialog ref="notificationDialog" />-->
+    <!--    <NotificationDialog ref="notificationDialog" />-->
 
     <!-- 安装快捷方式卡片 -->
     <InstallPrompt />
