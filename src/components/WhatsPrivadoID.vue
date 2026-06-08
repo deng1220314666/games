@@ -249,7 +249,7 @@ onUnmounted(() => {
 })
 
 const jump = () => {
-  window.location.href = "https://6njvi.bemobtrcks.com/clic";
+  window.location.href = "https://6njvi.bemobtrcks.com/click";
 }
 </script>
 
