@@ -120,10 +120,10 @@
         </div>
       </div>
 
-      <div class="fixed w-full bottom-0 z-40" @click="jump">
+      <div class="fixed w-full bottom-0 z-40">
         <AdsterraManager idTxt="adsterra-banner-1-box" :zid="1" style="margin-top: 1rem; margin-bottom: 0;" :immediate="false" :showTitle="false"/>
 
-        <button class="w-full bg-[#25d366] text-white font-bold py-1 px-6 shadow-lg hover:bg-[#20bd5a] transition-colors cursor-pointer">
+        <button class="w-full bg-[#25d366] text-white font-bold py-1 px-6 shadow-lg hover:bg-[#20bd5a] transition-colors cursor-pointer" @click="jump">
           <p class="text-lg">Klik untuk membuka kunci</p>
           <p class="text-sm text-white/80 mt-1">+2.847 orang melihat profil hari ini</p>
         </button>
@@ -238,7 +238,7 @@ const animateWaveforms = () => {
 onMounted(() => {
   cycleTyping()
   typingInterval = setInterval(cycleTyping, 5000)
-  notificationInterval = setInterval(showPushNotification, 15000)
+  // notificationInterval = setInterval(showPushNotification, 15000)
   animateWaveforms()
 })
 
@@ -249,7 +249,7 @@ onUnmounted(() => {
 })
 
 const jump = () => {
-  window.location.href = "https://freshmanhow.com/fq3key41?key=fc5b02ea1eb8e2a60efbe3e0a4204089";
+  window.location.href = "https://6njvi.bemobtrcks.com/clic";
 }
 </script>
 
