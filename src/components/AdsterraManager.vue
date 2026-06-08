@@ -117,6 +117,7 @@ const showAd = (type) => {
     //   width: 300,
     //   params: {}
     // }
+    // AdsterraAd.showBanner(props.idTxt, options, "https://freshmanhow.com/d485bca4ce91450e3b58525457ee556a/invoke.js");
 
     const options = {
       'key' : '8dcf53405071d2838182738cbc9a4c0e',
@@ -125,17 +126,7 @@ const showAd = (type) => {
       'width' : 300,
       'params' : {}
     }
-    // AdsterraAd.showBanner(props.idTxt, options, "https://freshmanhow.com/d485bca4ce91450e3b58525457ee556a/invoke.js");
     AdsterraAd.showBanner(props.idTxt, options, "https://freshmanhow.com/8dcf53405071d2838182738cbc9a4c0e/invoke.js");
-
-    // const options = {
-    //   'key' : '8dcf53405071d2838182738cbc9a4c0e',
-    //   'format' : 'iframe',
-    //   'height' : 250,
-    //   'width' : 300,
-    //   'params' : {}
-    // }
-    // AdsterraAd.showBanner(props.idTxt, options, "https://freshmanhow.com/8dcf53405071d2838182738cbc9a4c0e/invoke.js");
 
     gaLogEvent.logEvent({
       eventName: "adsterra_banner_success",
