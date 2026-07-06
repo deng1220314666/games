@@ -24,6 +24,7 @@ export const ONCLICK = {
   // 各广告位 zone（data-admpid）
   bannerZone: '441212',
   videoZone: '444023',
+  rewardZone: '447259', // 激励(reward)广告位,容器 #reward-1
   // AdManager（Popunder/Interstitial）
   adManager: 'https://js.wpadmngr.com/static/adManager.js',
   adManagerZone: '440816',

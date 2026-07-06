@@ -91,6 +91,57 @@ export const OnClickA = {
   },
 }
 
+// ===== OnClick 激励(reward)广告 =====
+// 用法:先 load() 注入脚本,再 show('reward-1') 展示,resolve(true)=看完可发币。
+// 注意:onclicka 的 reward 回调 API 未在公开文档,按检索到的 initCdTma 模式实现,
+// 若该广告位/SDK 用别的全局(见测试页日志),在此调整即可。
+export const OnClickReward = {
+  loaded: false,
+  containerId: 'reward-1',
+
+  load(zone = ONCLICK.rewardZone) {
+    if (this.loaded || document.querySelector(`script[data-admpid="${zone}"]`)) {
+      this.loaded = true
+      return
+    }
+    const s = document.createElement('script')
+    s.async = true
+    s.src = ONCLICK.loader
+    s.dataset.admpid = zone
+    document.head.appendChild(s)
+    this.loaded = true
+    track.adShow('onclick_reward_load')
+  },
+
+  // 等待 SDK 就绪(initCdTma 出现),最多等 timeout ms
+  _waitReady(timeout = 8000) {
+    return new Promise((resolve, reject) => {
+      const start = Date.now()
+      const t = setInterval(() => {
+        if (typeof window.initCdTma === 'function') {
+          clearInterval(t)
+          resolve()
+        } else if (Date.now() - start > timeout) {
+          clearInterval(t)
+          reject(new Error('reward SDK 未就绪(initCdTma 未出现)'))
+        }
+      }, 200)
+    })
+  },
+
+  // 展示激励广告;resolve(true) 表示用户看完拿到奖励
+  async show(containerId = this.containerId) {
+    this.load()
+    track.adShow('onclick_reward')
+    await this._waitReady()
+    // initCdTma(容器id) -> Promise<show>；show() -> Promise(看完 resolve)
+    const showFn = await window.initCdTma(containerId)
+    await (typeof showFn === 'function' ? showFn() : showFn)
+    track.adRewardComplete()
+    return true
+  },
+}
+
 // ===== 激励广告(看广告赚币核心) =====
 // show() resolve(true) 表示「有效观看」,调用方据此发币;
 // 当前用 Popunder + 最短停留时长模拟激励,真实激励接入后替换 present() 即可。

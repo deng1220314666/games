@@ -6,6 +6,7 @@ import Mine from '@/views/Mine.vue'
 import Invite from '@/views/Invite.vue'
 import GameDetail from '@/views/GameDetail.vue'
 import PrivacyPolicy from '@/views/PrivacyPolicy.vue'
+import RewardTest from '@/views/RewardTest.vue'
 
 const routes = [
   { path: '/', name: 'Home', component: Home, meta: { title: '首页', tab: true } },
@@ -15,6 +16,7 @@ const routes = [
   { path: '/invite', name: 'Invite', component: Invite, meta: { title: '邀请' } },
   { path: '/game/:id', name: 'GameDetail', component: GameDetail, meta: { title: '游戏' } },
   { path: '/privacy', name: 'PrivacyPolicy', component: PrivacyPolicy, meta: { title: '隐私政策' } },
+  { path: '/reward-test', name: 'RewardTest', component: RewardTest, meta: { title: 'Reward测试' } },
   { path: '/:pathMatch(.*)*', redirect: '/' },
 ]
 
