@@ -177,9 +177,9 @@ export const OnClickReward = {
       // SDK 内部报错(常见于无填充/会话失效,如 "e is not a function")
       throw new Error('广告播放失败(可能无填充或会话已失效):' + (e?.message || e))
     } finally {
-      // 一支广告播完/失败即失效,清掉并尝试预加载下一支
+      // 广告用掉即失效;不在此自动续加载(避免一次点击发两次请求),
+      // 下次点击时 show() 会按需重新 preload。
       this._showFn = null
-      this.preload().catch(() => {})
     }
   },
 }

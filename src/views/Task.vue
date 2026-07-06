@@ -75,7 +75,10 @@ const icons = {
 
 function refresh() {
   tasks.value = getTasks()
-  // 提前预加载激励广告,点击即时播放
+}
+
+// 只在进入页面时预加载一次(不放进 refresh,避免每次操作后重复请求)
+function warmAd() {
   if (platform.isTelegram) OnClickReward.preload().catch(() => {})
 }
 
@@ -97,11 +100,15 @@ async function doTask(task) {
 onMounted(() => {
   track.page('task')
   refresh()
+  warmAd()
   AdsterraAd.showBanner(
     'task-banner-box',
     { key: ADSTERRA.bannerKey, format: 'iframe', height: 250, width: 300, params: {} },
     `https://www.highperformanceformat.com/${ADSTERRA.bannerKey}/invoke.js`
   )
 })
-onActivated(refresh)
+onActivated(() => {
+  refresh()
+  warmAd()
+})
 </script>
