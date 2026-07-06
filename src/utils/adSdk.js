@@ -91,30 +91,25 @@ export const OnClickA = {
   },
 }
 
-// ===== OnClick 激励(reward)广告 =====
-// 用法:先 load() 注入脚本,再 show('reward-1') 展示,resolve(true)=看完可发币。
-// 注意:onclicka 的 reward 回调 API 未在公开文档,按检索到的 initCdTma 模式实现,
-// 若该广告位/SDK 用别的全局(见测试页日志),在此调整即可。
+// ===== OnClick TMA 激励(reward)广告 =====
+// 官方集成:加载 in-stream tma.js -> window.initCdTma({id}) -> Promise<show>
+//          -> window.show() -> Promise(看完 resolve)。无需容器 div。
+// ⚠️ tg_app 类型广告通常只在 Telegram 小程序内才能真正展示。
 export const OnClickReward = {
   loaded: false,
-  containerId: 'reward-1',
+  _showFn: null,
 
-  load(zone = ONCLICK.rewardZone) {
-    if (this.loaded || document.querySelector(`script[data-admpid="${zone}"]`)) {
-      this.loaded = true
-      return
-    }
+  load() {
+    if (this.loaded) return
     const s = document.createElement('script')
-    s.async = true
-    s.src = ONCLICK.loader
-    s.dataset.admpid = zone
+    s.src = ONCLICK.rewardTmaScript
     document.head.appendChild(s)
     this.loaded = true
     track.adShow('onclick_reward_load')
   },
 
-  // 等待 SDK 就绪(initCdTma 出现),最多等 timeout ms
-  _waitReady(timeout = 8000) {
+  // 等待 initCdTma 就绪
+  _waitInit(timeout = 8000) {
     return new Promise((resolve, reject) => {
       const start = Date.now()
       const t = setInterval(() => {
@@ -129,14 +124,21 @@ export const OnClickReward = {
     })
   },
 
-  // 展示激励广告;resolve(true) 表示用户看完拿到奖励
-  async show(containerId = this.containerId) {
+  // 初始化一次,拿到 show 函数(缓存)
+  async _getShow() {
+    if (this._showFn) return this._showFn
     this.load()
+    await this._waitInit()
+    this._showFn = await window.initCdTma({ id: Number(ONCLICK.rewardSpotId) })
+    window.show = this._showFn
+    return this._showFn
+  },
+
+  // 展示激励广告;resolve(true) 表示用户看完拿到奖励
+  async show() {
     track.adShow('onclick_reward')
-    await this._waitReady()
-    // initCdTma(容器id) -> Promise<show>；show() -> Promise(看完 resolve)
-    const showFn = await window.initCdTma(containerId)
-    await (typeof showFn === 'function' ? showFn() : showFn)
+    const showFn = await this._getShow()
+    await showFn()
     track.adRewardComplete()
     return true
   },

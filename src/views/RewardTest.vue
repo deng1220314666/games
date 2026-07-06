@@ -1,8 +1,9 @@
 <template>
   <div class="min-h-full bg-tg-secondary p-4 text-tg-text">
-    <h1 class="mb-1 text-lg font-bold">OnClick Reward 广告测试</h1>
-    <p class="mb-4 text-xs text-tg-hint">
-      zone(data-admpid): <b>{{ zone }}</b> · 容器: <b>#{{ containerId }}</b>
+    <h1 class="mb-1 text-lg font-bold">OnClick TMA Reward 广告测试</h1>
+    <p class="mb-1 text-xs text-tg-hint">Spot ID: <b>{{ spotId }}</b> · 脚本 tma.js · initCdTma({{ '{id}' }}) → show()</p>
+    <p class="mb-4 text-xs" :style="{ color: inTelegram ? 'var(--tg-button)' : 'var(--tg-destructive)' }">
+      当前环境:{{ inTelegram ? 'Telegram 小程序 ✓' : '普通浏览器(tg_app 广告可能不展示,建议在 Telegram 内打开)' }}
     </p>
 
     <!-- 余额 -->
@@ -16,13 +17,7 @@
       <button class="rounded-xl py-3 text-sm font-semibold text-tg-button-text" style="background: var(--tg-button)" @click="loadSdk">1. 加载 SDK</button>
       <button class="rounded-xl py-3 text-sm font-semibold text-tg-button-text" style="background: var(--tg-button)" @click="probe">探测全局</button>
       <button class="col-span-2 rounded-xl py-3 text-sm font-semibold text-tg-button-text" style="background:#34c759" @click="showReward">2. 展示激励广告 → 看完发币</button>
-      <button class="col-span-2 rounded-xl py-2.5 text-sm font-semibold text-tg-hint" style="background: var(--tg-section-bg); border:1px solid var(--tg-separator)" @click="simulate">模拟发奖(仅测下游发币,不看广告)</button>
-    </div>
-
-    <!-- 广告容器(SDK 要往这里渲染) -->
-    <div class="mb-4">
-      <div class="mb-1 text-xs text-tg-hint">广告容器 #{{ containerId }}:</div>
-      <div :id="containerId" class="min-h-[80px] rounded-xl border border-dashed" style="border-color: var(--tg-separator)"></div>
+      <button class="col-span-2 rounded-xl py-2.5 text-sm font-semibold text-tg-hint" style="background: var(--tg-section-bg); border:1px solid var(--tg-separator)" @click="simulate">模拟发奖(仅测下游发币)</button>
     </div>
 
     <!-- 日志 -->
@@ -31,7 +26,7 @@
         <span class="text-xs font-semibold text-tg-hint">日志</span>
         <button class="text-xs text-tg-button" @click="logs = []">清空</button>
       </div>
-      <pre class="max-h-72 overflow-auto whitespace-pre-wrap break-all text-[11px] leading-relaxed" style="color: var(--tg-text)">{{ logs.join('\n') || '(暂无)' }}</pre>
+      <pre class="max-h-80 overflow-auto whitespace-pre-wrap break-all text-[11px] leading-relaxed" style="color: var(--tg-text)">{{ logs.join('\n') || '(暂无)' }}</pre>
     </div>
   </div>
 </template>
@@ -43,10 +38,11 @@ import { ONCLICK } from '@/config/ads.js'
 import { OnClickReward } from '@/utils/adSdk.js'
 import { earn } from '@/services/reward.js'
 import { ECONOMY } from '@/config/index.js'
+import { platform } from '@/utils/platform.js'
 
 const user = useUserStore()
-const zone = ONCLICK.rewardZone
-const containerId = 'reward-1'
+const spotId = ONCLICK.rewardSpotId
+const inTelegram = platform.isTelegram
 const logs = ref([])
 
 function log(...args) {
@@ -55,29 +51,28 @@ function log(...args) {
 }
 
 function loadSdk() {
-  log('加载 onclicka.js, data-admpid=' + zone)
-  OnClickReward.load(zone)
+  log('加载 tma.js:' + ONCLICK.rewardTmaScript)
+  OnClickReward.load()
   setTimeout(probe, 1500)
 }
 
-// 打印 SDK 可能暴露的全局,帮助锁定真实调用 API
 function probe() {
-  const candidates = ['initCdTma', 'onclicka', 'OnClicka', 'Onclicka', 'AdController', 'wpn', 'show']
-  const found = candidates.filter((k) => typeof window[k] !== 'undefined')
-  log('已加载 onclicka 脚本:' + !!document.querySelector(`script[data-admpid="${zone}"]`))
-  log('检测到的全局:' + (found.length ? found.map((k) => `${k}(${typeof window[k]})`).join(', ') : '无(可能还没就绪或此广告位非 reward 类型)'))
+  const candidates = ['initCdTma', 'show', 'Telegram', 'onclicka']
+  const found = candidates.map((k) => `${k}:${typeof window[k]}`)
+  log('tma.js 已加载:' + OnClickReward.loaded)
+  log('全局:' + found.join(', '))
 }
 
 async function showReward() {
   try {
-    log('调用 OnClickReward.show("' + containerId + '") ...')
-    const ok = await OnClickReward.show(containerId)
-    log('广告返回:' + ok + ' → 发币')
+    log('OnClickReward.show() ...')
+    const ok = await OnClickReward.show()
+    log('广告播完:' + ok + ' → 发币')
     const res = await earn('watch_ad', ECONOMY.reward.watchAd)
-    log(res.ok ? `发币成功 +${res.amount},余额 ${res.balance}` : `发币被拒:${res.balance}(可能到达每日上限)`)
+    log(res.ok ? `发币成功 +${res.amount},余额 ${res.balance}` : `发币被拒(每日上限?)`)
   } catch (e) {
     log('❌ ' + (e?.message || e))
-    log('提示:若一直失败,点"探测全局"看 SDK 暴露了什么,把真实的展示函数名告诉我,我改 OnClickReward.show')
+    log('把这行报错发我,以便对齐 SDK 真实行为')
   }
 }
 
@@ -86,5 +81,8 @@ async function simulate() {
   log(res.ok ? `模拟发奖 +${res.amount},余额 ${res.balance}` : `发币被拒(每日上限?)`)
 }
 
-onMounted(() => log('页面就绪。先点「1. 加载 SDK」,再点「2. 展示激励广告」。'))
+onMounted(() => {
+  log('页面就绪。环境:' + (inTelegram ? 'Telegram' : '浏览器'))
+  log('先点「1. 加载 SDK」→「探测全局」,再「2. 展示激励广告」')
+})
 </script>
