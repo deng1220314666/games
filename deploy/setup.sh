@@ -9,6 +9,7 @@ WEB=/var/www/ttearn            # 前端静态目录
 API=/var/www/ttearn-server     # 后端目录
 FRONT_DOMAIN=tg.ttgame.fun
 API_DOMAIN=tgapi.ttgame.fun
+PORT=3001                      # 后端端口(3000 常被别的应用占用)
 
 echo ">> 1. 安装 Node 22 / nginx / certbot(已装会跳过)"
 if ! command -v node >/dev/null; then
@@ -16,11 +17,11 @@ if ! command -v node >/dev/null; then
   apt-get install -y nodejs
 fi
 apt-get update
-apt-get install -y nginx certbot python3-certbot-nginx rsync openssl
+apt-get install -y nginx certbot rsync openssl
 
 echo ">> 2. 构建前端"
 cd "$SRC"
-npm ci
+npm install --no-audit --no-fund   # 仓库无 lockfile,用 install 而非 ci
 npm run build
 mkdir -p "$WEB"
 rsync -a --delete "$SRC/dist/" "$WEB/"
@@ -29,18 +30,18 @@ echo ">> 3. 部署后端"
 mkdir -p "$API"
 rsync -a --delete --exclude node_modules --exclude .env "$SRC/server/" "$API/server/"
 cd "$API/server"
-npm ci --omit=dev
+npm install --omit=dev --no-audit --no-fund
 if [ ! -f .env ]; then
   cp .env.example .env
-  # 自动生成 JWT_SECRET
   SECRET=$(openssl rand -hex 32)
   sed -i "s/^JWT_SECRET=.*/JWT_SECRET=$SECRET/" .env
+  grep -q '^PORT=' .env && sed -i "s/^PORT=.*/PORT=$PORT/" .env || echo "PORT=$PORT" >> .env
   echo "!! 已生成 .env,请手动填 TELEGRAM_BOT_TOKEN / TON_WALLET_MNEMONIC / TONCENTER_API_KEY"
 fi
-chown -R www-data:www-data "$API"
 
 echo ">> 4. systemd 常驻后端"
-cp "$SRC/deploy/ttearn-server.service" /etc/systemd/system/
+NODE_BIN=$(command -v node)
+sed "s|ExecStart=.*|ExecStart=$NODE_BIN src/index.js|" "$SRC/deploy/ttearn-server.service" > /etc/systemd/system/ttearn-server.service
 systemctl daemon-reload
 systemctl enable --now ttearn-server
 systemctl restart ttearn-server

@@ -8,10 +8,11 @@ After=network.target
 Type=simple
 WorkingDirectory=/var/www/ttearn-server/server
 # dotenv 从 WorkingDirectory 读 .env,secrets 都放那份 .env
+# ExecStart 的 node 路径由 setup.sh 按实际 which node 写入
 ExecStart=/usr/bin/node src/index.js
 Restart=always
 RestartSec=3
-User=www-data
+User=root
 Environment=NODE_ENV=production
 
 [Install]
