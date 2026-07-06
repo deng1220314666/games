@@ -54,7 +54,6 @@ import { ADSTERRA } from '@/config/ads.js'
 import { getTasks, checkIn } from '@/services/task.js'
 import { earn } from '@/services/reward.js'
 import { RewardedAd, AdsterraAd, OnClickReward } from '@/utils/adSdk.js'
-import { platform } from '@/utils/platform.js'
 import { track } from '@/utils/event.js'
 
 defineOptions({ name: 'Task' })
@@ -77,9 +76,9 @@ function refresh() {
   tasks.value = getTasks()
 }
 
-// 只在进入页面时预加载一次(不放进 refresh,避免每次操作后重复请求)
+// 进入页面时只预加载 SDK 脚本(不拉广告;广告在点击时才请求)
 function warmAd() {
-  if (platform.isTelegram) OnClickReward.preload().catch(() => {})
+  OnClickReward.load()
 }
 
 async function doTask(task) {

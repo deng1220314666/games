@@ -23,7 +23,7 @@ import RewardToast from '@/components/RewardToast.vue'
 import { initVhUnit } from '@/utils/init.js'
 import { initGA } from '@/utils/event.js'
 import { registerPwa } from '@/utils/pwa.js'
-import { initPlatform, platform } from '@/utils/platform.js'
+import { initPlatform } from '@/utils/platform.js'
 import { OnClickReward } from '@/utils/adSdk.js'
 import { login } from '@/services/user.js'
 import { bindReferrerFromStart } from '@/services/referral.js'
@@ -47,7 +47,7 @@ onMounted(async () => {
   await bindReferrerFromStart()
   restoreWallet()
 
-  // Telegram 内提前预加载激励广告(tg_app 广告仅在 TG 有效)
-  if (platform.isTelegram) OnClickReward.preload().catch(() => {})
+  // 提前加载激励广告 SDK 脚本(仅脚本,不拉广告;广告在点击时才请求)
+  OnClickReward.load()
 })
 </script>

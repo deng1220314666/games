@@ -98,16 +98,10 @@ export const OnClickA = {
 // ⚠️ tg_app 类型广告通常只在 Telegram 小程序内才能真正展示。
 export const OnClickReward = {
   loaded: false,
-  _showFn: null, // 预加载好的 show 函数;为 null 表示还没备好广告
-  _preloading: null, // 进行中的预加载 Promise(防并发重复 init)
 
-  // 是否已备好一支广告(可即时播放)
-  get ready() {
-    return !!this._showFn
-  },
-
+  // 预加载 SDK 脚本(仅 tma.js 本身,不拉广告)。
+  // index.html 的 <head> 已静态引入,这里兜底/去重;可在进页面时调。
   load() {
-    // index.html 的 <head> 已静态引入 tma.js;这里兜底,避免重复注入
     if (this.loaded || document.querySelector(`script[src="${ONCLICK.rewardTmaScript}"]`)) {
       this.loaded = true
       return
@@ -118,7 +112,7 @@ export const OnClickReward = {
     this.loaded = true
   },
 
-  // 等待 initCdTma 就绪
+  // 等待 initCdTma 就绪(脚本加载完)
   _waitInit(timeout = 8000) {
     return new Promise((resolve, reject) => {
       const start = Date.now()
@@ -134,41 +128,26 @@ export const OnClickReward = {
     })
   },
 
-  // 预加载:提前 initCdTma 备好一支广告,缓存 show。幂等、可重复调用。
-  // initCdTma 返回非函数 = 当前无广告填充(no fill)。
-  preload() {
-    if (this._showFn) return Promise.resolve(this._showFn)
-    if (this._preloading) return this._preloading
-    this._preloading = (async () => {
-      this.load()
-      await this._waitInit()
-      const show = await window.initCdTma({ id: Number(ONCLICK.rewardSpotId) })
-      if (typeof show !== 'function') {
-        throw new Error('NO_FILL:暂无广告填充(initCdTma 未返回 show)')
-      }
-      this._showFn = show
-      window.show = show
-      return show
-    })()
-      .catch((e) => {
-        track.adError('reward_preload')
-        throw e
-      })
-      .finally(() => {
-        this._preloading = null
-      })
-    return this._preloading
-  },
-
-  // 展示激励广告;resolve(true) 表示用户看完拿到奖励,失败抛错(调用方据此不发币)。
+  // 展示激励广告(点击时才拉广告):initCdTma({id}) → show()。
+  // resolve(true)=看完拿奖励;失败抛错(调用方据此不发币)。
   async show() {
     track.adShow('onclick_reward')
+    this.load()
+    await this._waitInit()
+
     let showFn
     try {
-      showFn = await this.preload() // 已预加载则立即返回
+      showFn = await window.initCdTma({ id: Number(ONCLICK.rewardSpotId) })
     } catch (e) {
-      throw new Error('暂无广告可播(no fill):' + (e?.message || e))
+      track.adError('reward_init')
+      throw new Error('拉取广告失败:' + (e?.message || e))
     }
+    if (typeof showFn !== 'function') {
+      track.adError('reward_nofill')
+      throw new Error('NO_FILL:暂无广告填充')
+    }
+    window.show = showFn
+
     try {
       await showFn()
       track.adRewardComplete()
@@ -176,10 +155,6 @@ export const OnClickReward = {
     } catch (e) {
       // SDK 内部报错(常见于无填充/会话失效,如 "e is not a function")
       throw new Error('广告播放失败(可能无填充或会话已失效):' + (e?.message || e))
-    } finally {
-      // 广告用掉即失效;不在此自动续加载(避免一次点击发两次请求),
-      // 下次点击时 show() 会按需重新 preload。
-      this._showFn = null
     }
   },
 }
@@ -202,8 +177,8 @@ export const RewardedAd = {
     }
   },
 
-  // 预加载入口(供页面提前调用)
-  preload() {
-    if (platform.isTelegram) OnClickReward.preload().catch(() => {})
+  // 只预加载 SDK 脚本(不拉广告),供页面进入时调用
+  preloadSdk() {
+    OnClickReward.load()
   },
 }
