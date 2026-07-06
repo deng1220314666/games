@@ -25,7 +25,8 @@ export const ONCLICK = {
   bannerZone: '441212',
   videoZone: '444023',
   // TMA 激励(reward)广告:用 in-stream tma.js + initCdTma({id})，无需容器 div
-  rewardSpotId: 447259,
+  // id 传的是 Spot ID(不是广告 ID 447259)
+  rewardSpotId: 6122201,
   rewardTmaScript: 'https://js.onclckvd.com/in-stream-ad-admanager/tma.js',
   // AdManager（Popunder/Interstitial）
   adManager: 'https://js.wpadmngr.com/static/adManager.js',
