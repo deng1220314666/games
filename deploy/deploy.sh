@@ -204,7 +204,11 @@ fi
 
 # ---------- 8. 自检 ----------
 log "自检"
-echo -n "backend  : "; curl -s http://127.0.0.1:$BACKEND_PORT/health || echo FAIL
+echo -n "backend  : "
+for i in $(seq 1 8); do
+  if curl -sf "http://127.0.0.1:$BACKEND_PORT/health"; then break; fi
+  [ "$i" = 8 ] && echo "FAIL" || sleep 1
+done
 echo
 echo -n "service  : "; systemctl is-active ttearn-server
 echo ">> 完成。公网验证:"
