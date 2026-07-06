@@ -12,9 +12,14 @@
       <span class="tabular text-xl font-bold" style="color: var(--tg-button)">{{ user.balance }}</span>
     </div>
 
+    <!-- 就绪状态 -->
+    <div class="mb-3 text-xs">
+      广告预加载:<b :style="{ color: ready ? 'var(--tg-button)' : 'var(--tg-hint)' }">{{ ready ? '已就绪 ✓' : '未就绪' }}</b>
+    </div>
+
     <!-- 操作 -->
     <div class="mb-4 grid grid-cols-2 gap-2">
-      <button class="rounded-xl py-3 text-sm font-semibold text-tg-button-text" style="background: var(--tg-button)" @click="loadSdk">1. 加载 SDK</button>
+      <button class="rounded-xl py-3 text-sm font-semibold text-tg-button-text" style="background: var(--tg-button)" @click="doPreload">1. 预加载广告</button>
       <button class="rounded-xl py-3 text-sm font-semibold text-tg-button-text" style="background: var(--tg-button)" @click="probe">探测全局</button>
       <button class="col-span-2 rounded-xl py-3 text-sm font-semibold text-tg-button-text" style="background:#34c759" @click="showReward">2. 展示激励广告 → 看完发币</button>
       <button class="col-span-2 rounded-xl py-2.5 text-sm font-semibold text-tg-hint" style="background: var(--tg-section-bg); border:1px solid var(--tg-separator)" @click="simulate">模拟发奖(仅测下游发币)</button>
@@ -44,16 +49,23 @@ const user = useUserStore()
 const spotId = ONCLICK.rewardSpotId
 const inTelegram = platform.isTelegram
 const logs = ref([])
+const ready = ref(false)
 
 function log(...args) {
   const t = new Date().toLocaleTimeString()
   logs.value.push(`[${t}] ` + args.map((a) => (typeof a === 'object' ? JSON.stringify(a) : String(a))).join(' '))
 }
 
-function loadSdk() {
-  log('加载 tma.js:' + ONCLICK.rewardTmaScript)
-  OnClickReward.load()
-  setTimeout(probe, 1500)
+async function doPreload() {
+  log('预加载 initCdTma({ id: ' + spotId + ' }) ...')
+  try {
+    await OnClickReward.preload()
+    ready.value = OnClickReward.ready
+    log('预加载完成,ready=' + ready.value)
+  } catch (e) {
+    ready.value = false
+    log('❌ 预加载失败:' + (e?.message || e))
+  }
 }
 
 function probe() {
@@ -65,7 +77,7 @@ function probe() {
 
 async function showReward() {
   try {
-    log('OnClickReward.show() ...')
+    log('OnClickReward.show()(已预加载则即时播放)...')
     const ok = await OnClickReward.show()
     log('广告播完:' + ok + ' → 发币')
     const res = await earn('watch_ad', ECONOMY.reward.watchAd)
@@ -73,6 +85,8 @@ async function showReward() {
   } catch (e) {
     log('❌ ' + (e?.message || e))
     log('把这行报错发我,以便对齐 SDK 真实行为')
+  } finally {
+    ready.value = OnClickReward.ready
   }
 }
 
@@ -83,6 +97,8 @@ async function simulate() {
 
 onMounted(() => {
   log('页面就绪。环境:' + (inTelegram ? 'Telegram' : '浏览器'))
-  log('先点「1. 加载 SDK」→「探测全局」,再「2. 展示激励广告」')
+  log('已自动预加载;也可手动点「1. 预加载广告」→「2. 展示激励广告」')
+  // 进页面自动预加载
+  doPreload()
 })
 </script>

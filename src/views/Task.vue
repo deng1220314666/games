@@ -53,7 +53,8 @@ import { APP, ECONOMY } from '@/config/index.js'
 import { ADSTERRA } from '@/config/ads.js'
 import { getTasks, checkIn } from '@/services/task.js'
 import { earn } from '@/services/reward.js'
-import { RewardedAd, AdsterraAd } from '@/utils/adSdk.js'
+import { RewardedAd, AdsterraAd, OnClickReward } from '@/utils/adSdk.js'
+import { platform } from '@/utils/platform.js'
 import { track } from '@/utils/event.js'
 
 defineOptions({ name: 'Task' })
@@ -74,6 +75,8 @@ const icons = {
 
 function refresh() {
   tasks.value = getTasks()
+  // 提前预加载激励广告,点击即时播放
+  if (platform.isTelegram) OnClickReward.preload().catch(() => {})
 }
 
 async function doTask(task) {

@@ -98,7 +98,13 @@ export const OnClickA = {
 // ⚠️ tg_app 类型广告通常只在 Telegram 小程序内才能真正展示。
 export const OnClickReward = {
   loaded: false,
-  _showFn: null,
+  _showFn: null, // 预加载好的 show 函数;为 null 表示还没备好广告
+  _preloading: null, // 进行中的预加载 Promise(防并发重复 init)
+
+  // 是否已备好一支广告(可即时播放)
+  get ready() {
+    return !!this._showFn
+  },
 
   load() {
     // index.html 的 <head> 已静态引入 tma.js;这里兜底,避免重复注入
@@ -128,23 +134,41 @@ export const OnClickReward = {
     })
   },
 
-  // 初始化一次,拿到 show 函数(缓存)
-  async _getShow() {
-    if (this._showFn) return this._showFn
-    this.load()
-    await this._waitInit()
-    this._showFn = await window.initCdTma({ id: Number(ONCLICK.rewardSpotId) })
-    window.show = this._showFn
-    return this._showFn
+  // 预加载:提前 initCdTma 备好一支广告,缓存 show。幂等、可重复调用。
+  preload() {
+    if (this._showFn) return Promise.resolve(this._showFn)
+    if (this._preloading) return this._preloading
+    this._preloading = (async () => {
+      this.load()
+      await this._waitInit()
+      const show = await window.initCdTma({ id: Number(ONCLICK.rewardSpotId) })
+      this._showFn = show
+      window.show = show
+      return show
+    })()
+      .catch((e) => {
+        track.adError('reward_preload')
+        throw e
+      })
+      .finally(() => {
+        this._preloading = null
+      })
+    return this._preloading
   },
 
-  // 展示激励广告;resolve(true) 表示用户看完拿到奖励
+  // 展示激励广告;resolve(true) 表示用户看完拿到奖励。
   async show() {
     track.adShow('onclick_reward')
-    const showFn = await this._getShow()
-    await showFn()
-    track.adRewardComplete()
-    return true
+    const showFn = await this.preload() // 已预加载则立即返回
+    try {
+      await showFn()
+      track.adRewardComplete()
+      return true
+    } finally {
+      // 一支广告播完即失效,清掉并预加载下一支,保证下次点击即时
+      this._showFn = null
+      this.preload().catch(() => {})
+    }
   },
 }
 
