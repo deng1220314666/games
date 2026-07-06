@@ -2,6 +2,7 @@
 // 配置见 src/config/ads.js;发币只经 services/reward.js,勿在此直接发币。
 import { loadScript } from '@/utils/index.js'
 import { track } from '@/utils/event.js'
+import { platform } from '@/utils/platform.js'
 import { ADSTERRA, ONCLICK } from '@/config/ads.js'
 
 export const AdsterraAd = {
@@ -100,12 +101,15 @@ export const OnClickReward = {
   _showFn: null,
 
   load() {
-    if (this.loaded) return
+    // index.html 的 <head> 已静态引入 tma.js;这里兜底,避免重复注入
+    if (this.loaded || document.querySelector(`script[src="${ONCLICK.rewardTmaScript}"]`)) {
+      this.loaded = true
+      return
+    }
     const s = document.createElement('script')
     s.src = ONCLICK.rewardTmaScript
     document.head.appendChild(s)
     this.loaded = true
-    track.adShow('onclick_reward_load')
   },
 
   // 等待 initCdTma 就绪
@@ -144,14 +148,24 @@ export const OnClickReward = {
   },
 }
 
-// ===== 激励广告(看广告赚币核心) =====
-// show() resolve(true) 表示「有效观看」,调用方据此发币;
-// 当前用 Popunder + 最短停留时长模拟激励,真实激励接入后替换 present() 即可。
+// ===== 激励广告(看广告赚币核心,全站统一入口) =====
+// show() resolve(true) 表示「有效观看」,调用方据此发币。
+// Telegram 内:走 OnClick 真·TMA 激励广告;web:回退 Popunder + 最短停留时长。
 export const RewardedAd = {
-  minWatchMs: 5000, // 最短有效观看
+  minWatchMs: 5000, // web 回退的最短有效观看
 
   async show() {
-    track.adShow('rewarded')
+    // Telegram 小程序:真实激励广告(tg_app)
+    if (platform.isTelegram) {
+      try {
+        return await OnClickReward.show()
+      } catch (e) {
+        track.adError('reward_tma')
+        // 无填充/失败则落到下面的回退
+      }
+    }
+    // web 或 TMA 失败:Popunder + 计时(占位,防刷靠后端)
+    track.adShow('rewarded_fallback')
     try {
       await this._present()
       const ok = await this._waitWatched()
