@@ -10,12 +10,13 @@ API=/var/www/ttearn-server     # 后端目录
 FRONT_DOMAIN=tg.ttgame.fun
 API_DOMAIN=tgapi.ttgame.fun
 
-echo ">> 1. 安装 Node 20 / nginx / certbot(已装会跳过)"
+echo ">> 1. 安装 Node 22 / nginx / certbot(已装会跳过)"
 if ! command -v node >/dev/null; then
-  curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+  curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
   apt-get install -y nodejs
 fi
-apt-get install -y nginx certbot python3-certbot-nginx rsync
+apt-get update
+apt-get install -y nginx certbot python3-certbot-nginx rsync openssl
 
 echo ">> 2. 构建前端"
 cd "$SRC"
