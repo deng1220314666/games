@@ -174,51 +174,24 @@ export const OnClickReward = {
 
 // ===== 激励广告(看广告赚币核心,全站统一入口) =====
 // show() resolve(true) 表示「有效观看」,调用方据此发币。
-// Telegram 内:走 OnClick 真·TMA 激励广告;web:回退 Popunder + 最短停留时长。
+// 只走 OnClick 真·TMA 激励广告(tg_app);非 Telegram 环境不可用,
+// 不再加载 Adsterra popunder,避免无关的 403 请求。
 export const RewardedAd = {
-  minWatchMs: 5000, // web 回退的最短有效观看
-
   async show() {
-    // Telegram 小程序:真实激励广告(tg_app)
-    if (platform.isTelegram) {
-      try {
-        return await OnClickReward.show()
-      } catch (e) {
-        track.adError('reward_tma')
-        // 无填充/失败则落到下面的回退
-      }
+    if (!platform.isTelegram) {
+      track.adError('reward_no_tg') // 需在 Telegram 小程序内
+      return false
     }
-    // web 或 TMA 失败:Popunder + 计时(占位,防刷靠后端)
-    track.adShow('rewarded_fallback')
     try {
-      await this._present()
-      const ok = await this._waitWatched()
-      if (ok) track.adRewardComplete()
-      return ok
+      return await OnClickReward.show()
     } catch (e) {
-      track.adError('rewarded')
+      track.adError('reward_tma') // 无填充 / 播放失败 → 不发币
       return false
     }
   },
 
-  // 展示广告载体(可替换为真实激励视频 SDK)
-  async _present() {
-    // 优先 OnClick 广告,回退 Adsterra Popunder
-    OnClickA.showBanner(ONCLICK.videoZone)
-    await AdsterraAd.showPopunder()
-  },
-
-  // 最短观看时长校验(前端第一道防刷,后端二次校验)
-  _waitWatched() {
-    return new Promise((resolve) => {
-      const start = Date.now()
-      let elapsed = 0
-      const onHide = () => (elapsed += Date.now() - start)
-      document.addEventListener('visibilitychange', onHide)
-      setTimeout(() => {
-        document.removeEventListener('visibilitychange', onHide)
-        resolve(Date.now() - start >= this.minWatchMs)
-      }, this.minWatchMs)
-    })
+  // 预加载入口(供页面提前调用)
+  preload() {
+    if (platform.isTelegram) OnClickReward.preload().catch(() => {})
   },
 }
