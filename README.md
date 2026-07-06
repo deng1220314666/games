@@ -19,13 +19,23 @@ cp .env.example .env    # 把 VITE_USE_MOCK 改成 true
 npm run dev             # http://localhost:8888
 ```
 
-接后端(完整链路):
+接后端(本地完整链路):
 ```bash
 # 1) 起后端
 cd server && npm install && cp .env.example .env && npm run dev
 # 2) 起前端(根目录):.env 设 VITE_USE_MOCK=false, VITE_API_BASE_URL=http://localhost:3000
 npm install && npm run dev
 ```
+
+## 一键部署到服务器
+
+在本机(Windows)执行,免密上传并在服务器构建/重启:
+```powershell
+.\deploy.ps1            # PowerShell;或在 Git Bash 里 ./deploy.sh
+```
+- 用 `~/.ssh/ttgame_deploy` 密钥免密登录 `root@103.235.73.195`
+- 打包源码 → scp 上传 → 服务器跑 `scripts/server-deploy.sh`(构建前端、部署后端保留 .env、nginx 80+443、Let's Encrypt 证书、重启、健康检查)
+- 线上:前端 `https://tg.ttgame.fun`、API `https://tgapi.ttgame.fun`(后端端口 3001)
 
 ## 核心能力
 
