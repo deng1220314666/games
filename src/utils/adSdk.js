@@ -135,6 +135,7 @@ export const OnClickReward = {
   },
 
   // 预加载:提前 initCdTma 备好一支广告,缓存 show。幂等、可重复调用。
+  // initCdTma 返回非函数 = 当前无广告填充(no fill)。
   preload() {
     if (this._showFn) return Promise.resolve(this._showFn)
     if (this._preloading) return this._preloading
@@ -142,6 +143,9 @@ export const OnClickReward = {
       this.load()
       await this._waitInit()
       const show = await window.initCdTma({ id: Number(ONCLICK.rewardSpotId) })
+      if (typeof show !== 'function') {
+        throw new Error('NO_FILL:暂无广告填充(initCdTma 未返回 show)')
+      }
       this._showFn = show
       window.show = show
       return show
@@ -156,16 +160,24 @@ export const OnClickReward = {
     return this._preloading
   },
 
-  // 展示激励广告;resolve(true) 表示用户看完拿到奖励。
+  // 展示激励广告;resolve(true) 表示用户看完拿到奖励,失败抛错(调用方据此不发币)。
   async show() {
     track.adShow('onclick_reward')
-    const showFn = await this.preload() // 已预加载则立即返回
+    let showFn
+    try {
+      showFn = await this.preload() // 已预加载则立即返回
+    } catch (e) {
+      throw new Error('暂无广告可播(no fill):' + (e?.message || e))
+    }
     try {
       await showFn()
       track.adRewardComplete()
       return true
+    } catch (e) {
+      // SDK 内部报错(常见于无填充/会话失效,如 "e is not a function")
+      throw new Error('广告播放失败(可能无填充或会话已失效):' + (e?.message || e))
     } finally {
-      // 一支广告播完即失效,清掉并预加载下一支,保证下次点击即时
+      // 一支广告播完/失败即失效,清掉并尝试预加载下一支
       this._showFn = null
       this.preload().catch(() => {})
     }
