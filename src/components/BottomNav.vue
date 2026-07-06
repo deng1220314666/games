@@ -1,96 +1,46 @@
 <template>
-  <nav class="bottom-nav flex justify-around items-center bg-white border-t border-gray-200 py-2 fixed bottom-0 left-0 right-0 z-50 max-w-xl mx-auto">
-    <div
-      v-for="item in navItems"
+  <nav
+    class="fixed bottom-0 left-0 right-0 z-50 mx-auto flex max-w-xl items-stretch justify-around border-t border-tg-separator bg-tg-bg"
+    style="padding-bottom: env(safe-area-inset-bottom, 0px)"
+  >
+    <button
+      v-for="item in items"
       :key="item.path"
-      class="nav-item flex flex-col items-center flex-1 py-1 cursor-pointer transition-colors"
-      :class="isActive(item.path) ? 'text-blue-500' : 'text-black'"
-      @click="navigateTo(item.path)"
+      class="flex min-h-[49px] flex-1 flex-col items-center justify-center gap-0.5 pt-1.5 transition-colors"
+      :class="isActive(item.path) ? 'text-tg-button' : 'text-tg-hint'"
+      :aria-label="t('nav.' + item.key)"
+      @click="go(item.path)"
     >
-      <component :is="item.icon" class="w-6 h-6" />
-      <span class="text-xs mt-1 font-medium">{{ item.label }}</span>
-    </div>
+      <svg class="h-6 w-6" viewBox="0 0 24 24" :fill="isActive(item.path) ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path :d="item.icon" />
+      </svg>
+      <span class="text-[10px] font-medium leading-none">{{ t('nav.' + item.key) }}</span>
+    </button>
   </nav>
 </template>
 
 <script setup>
-import { h } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+import { TABS } from '@/config/index.js'
+import { haptic } from '@/utils/platform.js'
 
 const router = useRouter()
 const route = useRoute()
+const { t } = useI18n()
 
-const HomeIcon = {
-  render() {
-    return h('svg', {
-      xmlns: 'http://www.w3.org/2000/svg',
-      fill: 'none',
-      viewBox: '0 0 24 24',
-      stroke: 'currentColor',
-      'stroke-width': '2'
-    }, [
-      h('path', {
-        'stroke-linecap': 'round',
-        'stroke-linejoin': 'round',
-        d: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'
-      })
-    ])
-  }
+// 单路径 SVG(描边风格,统一 1.8 stroke)
+const paths = {
+  home: 'M3 10.5 12 3l9 7.5M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5',
+  task: 'M9 4h6a1 1 0 0 1 1 1v0a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v0a1 1 0 0 1 1-1zM7 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1M8.5 12l2 2 4-4',
+  wallet: 'M3 8a2 2 0 0 1 2-2h13a1 1 0 0 1 1 1v2M3 8v9a2 2 0 0 0 2 2h13a1 1 0 0 0 1-1v-3M3 8h16m2 3h-4a2 2 0 0 0 0 4h4a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1z',
+  mine: 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM5 20a7 7 0 0 1 14 0',
 }
+const items = TABS.map((tab) => ({ ...tab, icon: paths[tab.key] }))
 
-const TaskIcon = {
-  render() {
-    return h('svg', {
-      xmlns: 'http://www.w3.org/2000/svg',
-      fill: 'none',
-      viewBox: '0 0 24 24',
-      stroke: 'currentColor',
-      'stroke-width': '2'
-    }, [
-      h('path', {
-        'stroke-linecap': 'round',
-        'stroke-linejoin': 'round',
-        d: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4'
-      })
-    ])
-  }
-}
-
-const MineIcon = {
-  render() {
-    return h('svg', {
-      xmlns: 'http://www.w3.org/2000/svg',
-      fill: 'none',
-      viewBox: '0 0 24 24',
-      stroke: 'currentColor',
-      'stroke-width': '2'
-    }, [
-      h('path', {
-        'stroke-linecap': 'round',
-        'stroke-linejoin': 'round',
-        d: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z'
-      })
-    ])
-  }
-}
-
-const navItems = [
-  { path: '/', label: 'Home', icon: HomeIcon },
-  { path: '/task', label: 'Task', icon: TaskIcon },
-  { path: '/mine', label: 'Mine', icon: MineIcon }
-]
-
-const isActive = (path) => {
-  return route.path === path
-}
-
-const navigateTo = (path) => {
-  router.push(path)
+const isActive = (path) => route.path === path
+const go = (path) => {
+  haptic('light')
+  if (route.path !== path) router.push(path)
 }
 </script>
-
-<style scoped>
-.bottom-nav {
-  padding-bottom: env(safe-area-inset-bottom, 0);
-}
-</style>

@@ -1,184 +1,72 @@
-import { ENV } from "@/config/index.js";
-let gaLoaded = false;
+// ===== GA 埋点(gtag) + 网赚事件 =====
+import { IS_PROD } from '@/config/index.js'
+
+let gaLoaded = false
+const GA_ID = 'G-JNMVKZ8RCM'
 
 export function initGA() {
-  if (ENV === "development") return false
-  if (gaLoaded) return;
-  gaLoaded = true;
+  if (!IS_PROD) return false
+  if (gaLoaded) return
+  gaLoaded = true
 
-  // 1. 创建 script
-  const script = document.createElement('script');
-  script.async = true;
-  script.src = 'https://www.googletagmanager.com/gtag/js?id=G-JNMVKZ8RCM';
-  document.head.appendChild(script);
+  const script = document.createElement('script')
+  script.async = true
+  script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`
+  document.head.appendChild(script)
 
-  // 2. 初始化 gtag
-  window.dataLayer = window.dataLayer || [];
-
+  window.dataLayer = window.dataLayer || []
   function gtag() {
-    window.dataLayer.push(arguments);
+    window.dataLayer.push(arguments)
   }
-
-  window.gtag = gtag;
-
-  gtag('js', new Date());
-  gtag('config', 'G-JNMVKZ8RCM', {
-    send_page_view: true // SPA 必开
-  });
+  window.gtag = gtag
+  gtag('js', new Date())
+  gtag('config', GA_ID, { send_page_view: true })
 }
 
-export let gaLogEvent = {
-  staySeconds: 30,
-  currentIndex: 0, // 当前索引
-
-  logEvent({
-     eventName,
-     eventValue,
-     eventLog
-  }) {
-    console.log(
-        `【events】 【name】:${eventName},【value】:${eventValue},【log】:${eventLog}`,
-    );
-    if (ENV === "development") return false;
-
-    if (eventName) {
-      // 发送事件
-      if (window?.gtag) {
-        let params = null;
-        if (eventValue !== undefined) {
-          params = {};
-          params.value = eventValue;
-        }
-        params === null && window.gtag("event", eventName);
-        params !== null && window.gtag("event", eventName, params);
-      }
+// 通用事件
+export const gaLogEvent = {
+  logEvent({ eventName, eventValue, eventLog }) {
+    if (!IS_PROD) {
+      console.log(`【event】${eventName} value=${eventValue} ${eventLog || ''}`)
+      return
+    }
+    if (!eventName || !window?.gtag) return
+    if (eventValue !== undefined) {
+      window.gtag('event', eventName, { value: eventValue })
+    } else {
+      window.gtag('event', eventName)
     }
   },
+}
 
-  startIntervalVisibilityTracking(intervals, callback, loopAfterDone = false) {
-    let index = 0;
-    let timer = null;
-    let pausedAt = 0;
-    let remaining = 0;
-    let lastStart = Date.now();
-    let loopTime = 30000;
-
-    function next() {
-      lastStart = Date.now();
-
-      if (index < intervals.length) {
-        const [value, delay] = intervals[index];
-        timer = setTimeout(() => {
-          callback(value, index);
-          index++;
-          next();
-        }, delay * 1000);
-      } else if (loopAfterDone) {
-        timer = setTimeout(() => {
-          const value = intervals.length > 0 ? intervals[intervals.length - 1][0] + (index -
-              intervals.length + 1) * (loopTime / 1000) : (index + 1) * (loopTime / 1000);
-          callback(value, index);
-          index++;
-          next();
-        }, loopTime);
-      }
-    }
-
-    function pause() {
-      if (timer !== null) {
-        clearTimeout(timer);
-        timer = null;
-        pausedAt = Date.now();
-        const elapsed = pausedAt - lastStart;
-        const currentDelay = index < intervals.length ?
-            intervals[index][1] * 1000 :
-            loopTime;
-        remaining = Math.max(currentDelay - elapsed, 0);
-      }
-    }
-
-    function resume() {
-      if (timer === null && remaining > 0) {
-        lastStart = Date.now();
-        timer = setTimeout(() => {
-          if (index < intervals.length) {
-            const [value] = intervals[index];
-            callback(value, index);
-          } else {
-            const value = intervals.length > 0 ? intervals[intervals.length - 1][0] + (index -
-                intervals.length + 1) * (loopTime / 1000) : (index + 1) * (loopTime / 1000);
-            callback(value, index);
-          }
-          index++;
-          next();
-        }, remaining);
-        remaining = 0;
-      }
-    }
-
-    visibilityManager.onHide(pause);
-    visibilityManager.onShow(resume);
-
-    next(); // 启动
+// ===== 网赚业务事件(语义化封装) =====
+export const track = {
+  earn(source, amount) {
+    gaLogEvent.logEvent({ eventName: 'earn', eventValue: amount, eventLog: source })
+    gaLogEvent.logEvent({ eventName: `earn_${source}`, eventValue: amount })
   },
-
-  /**
-   * play_time上报
-   */
-  async startPageTimeTimers() {
-    const times = [1, 3, 5, 10, 15, 20, 25, 30];
-    const intervals = times.map((v, i) => [v, i === 0 ? v : v - times[i - 1]]);
-
-    // 初始化状态
-    this.currentIndex = 0;
-    this.staySeconds = 30;
-
-    this.startIntervalVisibilityTracking(intervals, (timeMark, index) => {
-      this.currentIndex = index;
-      this.staySeconds = timeMark;
-
-      this.logEvent({
-        eventName: `play_time_${timeMark}`,
-        eventValue: timeMark,
-        eventLog: `Length of stay ${timeMark} 秒`,
-      });
-    }, false);
-  }
-};
-
-const visibilityManager = (() => {
-  const listeners = {
-    show: [],
-    hide: []
-  };
-
-  let initialized = false;
-
-  function init() {
-    if (initialized) return;
-    initialized = true;
-
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) {
-        listeners.hide.forEach(fn => fn());
-      } else {
-        listeners.show.forEach(fn => fn());
-      }
-    });
-  }
-
-  return {
-    onShow(fn) {
-      init();
-      listeners.show.push(fn);
-    },
-    onHide(fn) {
-      init();
-      listeners.hide.push(fn);
-    },
-    clearAll() {
-      listeners.show = [];
-      listeners.hide = [];
-    }
-  };
-})();
+  checkIn(streak) {
+    gaLogEvent.logEvent({ eventName: 'daily_checkin', eventValue: streak })
+  },
+  adShow(type) {
+    gaLogEvent.logEvent({ eventName: 'ad_show', eventValue: type })
+  },
+  adRewardComplete() {
+    gaLogEvent.logEvent({ eventName: 'ad_reward_complete' })
+  },
+  adError(type) {
+    gaLogEvent.logEvent({ eventName: 'ad_error', eventValue: type })
+  },
+  withdrawRequest(amountTon) {
+    gaLogEvent.logEvent({ eventName: 'withdraw_request', eventValue: amountTon })
+  },
+  walletConnect() {
+    gaLogEvent.logEvent({ eventName: 'wallet_connect' })
+  },
+  invite() {
+    gaLogEvent.logEvent({ eventName: 'invite_share' })
+  },
+  page(name) {
+    gaLogEvent.logEvent({ eventName: 'enter_page', eventValue: name })
+  },
+}

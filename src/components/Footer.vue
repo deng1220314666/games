@@ -12,18 +12,6 @@
           >
             {{ $t('nav.home') }}
           </a>
-          <router-link 
-            to="/about" 
-            class="text-gray-600 hover:text-gray-900 text-sm transition-colors"
-          >
-            {{ $t('nav.about') }}
-          </router-link>
-          <router-link 
-            to="/contact" 
-            class="text-gray-600 hover:text-gray-900 text-sm transition-colors"
-          >
-            {{ $t('nav.contact') }}
-          </router-link>
 					<router-link
 					  to="/privacy"
 					  class="text-gray-600 hover:text-gray-900 text-sm transition-colors"

@@ -1,116 +1,106 @@
 {
   "app": {
-    "title": "TTGame",
-    "description": "TTGame"
-  },
-  "header": {
-    "searchGame": "搜索游戏..."
+    "title": "TTEarn",
+    "description": "玩游戏赚 TON"
   },
   "nav": {
     "home": "首页",
-    "about": "关于",
-    "contact": "联系",
+    "task": "任务",
+    "wallet": "钱包",
+    "mine": "我的",
+    "invite": "邀请",
     "privacyPolicy": "隐私政策"
   },
-  "home": {
-    "title": "欢迎首页",
-    "description": "这是使用路由懒加载的首页组件。",
-    "features": "功能特性",
-    "counter": {
-      "title": "计数器演示",
-      "increment": "增加",
-      "decrement": "减少",
-      "reset": "重置"
-    },
-    "api": {
-      "title": "API 测试",
-      "fetch": "获取数据",
-      "loading": "加载中..."
+  "earn": {
+    "balance": "积分余额",
+    "earnMore": "去赚币",
+    "withdraw": "提现",
+    "source": {
+      "daily_checkin": "每日签到",
+      "watch_ad": "观看广告",
+      "play_game": "玩游戏",
+      "invite": "邀请好友"
     }
   },
-  "about": {
-    "title": "关于 TTGame",
-    "description": "TTGame.fun 致力于让游戏随时随地，触手可及。作为新一代 HTML5 游戏娱乐平台，我们为全球玩家提供极速、流畅的娱乐体验 —— 无需下载，无需安装，打开即可畅玩。",
-    "mission_title": "我们的使命",
-    "mission_desc": "我们的使命非常明确：",
-    "mission_points": [
-      { "icon": "🌐", "title": "让玩家与游戏零距离连接" },
-      { "icon": "🎯", "title": "打造轻量化、高品质的娱乐体验" },
-      { "icon": "🤝", "title": "构建全球休闲与社交游戏的聚合平台" }
-    ],
-    "why_title": "为什么选择 TTGame？",
-    "why_points": [
-      { "icon": "🎮", "title": "即点即玩", "desc": "游戏直接在浏览器中运行" },
-      { "icon": "📱", "title": "全平台适配", "desc": "手机、平板、电脑体验一致" },
-      { "icon": "🌎", "title": "全球玩家社区", "desc": "与来自世界各地的玩家互动" },
-      { "icon": "🚀", "title": "持续创新", "desc": "不断扩充丰富有趣的游戏内容" }
-    ],
-    "footer": "在 TTGame，游戏不仅仅是娱乐，它更是一种分享快乐、建立联系、体验无限可能的方式。"
+  "home": {
+    "playToEarn": "玩游戏赚币",
+    "playToEarnHint": "边玩边赚",
+    "watchAd": "看广告",
+    "tasks": "任务",
+    "invite": "邀请",
+    "wallet": "钱包"
   },
-  "contact": {
-    "title": "我们很乐意听到您的声音！",
-    "desc": "我们的友好帮助团队可在太平洋时间周一至周五上午 7 点至下午 5 点之间联系。",
-    "email": "请直接联系我们: "
+  "checkin": {
+    "title": "每日签到",
+    "streak": "已连续 {n} 天",
+    "done": "今日已签到",
+    "action": "立即签到"
   },
-  "footer": {
-    "copyright": "Copyright © {year} TTGame.fun"
+  "task": {
+    "checkin": "每日签到",
+    "watchAd": "观看激励广告",
+    "playGame": "玩游戏赚币",
+    "invite": "邀请好友",
+    "done": "已完成",
+    "go": "去完成"
   },
-  "common": {
-    "learnMore": "了解更多",
-    "getSupport": "获取支持",
-    "demo": "演示",
-    "viewDetails": "查看详情",
-    "readMore": "阅读更多",
-    "success": "成功",
-    "error": "错误",
-    "historyGame": "历史游戏",
-    "recommend": "推荐",
-    "menu": "菜单"
+  "wallet": {
+    "wallet": "钱包",
+    "connected": "已连接",
+    "disconnected": "未连接",
+    "connect": "连接 TON 钱包",
+    "disconnect": "断开连接",
+    "connectFail": "连接钱包失败",
+    "withdrawTitle": "提现到 TON",
+    "rate": "{rate} 积分 = 1 TON · 最低 {min} TON",
+    "amountPlaceholder": "提现金额",
+    "withdrawBtn": "申请提现",
+    "records": "提现记录",
+    "noRecords": "暂无记录",
+    "submitted": "已提交,等待审核打款",
+    "errNoWallet": "请先连接 TON 钱包",
+    "errBelowMin": "低于最低提现金额",
+    "errInsufficient": "余额不足",
+    "errNetwork": "网络错误,请重试",
+    "status": {
+      "pending": "审核中",
+      "done": "已到账",
+      "rejected": "已拒绝"
+    }
   },
-  "gameSearch": {
-    "title": "游戏查询",
-    "searchLabel": "搜索游戏",
-    "searchPlaceholder": "输入游戏名称或描述",
-    "gameTypeLabel": "游戏类型",
-    "allTypes": "所有类型",
-    "searchButton": "搜索",
-    "noResults": "没有找到符合条件的游戏",
-    "free": "免费",
-    "viewDetails": "查看详情",
-    "more": "更多",
-    "shooting": "射击游戏",
-    "ball": "球类游戏",
-    "match3": "消消乐游戏",
-    "sort": "排序游戏",
-    "boom blast": "Boom Blast",
-    "tower defense": "td塔防游戏",
-    "puzzle": "连一连游戏",
-    "merge": "合成游戏",
-    "running": "跑酷游戏",
-    "find difference": "找不同游戏",
-    "parking": "停车游戏",
-    "connect": "连一连游戏",
-    "music": "音乐游戏"
+  "invite": {
+    "headline": "邀请好友一起赚",
+    "rebate": "好友收益额外返 {pct}%",
+    "yourCode": "你的邀请码",
+    "copy": "复制",
+    "copied": "已复制",
+    "share": "分享邀请链接",
+    "friends": "已邀请好友",
+    "noFriends": "还没有邀请好友"
+  },
+  "mine": {
+    "invite": "邀请好友",
+    "wallet": "我的钱包",
+    "task": "任务中心",
+    "privacy": "隐私政策",
+    "history": "积分流水",
+    "noHistory": "暂无记录"
   },
   "gameDetail": {
-    "title": "游戏详情",
-    "backButton": "返回",
-    "startGame": "开始游戏",
-    "gameLoading": "游戏加载中...",
-    "playingGame": "正在游玩:",
-    "closeGame": "关闭游戏",
-    "fullscreen": "全屏",
-    "tagsLabel": "标签",
+    "back": "返回",
     "loading": "加载中...",
-    "gameNotFound": "游戏未找到",
-    "loadFailed": "加载游戏详情失败"
+    "notFound": "未找到游戏",
+    "earnHint": "每玩 1 分钟 +{coin} 积分"
+  },
+  "footer": {
+    "copyright": "版权所有 © {year} TTEarn"
   },
   "privacyPolicy": {
     "title": "隐私政策",
     "lastUpdated": "最后更新",
     "introduction": "简介",
     "infoCollection": "信息收集",
-    "adsense": "Google AdSense",
+    "adsense": "广告",
     "infoUsage": "信息使用",
     "infoSharing": "信息共享",
     "dataSecurity": "数据安全",

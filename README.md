@@ -1,169 +1,67 @@
-# Vue 3 项目模板
+# TTEarn — 玩游戏赚 TON 的网赚平台
 
-这是一个基于 Vue 3 的现代化前端项目模板，集成了当前主流的前端开发工具和库。
+「玩游戏 / 看广告 / 做任务 / 拉好友 → 赚积分 → 提现到 TON 钱包」。
+**同一套代码同时跑在 Telegram 小程序内和普通浏览器 H5**,运行时探测环境。
 
-## 特性
+技术栈:Vue 3 + Vite + Pinia(持久化) + vue-router + vue-i18n + Tailwind。
 
-- 🚀 **Vue 3** - 渐进式 JavaScript 框架
-- ⚡ **Vite** - 下一代前端构建工具
-- 🏪 **Pinia** - Vue 官方推荐的状态管理库
-- 🌐 **Vue Router** - 官方路由管理器
-- 🌍 **Vue I18n** - 国际化解决方案
-- 🎨 **Tailwind CSS** - 实用优先的 CSS 框架
-- 🔄 **Axios** - 基于 Promise 的 HTTP 客户端
-- 💾 **状态持久化** - 使用 pinia-plugin-persistedstate
-- 🎯 **深色模式** - 支持主题切换
-- 📱 **响应式设计** - 支持移动端
+## 前后端分离
+
+- **前端**(仓库根):Vue 3 + Vite,端口 8888。
+- **后端**(`server/`):独立 Node/Express 服务,端口 3000。账本、发币规则、签到、提现打款、鉴权都在后端(权威)。见 `server/README.md`。
 
 ## 快速开始
 
-### 安装依赖
-
+纯前端演示(不需后端):
 ```bash
 npm install
+cp .env.example .env    # 把 VITE_USE_MOCK 改成 true
+npm run dev             # http://localhost:8888
 ```
 
-### 开发模式
-
+接后端(完整链路):
 ```bash
-npm run dev
+# 1) 起后端
+cd server && npm install && cp .env.example .env && npm run dev
+# 2) 起前端(根目录):.env 设 VITE_USE_MOCK=false, VITE_API_BASE_URL=http://localhost:3000
+npm install && npm run dev
 ```
 
-### 构建生产
+## 核心能力
 
-```bash
-npm run build
-```
+- **双端**:`src/utils/platform.js` 探测 Telegram / Web;TG 用 initData 免密登录,Web 用匿名 ID。
+- **四种赚币**:每日签到、看激励广告(Adsterra/OnClick)、玩游戏计时、邀请好友返佣。
+- **积分经济**:积分按汇率兑 TON,发币统一走 `src/services/reward.js` 的 `earn()`。
+- **TON 支付**:`src/utils/tonConnect.js` 懒加载 TON Connect 连钱包,`Wallet` 页提现(真实打款走后端)。
+- **广告**:仅 Adsterra + OnClick,配置集中在 `src/config/ads.js`。
+- **埋点**:GA(`src/utils/event.js`),网赚事件用 `track.*`。
 
-### 预览构建结果
-
-```bash
-npm run preview
-```
-
-## 项目结构
+## 目录
 
 ```
 src/
-├── components/          # 公共组件
-│   └── ThemeToggle.vue  # 主题切换组件
-├── locales/             # 国际化文件
-│   ├── index.js         # 国际化配置
-│   ├── zh.json          # 中文语言包
-│   └── en.json          # 英文语言包
-├── router/              # 路由配置
-│   └── index.js         # 路由定义
-├── stores/              # 状态管理
-│   ├── counter.js       # 计数器状态
-│   └── index.js         # store 导出
-├── styles/              # 样式文件
-│   ├── index.scss       # 主样式文件
-│   └── variables.scss   # 样式变量
-├── utils/               # 工具函数
-│   └── request.js       # HTTP 请求封装
-├── views/               # 页面组件
-│   ├── Home.vue         # 首页
-│   └── About.vue        # 关于页面
-├── App.vue              # 根组件
-└── main.js              # 应用入口
+  config/      全局配置(经济参数/广告位/TON)
+  utils/       platform / telegram / tonConnect / adSdk / event
+  services/    业务服务层:user / reward / task / wallet / referral(mock,可接后端)
+  stores/      Pinia:userStore / walletStore / gameStore
+  views/       Home / Task / Wallet / Mine / Invite / GameDetail / PrivacyPolicy
+  components/  BalanceCard / CheckInBar / BottomNav / RewardToast / GameCard ...
 ```
 
-## 开发指南
+## 分层规则
 
-### 添加新页面
+UI → `services/*` → `api/client` →(mock 或后端)。
+**发币只能经 `reward.earn()`**;所有可调数值进 `config`;后端未接时 `USE_MOCK=true`,接后端只改 services,页面无感。
 
-1. 在 `src/views` 目录下创建新的 Vue 组件
-2. 在 `src/router/index.js` 中添加路由配置
+## 部署清单
 
-```javascript
-import NewPage from '@/views/NewPage.vue'
+- `public/tonconnect-manifest.json` 换成正式域名与图标。
+- `src/services/referral.js` 的 `TG_BOT` / `TG_APP` 换成真实 bot。
+- 后端 `server/.env`:`JWT_SECRET` 换强随机、配 `TELEGRAM_BOT_TOKEN`、TON 热钱包(见 `server/README.md`)。
+- 后端数据层 `server/src/lib/store.js` 换成真实 DB(提现要事务)。
+- 支付当前仅 TON,其他渠道预留。
 
-const routes = [
-  // ... 其他路由
-  {
-    path: '/new-page',
-    name: 'NewPage',
-    component: NewPage
-  }
-]
-```
+## 开发辅助(Claude Code)
 
-### 添加新语言
-
-1. 在 `src/locales` 目录下创建新的语言文件，如 `fr.json`
-2. 在 `src/locales/index.js` 中导入并配置
-
-```javascript
-import fr from './fr.json'
-
-const messages = {
-  zh,
-  en,
-  fr  // 添加新语言
-}
-```
-
-### 状态管理
-
-1. 在 `src/stores` 目录下创建新的 store
-2. 在组件中使用 `useStore` 来访问状态
-
-```javascript
-import { useUserStore } from '@/stores'
-
-const userStore = useUserStore()
-```
-
-### HTTP 请求
-
-使用封装的 Axios 实例进行 HTTP 请求：
-
-```javascript
-import request from '@/utils/request'
-
-// GET 请求
-request.get('/api/users')
-
-// POST 请求
-request.post('/api/users', { name: 'John' })
-```
-
-## 配置说明
-
-### 环境变量
-
-项目支持环境变量配置，参考 `.env.example` 文件：
-
-```bash
-VITE_API_BASE_URL=http://localhost:3000/api
-VITE_APP_TITLE=Vue 3 Template
-```
-
-### 主题配置
-
-项目支持深色/浅色主题切换，主题配置在 `src/styles/index.scss` 中定义。
-
-## 技术栈版本
-
-- Vue 3.4.0+
-- Vite 5.0.0+
-- Pinia 2.1.0+
-- Vue Router 4.2.0+
-- Vue I18n 9.0.0+
-- Tailwind CSS 3.3.0+
-- Axios 1.6.0+
-
-## 浏览器支持
-
-- Chrome ≥ 60
-- Firefox ≥ 60
-- Safari ≥ 12
-- Edge ≥ 79
-
-## 贡献
-
-欢迎提交 Issue 和 Pull Request 来改进这个项目模板。
-
-## 许可证
-
-MIT License
+- 项目级技能见 `.claude/skills/`(overview / adops / reward-economy / ton-payments / telegram-miniapp),改代码前按需读。
+- MCP 见 `.mcp.json` 与 `.claude/MCP.md`(playwright 验证 UI、context7 查文档)。

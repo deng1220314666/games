@@ -1,159 +1,95 @@
 <template>
-  <div class="home w-full box-border max-w-7xl mx-auto px-2 sm:px-1 lg:px-2 py-2 flex-1 overflow-y-auto hide-scrollbar z-0 pb-16">
+  <div class="flex-1 overflow-y-auto px-4 pb-24 pt-4">
+    <BalanceCard class="mb-5" />
 
-    <div id="ttgame-out-stream" class="w-full h-auto min-h-[250px]"></div>
-    <div v-for="(item, index) in category" :key="index" class="w-full mb-4">
-      <!--      <AdsterraManager idTxt="adsterra-banner-2-box" :zid="2" v-if="index === 2" />-->
-      <!--      <AdsterraManager idTxt="adsterra-banner-3-box" :zid="3" v-if="index === 3" />-->
-      <!-- 分类标题栏 -->
-      <div
-          class="category-header flex items-center justify-between p-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl mb-4 cursor-pointer hover:shadow-lg transition-all duration-300"
-          @click="navigateToCategory()"
+    <!-- 快捷赚币入口 -->
+    <div class="mb-5 grid grid-cols-4 gap-2.5">
+      <button
+        v-for="q in quickEntries"
+        :key="q.key"
+        class="tg-section flex flex-col items-center gap-1.5 py-3.5 transition active:scale-[0.97]"
+        @click="q.action"
       >
-        <!--        @click="navigateToCategory()"-->
-        <div class="flex items-center">
-          <img :src="item.img" alt="" class="w-10 h-10 mr-3 bg-white rounded-full p-1">
-          <h2 class="text-xl font-bold">
-            {{ $t('gameSearch.' + item.name.toLowerCase()) || (locale === 'zh' ? item.cn_name : item.name) }}
-          </h2>
-        </div>
-        <div class="font-medium flex items-center">
-          {{ $t('gameSearch.more') }} <span class="ml-1">></span>
-        </div>
-
-      </div>
-
-      <!-- 游戏网格 -->
-      <GameGrild :games="item.games"/>
-      <div v-if="index === 0" id="adsterra-banner-1-box" class="w-full flex items-center justify-center"></div>
-
-      <div v-if="index === 1" data-banner-id="6119451" class="w-full flex items-center justify-center"></div>
+        <span
+          class="flex h-9 w-9 items-center justify-center rounded-full"
+          style="background: color-mix(in srgb, var(--tg-button) 14%, transparent)"
+          v-html="q.icon"
+        ></span>
+        <span class="text-[11px] text-tg-text">{{ t(q.label) }}</span>
+      </button>
     </div>
 
-    <Footer />
-    <!--    <InfoDialog-->
-    <!--        :isShow="adsUtilsStore.dialogStatus"-->
-    <!--        :duration="3"/>-->
+    <CheckInBar class="mb-5" />
 
-    <!-- 通知权限弹窗 -->
-    <!--    <NotificationDialog ref="notificationDialog" />-->
+    <!-- 广告位 -->
+    <div id="home-banner-box" class="mb-5 flex min-h-[100px] w-full items-center justify-center overflow-hidden rounded-xl"></div>
 
-    <!-- 安装快捷方式卡片 -->
-    <InstallPrompt />
+    <!-- 玩游戏赚币 -->
+    <div class="tg-section-header flex items-center justify-between">
+      <span>{{ t('home.playToEarn') }}</span>
+      <span class="normal-case tracking-normal text-tg-hint">+{{ perMinute }} {{ coinSymbol }}/min</span>
+    </div>
+    <div class="grid grid-cols-3 gap-2.5">
+      <div
+        v-for="g in games"
+        :key="g.game_id"
+        class="tg-section aspect-square"
+      >
+        <GameCard :value="g" />
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import {useGameStore} from '@/stores/gameStore'
-import {useAdUtilsStore} from "@/stores/adsUtils"
-import {useI18n} from 'vue-i18n'
-import {onMounted, ref, watch} from 'vue'
-import GameGrild from "@/components/GameGrild.vue";
-import { getGames, getCategory} from "@/api/mock.js";
-import AdsterraManager from "@/components/AdsterraManager.vue";
-import Footer from "@/components/Footer.vue";
-import InfoDialog from "@/components/InfoDialog.vue";
-import { smartLink } from "@/config/index.js";
-import { gaLogEvent } from "@/utils/event.js";
-import { AdsterraAd } from "@/utils/adSdk.js";
-import { requestNotifyPermission } from "@/utils/pwa.js";
-import { pushRouterHistory } from "@/utils/index.js";
-import { useRoute } from 'vue-router';
-import AdContainer from "../components/AdContainer.vue";
-import {bachJump, loadOnclickScript} from "../utils";
-import NotificationDialog from "@/components/NotificationDialog.vue";
-import InstallPrompt from "@/components/InstallPrompt.vue";
-import {TTGameSdk} from "@/utils/ttgame-sdk.js";
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+import BalanceCard from '@/components/BalanceCard.vue'
+import CheckInBar from '@/components/CheckInBar.vue'
+import GameCard from '@/components/GameCard.vue'
+import { useGameStore } from '@/stores/gameStore.js'
+import { getGames } from '@/api/mock.js'
+import { AdsterraAd, RewardedAd } from '@/utils/adSdk.js'
+import { earn } from '@/services/reward.js'
+import { APP, ECONOMY } from '@/config/index.js'
+import { ADSTERRA } from '@/config/ads.js'
+import { track } from '@/utils/event.js'
 
-const {locale} = useI18n()
+defineOptions({ name: 'Home' })
+
+const { t } = useI18n()
+const router = useRouter()
 const gameStore = useGameStore()
-const adsUtilsStore = useAdUtilsStore();
-const category = ref([])
+const games = ref([])
+const coinSymbol = APP.coinSymbol
+const perMinute = ECONOMY.reward.playGamePerMinute
 
-/**
- * 1. 获取 cid（Bemob 自动带）
- */
-function getCid() {
-  const url = new URL(window.location.href);
-  return url.searchParams.get("cid");
-}
+// 简洁描边 SVG 图标(currentColor=tg-button)
+const svg = (d) =>
+  `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--tg-button)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"/></svg>`
 
-/**
- * 2. 保存 cid（防止丢失）
- */
-function saveCid(cid) {
-  if (cid) {
-    localStorage.setItem("bemob_cid", cid);
-  }
+const quickEntries = [
+  { key: 'ad', icon: svg('m10 8 6 4-6 4V8zM4 5v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2z'), label: 'home.watchAd', action: watchAd },
+  { key: 'task', icon: svg('M8 6h11M8 12h11M8 18h11M3.5 6h.01M3.5 12h.01M3.5 18h.01'), label: 'home.tasks', action: () => router.push('/task') },
+  { key: 'invite', icon: svg('M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM19 8v6M22 11h-6'), label: 'home.invite', action: () => router.push('/invite') },
+  { key: 'wallet', icon: svg('M3 8a2 2 0 0 1 2-2h13a1 1 0 0 1 1 1v2M3 8v9a2 2 0 0 0 2 2h13a1 1 0 0 0 1-1v-3M3 8h16m2 3h-4a2 2 0 0 0 0 4h4a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1z'), label: 'home.wallet', action: () => router.push('/wallet') },
+]
+
+async function watchAd() {
+  const ok = await RewardedAd.show()
+  if (ok) await earn('watch_ad', ECONOMY.reward.watchAd)
 }
 
 onMounted(async () => {
-  TTGameSdk.init();
-  // requestNotifyPermission();
-  // setTimeout(() => {
-  //   pushRouterHistory();
-  //
-  //   bachJump();
-  // }, 500)
-  if (AdsterraAd) {
-    // AdsterraAd.showSocialBar();
-
-    // setTimeout(() => {
-    //   AdsterraAd.showPopunder();
-    // }, 3000)
-  }
-  const cid = getCid();
-  saveCid(cid);
-  const lang = (navigator.language || '').split('-')[0];
-
-  gaLogEvent.logEvent({
-    eventName: "enter_home",
-    eventValue: lang,
-    eventLog: `Enter Home`
-  })
-  await gameStore.setRecommendGame()
+  track.page('home')
   gameStore.games = await getGames()
-  category.value = await getCategory()
+  games.value = gameStore.games.slice(0, 12)
+  await gameStore.setRecommendGame()
+  AdsterraAd.showBanner(
+    'home-banner-box',
+    { key: ADSTERRA.bannerKey, format: 'iframe', height: 250, width: 300, params: {} },
+    `https://www.highperformanceformat.com/${ADSTERRA.bannerKey}/invoke.js`
+  )
 })
-
-// 跳转到分类游戏页面
-const navigateToCategory = () => {
-  gaLogEvent.logEvent({
-    eventName: "enter_smart_link",
-    eventLog: `Enter Smart Link`
-  })
-
-  window.location.href = "https://6njvi.bemobtrcks.com/click";
-}
-
-const injectBeMobTracking = () => {
-  // 防重入：同样先清理掉可能残留的追踪代码
-  const existingScript = document.getElementById('bemob-tracking-pixel');
-  if (existingScript) existingScript.remove();
-
-  const script = document.createElement("script");
-  script.id = 'bemob-tracking-pixel';
-  script.type = "text/javascript";
-  script.async = true;
-
-  // 填入属于 Page2 的专属链接
-  script.src = "https://6njvi.bemobtrcks.com/landing/2e1f1795-652b-424b-95b0-abe9846166ac?callback=REPLACE&rule=REPLACE&path=REPLACE&landing=REPLACE&" + window.location.search.substring(1);
-
-  const firstScript = document.getElementsByTagName("script")[0];
-  if (firstScript && firstScript.parentNode) {
-    firstScript.parentNode.insertBefore(script, firstScript);
-  } else {
-    document.head.appendChild(script);
-  }
-}
-
-injectBeMobTracking();
 </script>
-
-<style scoped>
-.home {
-  margin: 0 auto;
-  width: 100%;
-  height: auto;
-}
-</style>

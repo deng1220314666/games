@@ -4,14 +4,58 @@
 
 @use './variables.scss';
 
+/* =========================================================
+   Telegram 主题令牌层
+   - 在 Telegram 内:telegram-web-app.js 会注入 --tg-theme-*,
+     下面的语义令牌自动跟随用户主题(含深色)。
+   - 在普通浏览器:--tg-theme-* 不存在,用回退值(浅色),
+     并在 prefers-color-scheme: dark 下切深色回退。
+   ========================================================= */
+:root {
+  --tg-bg: var(--tg-theme-bg-color, #ffffff);
+  --tg-secondary-bg: var(--tg-theme-secondary-bg-color, #efeff4);
+  --tg-section-bg: var(--tg-theme-section-bg-color, var(--tg-theme-bg-color, #ffffff));
+  --tg-text: var(--tg-theme-text-color, #000000);
+  --tg-hint: var(--tg-theme-hint-color, #999999);
+  --tg-subtitle: var(--tg-theme-subtitle-text-color, #999999);
+  --tg-link: var(--tg-theme-link-color, #2481cc);
+  --tg-button: var(--tg-theme-button-color, #3390ec);
+  --tg-button-text: var(--tg-theme-button-text-color, #ffffff);
+  --tg-section-header: var(--tg-theme-section-header-text-color, #6d6d72);
+  --tg-accent: var(--tg-theme-accent-text-color, var(--tg-theme-button-color, #3390ec));
+  --tg-destructive: var(--tg-theme-destructive-text-color, #ff3b30);
+  --tg-separator: var(--tg-separator-color, rgba(0, 0, 0, 0.08));
+}
+
+/* 浏览器深色回退(Telegram 内因变量已存在,不会命中这里) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --tg-bg: var(--tg-theme-bg-color, #1c1c1e);
+    --tg-secondary-bg: var(--tg-theme-secondary-bg-color, #000000);
+    --tg-section-bg: var(--tg-theme-section-bg-color, var(--tg-theme-bg-color, #1c1c1e));
+    --tg-text: var(--tg-theme-text-color, #ffffff);
+    --tg-hint: var(--tg-theme-hint-color, #98989e);
+    --tg-subtitle: var(--tg-theme-subtitle-text-color, #98989e);
+    --tg-link: var(--tg-theme-link-color, #2ea6ff);
+    --tg-button: var(--tg-theme-button-color, #2ea6ff);
+    --tg-button-text: var(--tg-theme-button-text-color, #ffffff);
+    --tg-section-header: var(--tg-theme-section-header-text-color, #98989e);
+    --tg-accent: var(--tg-theme-accent-text-color, var(--tg-theme-button-color, #2ea6ff));
+    --tg-destructive: var(--tg-theme-destructive-text-color, #ff453a);
+    --tg-separator: var(--tg-separator-color, rgba(255, 255, 255, 0.12));
+  }
+}
+
+html,
 body {
   width: 100%;
   height: calc(var(--vh, 1vh) * 100);
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  background: var(--tg-secondary-bg);
+  color: var(--tg-text);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI',
+    'Roboto', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -20,56 +64,58 @@ body {
   box-sizing: border-box;
 }
 
-.overscrollBehavior {
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior-y: contain;
+/* 数据/金额用等宽数字,避免跳动 */
+.tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
 }
 
 img {
-  -webkit-user-drag: none;  /* Chrome, Safari */
-  -khtml-user-drag: none;   /* Konqueror */
-  -moz-user-drag: none;     /* Firefox */
-  -o-user-drag: none;       /* Opera */
-  user-drag: none;
-
-  -webkit-user-select: none; /* 防止选中文本 */
-  -moz-user-select: none;
-  -ms-user-select: none;
+  -webkit-user-drag: none;
   user-select: none;
 }
 
-/* 隐藏滚动条但允许滚动 */
 .hide-scrollbar {
-  overflow: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
-
 .hide-scrollbar::-webkit-scrollbar {
-  display: none; /* 隐藏滚动条（Webkit） */
+  display: none;
 }
 
-// 主题切换相关样式
-:root {
-  --primary-color: #3b82f6;
-  --secondary-color: #6b7280;
-  --background-color: rgb(243 244 246);
-  --text-color: #1f2937;
+/* =========================================================
+   Telegram 分组列表通用样式
+   ========================================================= */
+.tg-section {
+  background: var(--tg-section-bg);
+  border-radius: 12px;
+  overflow: hidden;
 }
-
-[data-theme='dark'] {
-  --primary-color: #60a5fa;
-  --secondary-color: #9ca3af;
-  --background-color: #0A0A0B;
-  --text-color: #ffffff;
+.tg-section-header {
+  color: var(--tg-section-header);
+  font-size: 13px;
+  padding: 0 16px 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
-
-[data-theme='light'] {
-  --primary-color: #60a5fa;
-  --secondary-color: #6b7280;
-  --background-color: linear-gradient(135deg,#f0f4ff,#e0f7fa);
-  --text-color: #1f2937;
+.tg-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  padding: 10px 16px;
+  position: relative;
 }
-
-.theme-transition * {
-  transition: background-color 0.3s ease, color 0.3s ease;
+/* 分隔线从图标右侧缩进(iOS 风格) */
+.tg-row:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 16px;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--tg-separator);
+}
+.tg-row.inset::after {
+  left: 52px;
 }

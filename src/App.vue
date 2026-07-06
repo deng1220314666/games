@@ -1,54 +1,49 @@
 <template>
-  <div class="h-custom-vh max-w-xl m-auto theme-transition bg-theme-bg text-theme-text hide-scrollbar flex flex-col" :data-theme="theme">
-    <!-- 主要内容 -->
-    <router-view />
+  <div
+    class="app-shell max-w-xl m-auto flex flex-col bg-tg-secondary text-tg-text"
+    :style="{ minHeight: 'calc(var(--vh, 1vh) * 100)' }"
+  >
+    <router-view v-slot="{ Component }">
+      <keep-alive include="Home,Task,Wallet,Mine">
+        <component :is="Component" />
+      </keep-alive>
+    </router-view>
 
-    <!-- 底部导航 -->
-<!--    <BottomNav />-->
+    <BottomNav v-if="showTab" />
+    <RewardToast />
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { initVhUnit } from "@/utils/init"
-import { initGA } from "@/utils/event.js";
-import BottomNav from "@/components/BottomNav.vue";
-import {registerPwa} from "./utils/pwa.js";
+import BottomNav from '@/components/BottomNav.vue'
+import RewardToast from '@/components/RewardToast.vue'
+import { initVhUnit } from '@/utils/init.js'
+import { initGA } from '@/utils/event.js'
+import { registerPwa } from '@/utils/pwa.js'
+import { initPlatform } from '@/utils/platform.js'
+import { login } from '@/services/user.js'
+import { bindReferrerFromStart } from '@/services/referral.js'
+import { restoreWallet } from '@/services/wallet.js'
 
+const route = useRoute()
 const { locale } = useI18n()
-const currentLocale = ref(locale.value)
-const theme = ref('light') // light
-const notificationDialog = ref(null)
-initVhUnit();
-const switchLanguage = () => {
-  locale.value = currentLocale.value
-  localStorage.setItem('locale', currentLocale.value)
-}
+const showTab = computed(() => route.meta.tab === true)
 
-onMounted(() => {
-  initGA();
-  registerPwa();
+initVhUnit()
 
-  // 从本地存储加载语言设置
+onMounted(async () => {
+  initPlatform()
+  initGA()
+  registerPwa()
+
   const savedLocale = localStorage.getItem('locale')
-  if (savedLocale) {
-    currentLocale.value = savedLocale
-    locale.value = savedLocale
-  }
+  if (savedLocale) locale.value = savedLocale
 
-  // 从本地存储加载主题设置
-  const savedTheme = localStorage.getItem('theme')
-  if (savedTheme) {
-    theme.value = savedTheme
-  }
-
-  // 监听主题变化
-  window.addEventListener('themeChange', (event) => {
-    theme.value = event.detail.theme
-  })
+  await login()
+  await bindReferrerFromStart()
+  restoreWallet()
 })
 </script>
-
-<style scoped lang="scss">
-</style>

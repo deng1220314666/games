@@ -1,125 +1,106 @@
 {
   "app": {
-    "title": "TTGame",
-    "description": "TTGame"
-  },
-  "header": {
-    "searchGame": "Search games..."
+    "title": "TTEarn",
+    "description": "Play & Earn TON"
   },
   "nav": {
     "home": "Home",
-    "about": "About",
-    "contact": "Contact",
+    "task": "Tasks",
+    "wallet": "Wallet",
+    "mine": "Me",
+    "invite": "Invite",
     "privacyPolicy": "Privacy Policy"
   },
-  "home": {
-    "title": "Welcome Home",
-    "description": "This is the home page with lazy-loaded routing.",
-    "features": "Features",
-    "counter": {
-      "title": "Counter Demo",
-      "increment": "Increment",
-      "decrement": "Decrement",
-      "reset": "Reset"
-    },
-    "api": {
-      "title": "API Test",
-      "fetch": "Fetch Data",
-      "loading": "Loading..."
+  "earn": {
+    "balance": "Balance",
+    "earnMore": "Earn More",
+    "withdraw": "Withdraw",
+    "source": {
+      "daily_checkin": "Daily Check-in",
+      "watch_ad": "Watch Ad",
+      "play_game": "Play Game",
+      "invite": "Invite Friend"
     }
   },
-  "about": {
-    "title": "About TTGame",
-    "description": "At TTGame.fun, we believe gaming should be accessible anytime, anywhere, on any device. As a next-generation HTML5 gaming platform, we provide players around the globe with a seamless and engaging experience — no downloads, no installations, just instant fun.",
-    "mission_title": "Our Mission",
-    "mission_desc": "Our mission is simple:",
-    "mission_points": [
-      {
-        "icon": "🌐",
-        "title": "Connect players and games effortlessly"
-      },
-      {
-        "icon": "🎯",
-        "title": "Deliver high-quality, lightweight entertainment"
-      },
-      {
-        "icon": "🤝",
-        "title": "Create a global hub for casual and social gamers"
-      }
-    ],
-    "why_title": "Why Choose TTGame?",
-    "why_points": [
-      { "icon": "🎮", "title": "Play instantly", "desc": "Games launch directly in your browser." },
-      { "icon": "📱", "title": "Cross-platform compatibility", "desc": "Enjoy the same smooth experience on mobile, tablet, or PC." },
-      { "icon": "🌎", "title": "Global community", "desc": "Connect with players from around the world." },
-      { "icon": "🚀", "title": "Continuous innovation", "desc": "We're constantly expanding our library with fresh, exciting titles." }
-    ],
-    "footer": "At TTGame, gaming is more than just playing — it's about sharing joy, building connections, and experiencing endless fun."
+  "home": {
+    "playToEarn": "Play to Earn",
+    "playToEarnHint": "Earn while you play",
+    "watchAd": "Watch Ad",
+    "tasks": "Tasks",
+    "invite": "Invite",
+    "wallet": "Wallet"
   },
-  "contact": {
-    "title": "WE'D LOVE TO HEAR FROM YOU!",
-    "desc": "Our friendly Help Team can be reached Monday through Friday, from 7 am to 5 pm, Pacific Time.",
-    "email": "Please contact us directly at: "
+  "checkin": {
+    "title": "Daily Check-in",
+    "streak": "{n}-day streak",
+    "done": "Checked in today",
+    "action": "Check in now"
   },
-  "footer": {
-    "copyright": "Copyright © {year} TTGame.fun"
+  "task": {
+    "checkin": "Daily check-in",
+    "watchAd": "Watch a rewarded ad",
+    "playGame": "Play games for coins",
+    "invite": "Invite friends",
+    "done": "Done",
+    "go": "Go"
   },
-  "common": {
-    "learnMore": "Learn More",
-    "getSupport": "Get Support",
-    "demo": "Demo",
-    "viewDetails": "View Details",
-    "readMore": "Read More",
-    "success": "Success",
-    "error": "Error",
-    "historyGame": "History",
-    "recommend": "Recommend",
-    "menu": "Menu"
+  "wallet": {
+    "wallet": "Wallet",
+    "connected": "Connected",
+    "disconnected": "Not connected",
+    "connect": "Connect TON Wallet",
+    "disconnect": "Disconnect",
+    "connectFail": "Failed to connect wallet",
+    "withdrawTitle": "Withdraw to TON",
+    "rate": "{rate} coins = 1 TON · min {min} TON",
+    "amountPlaceholder": "Amount",
+    "withdrawBtn": "Request Withdrawal",
+    "records": "Withdrawal Records",
+    "noRecords": "No records yet",
+    "submitted": "Request submitted, awaiting review",
+    "errNoWallet": "Connect your TON wallet first",
+    "errBelowMin": "Below minimum withdrawal",
+    "errInsufficient": "Insufficient balance",
+    "errNetwork": "Network error, try again",
+    "status": {
+      "pending": "Pending",
+      "done": "Paid",
+      "rejected": "Rejected"
+    }
   },
-  "gameSearch": {
-    "title": "Game Search",
-    "searchLabel": "Search Games",
-    "searchPlaceholder": "Enter game name or description",
-    "gameTypeLabel": "Game Type",
-    "allTypes": "All Types",
-    "searchButton": "Search",
-    "noResults": "No games found matching your criteria",
-    "free": "Free",
-    "viewDetails": "View Details",
-    "more": "More",
-    "shooting": "Shooting",
-    "ball": "Ball",
-    "match3": "Match3",
-    "sort": "Sort",
-    "boom blast": "Boom Blast",
-    "tower defense": "Tower Defense",
-    "puzzle": "Puzzle",
-    "merge": "Merge",
-    "running": "Running",
-    "find difference": "Find Difference",
-    "parking": "Parking",
-    "connect": "Connect",
-    "music": "Music"
+  "invite": {
+    "headline": "Invite friends and earn",
+    "rebate": "+{pct}% of your friends' earnings",
+    "yourCode": "Your invite code",
+    "copy": "Copy",
+    "copied": "Copied",
+    "share": "Share invite link",
+    "friends": "Invited friends",
+    "noFriends": "No friends invited yet"
+  },
+  "mine": {
+    "invite": "Invite friends",
+    "wallet": "My wallet",
+    "task": "Task center",
+    "privacy": "Privacy policy",
+    "history": "Coin history",
+    "noHistory": "No records yet"
   },
   "gameDetail": {
-    "title": "Game Details",
-    "backButton": "Back",
-    "startGame": "Start Game",
-    "gameLoading": "Loading Game...",
-    "playingGame": "Now Playing:",
-    "closeGame": "Close Game",
-    "fullscreen": "fullscreen",
-    "tagsLabel": "Tags",
+    "back": "Back",
     "loading": "Loading...",
-    "gameNotFound": "Game Not Found",
-    "loadFailed": "Failed to Load Game Details"
+    "notFound": "Game not found",
+    "earnHint": "+{coin} coins per minute of play"
+  },
+  "footer": {
+    "copyright": "Copyright © {year} TTEarn"
   },
   "privacyPolicy": {
     "title": "Privacy Policy",
     "lastUpdated": "Last Updated",
     "introduction": "Introduction",
     "infoCollection": "Information Collection",
-    "adsense": "Google AdSense",
+    "adsense": "Advertising",
     "infoUsage": "Information Usage",
     "infoSharing": "Information Sharing",
     "dataSecurity": "Data Security",

@@ -22,8 +22,7 @@
 import { useRouter } from 'vue-router'
 import LazyImage from './LazyImage.vue'
 import { gaLogEvent } from "@/utils/event.js"
-import {onMounted, ref, defineProps} from "vue";
-import {useAdUtilsStore} from "@/stores/adsUtils"
+import { defineProps } from "vue";
 
 const props = defineProps({
 	value: {
@@ -34,13 +33,6 @@ const props = defineProps({
 })
 
 const router = useRouter()
-
-const adsUtilsStore = useAdUtilsStore();
-
-const showDialog = () => {
-  adsUtilsStore.setDialogStatus(true);
-  adsUtilsStore.gameId = props.value.game_id;
-}
 
 const jumpGame = () => {
   gaLogEvent.logEvent({

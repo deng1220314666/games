@@ -1,253 +1,133 @@
-import { gaLogEvent } from "@/utils/event.js";
-import { loadScript } from "@/utils/index.js";
+// ===== 广告 SDK(仅 Adsterra + OnClick) =====
+// 配置见 src/config/ads.js;发币只经 services/reward.js,勿在此直接发币。
+import { loadScript } from '@/utils/index.js'
+import { track } from '@/utils/event.js'
+import { ADSTERRA, ONCLICK } from '@/config/ads.js'
 
-// Adsterra SDK 配置
 export const AdsterraAd = {
   adQueue: [],
   isLoading: false,
-  init() {
-    // await this.showAnchor();
-  },
 
   runNext() {
-    if (this.isLoading || this.adQueue.length === 0) return;
-
-    this.isLoading = true;
-    const task = this.adQueue.shift();
-    task();
+    if (this.isLoading || this.adQueue.length === 0) return
+    this.isLoading = true
+    this.adQueue.shift()()
   },
-
   enqueue(task) {
-    this.adQueue.push(task);
-    this.runNext();
+    this.adQueue.push(task)
+    this.runNext()
   },
 
-  async showSocialBar() {
-    try {
-      await loadScript("https://pl27893768.profitablecpmratenetwork.com/2e/b8/74/2eb87400c5dffb7412e3616deb63408a.js", "Adsterra");
-    } catch(e) {
-      console.log("SocialBar", e)
-    }
-  },
-
-  async showBannerImmediate(containerId, options, scriptSrc) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-
-    // ⚠️ 如果当前有队列任务在跑，建议不要抢
-    if (this.isLoading) {
-      this.showBanner(containerId, options, scriptSrc);
-      return;
-    }
-
-    this.isLoading = true;
-
-    window.atOptions = options;
-
-    const script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src = scriptSrc;
-    script.async = true;
-
-    script.onload = script.onerror = () => {
-      setTimeout(() => {
-        this.isLoading = false;
-        this.runNext(); // 继续队列
-      }, 120); // 比你之前 300 更合理
-    };
-
-    container.appendChild(script);
-  },
-
-  async showBanner(containerId, options, scriptSrc) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-
+  // 队列化 banner,避免并发抢占 window.atOptions
+  showBanner(containerId, options, scriptSrc) {
+    const container = document.getElementById(containerId)
+    if (!container) return
     this.enqueue(() => {
-      // 每次独立设置（关键）
-      window.atOptions = options;
-
-      const script = document.createElement("script");
-      script.type = "text/javascript";
-      script.src = scriptSrc;
-      script.async = true;
-
-      script.onload = script.onerror = () => {
-        // 防风控缓冲
-        setTimeout(() => {
-          this.isLoading = false;
-          this.runNext();
-        }, 120);
-      };
-
-      container.appendChild(script);
-    });
-  },
-
-  async showAnchor() {
-    let anchorDom = document.getElementById("adsterra-anchor-1-box");
-    if (!anchorDom) return false;
-    let container = document.createElement('div');
-    container.id = 'ad-container';
-    container.style = `
-			width: 100%;
-			height: 50px;
-			background-color: #ffffff;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-		`
-
-    // 插入页面，比如插到 body 或指定容器
-    anchorDom.appendChild(container);
-
-    // 关闭按钮
-    const closeBtn = document.createElement("div");
-    closeBtn.style.cssText = `
-		width:1.5rem; height:1.5rem; background:#ffffff;
-		border-radius:0.12rem; box-shadow:0 0 0.25rem rgba(0,0,0,0.25);
-		display:flex; justify-content:center; align-items:center;
-		position:absolute; right:0.25rem; top:-1.5rem; cursor:pointer;`
-
-    closeBtn.addEventListener("click", () => {
-      container.remove();
-      gaLogEvent.logEvent({
-        eventName: "adsterra_anchor_close"
-      })
-    });
-
-    // closeBtn.innerHTML = `<img style="width:1rem;height:1rem;" src="./img/ads-close-icon.webp" alt="">`;
-
-    // 2️⃣ 设置 atOptions 配置
-    window.atOptions = {
-      'key' : '5459cbf4cf22d7a2a5cdeb4108417b4d',
-      'format' : 'iframe',
-      'height' : 50,
-      'width' : 320,
-      'params' : {}
-    };
-
-    // 3️⃣ 动态插入广告脚本
-    const script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src = "https://www.highperformanceformat.com/5459cbf4cf22d7a2a5cdeb4108417b4d/invoke.js";
-
-    container.appendChild(script);
-  },
-
-  async showNativeBanner (type) {
-    if (type === 'ad.ttgame') {
-      loadScript("https://pl29268938.profitablecpmratenetwork.com/d1debede50ec7d8df5940dc07088499f/invoke.js", "Adsterra");
-    }
-
-    if (type === 'ttgame') {
-      loadScript("https://pl27894898.profitablecpmratenetwork.com/155789be5aa8a606b97a7d9e19e14adb/invoke.js", "Adsterra");
-    }
-  },
-
-  async showPopunder () {
-    loadScript("https://pl27363267.profitablecpmratenetwork.com/2d/b4/da/2db4da1a24ded0c8e42efadab90e35d6.js", "Adsterra");
-  }
-};
-
-export const MonetagAd = {
-  async pushShow() {
-    return new Promise((resolve, reject) => {
-      // 防止重复加载
-      if (document.querySelector('script[src*="5gvci.com/act/files/tag.min.js"]')) {
-        resolve(true)
-        return
-      }
-
+      window.atOptions = options
       const script = document.createElement('script')
-
+      script.type = 'text/javascript'
+      script.src = scriptSrc
       script.async = true
-      script.src = 'https://5gvci.com/act/files/tag.min.js?z=11022417'
-
-      script.onload = () => {
-        console.log('广告脚本加载成功')
-        resolve(true)
+      script.onload = script.onerror = () => {
+        setTimeout(() => {
+          this.isLoading = false
+          this.runNext()
+        }, 120)
       }
-
-      script.onerror = (err) => {
-        console.error('广告脚本加载失败', err)
-        reject(err)
-      }
-
-      document.body.appendChild(script)
+      container.appendChild(script)
+      track.adShow('adsterra_banner')
     })
   },
 
-  inPagePush() {
+  showSocialBar() {
+    return loadScript(ADSTERRA.socialBar).catch(() => {})
+  },
+  showNativeBanner() {
+    return loadScript(ADSTERRA.nativeInvoke).catch(() => {})
+  },
+  showPopunder() {
+    track.adShow('adsterra_popunder')
+    return loadScript(ADSTERRA.popunder).catch(() => {})
+  },
+
+  // 底部锚点 320x50
+  showAnchor(anchorId = 'adsterra-anchor-1-box') {
+    const anchorDom = document.getElementById(anchorId)
+    if (!anchorDom || anchorDom.dataset.loaded) return
+    anchorDom.dataset.loaded = '1'
+    window.atOptions = {
+      key: ADSTERRA.anchorKey,
+      format: 'iframe',
+      height: 50,
+      width: 320,
+      params: {},
+    }
     const script = document.createElement('script')
-
-    script.dataset.zone = '11021519'
-    script.src = 'https://nap5k.com/tag.min.js'
-
-    document.body.appendChild(script)
-  }
-}
-
-export const ExoClickAd = {
-  adProvider: {},
-  anchorAdProvider: {},
-  anchorContainer: {},
-  adContainer: {},
-  served: false,
-  interstitialAdProvider: {},
-  async init() {
-    await loadScript("https://a.magsrv.com/ad-provider.js", "ExoClick").then(async () => {
-      (this.adProvider = window.AdProvider || []).push({"serve": {}})
-    });
-  }
+    script.type = 'text/javascript'
+    script.src = ADSTERRA.anchorInvoke
+    anchorDom.appendChild(script)
+    track.adShow('adsterra_anchor')
+  },
 }
 
 export const OnClickA = {
-  showBanner() {
-    // 防止重复加载
-    if (document.querySelector('script[data-admpid="440816"]')) {
-      return
-    }
-
+  showBanner(zone = ONCLICK.bannerZone) {
+    if (document.querySelector(`script[data-admpid="${zone}"]`)) return
     const script = document.createElement('script')
-
     script.async = true
-    script.src = 'https://js.onclckmn.com/static/onclicka.js'
-    script.dataset.admpid = '441212'
-
-    script.onload = () => {
-      console.log('Onclick 广告脚本加载成功')
-    }
-
-    script.onerror = (err) => {
-      console.error('Onclick 广告脚本加载失败', err)
-    }
-
+    script.src = ONCLICK.loader
+    script.dataset.admpid = zone
+    document.head.appendChild(script)
+    track.adShow('onclick_banner')
+  },
+  loadAdManager() {
+    if (document.querySelector(`script[data-admpid="${ONCLICK.adManagerZone}"]`)) return
+    const script = document.createElement('script')
+    script.setAttribute('data-cfasync', 'false')
+    script.setAttribute('data-admpid', ONCLICK.adManagerZone)
+    script.async = true
+    script.src = ONCLICK.adManager
     document.head.appendChild(script)
   },
+}
 
-  loadOnclickAd() {
-    // 防重复加载
-    if (document.querySelector('script[data-admpid="440816"]')) {
-      return
+// ===== 激励广告(看广告赚币核心) =====
+// show() resolve(true) 表示「有效观看」,调用方据此发币;
+// 当前用 Popunder + 最短停留时长模拟激励,真实激励接入后替换 present() 即可。
+export const RewardedAd = {
+  minWatchMs: 5000, // 最短有效观看
+
+  async show() {
+    track.adShow('rewarded')
+    try {
+      await this._present()
+      const ok = await this._waitWatched()
+      if (ok) track.adRewardComplete()
+      return ok
+    } catch (e) {
+      track.adError('rewarded')
+      return false
     }
+  },
 
-    const script = document.createElement('script')
+  // 展示广告载体(可替换为真实激励视频 SDK)
+  async _present() {
+    // 优先 OnClick 广告,回退 Adsterra Popunder
+    OnClickA.showBanner(ONCLICK.videoZone)
+    await AdsterraAd.showPopunder()
+  },
 
-    script.setAttribute('data-cfasync', 'false')
-    script.setAttribute('data-admpid', '440816')
-
-    script.async = true
-    script.src = 'https://js.wpadmngr.com/static/adManager.js'
-
-    script.onload = () => {
-      console.log('Onclick 广告加载成功')
-    }
-
-    script.onerror = (err) => {
-      console.error('Onclick 广告加载失败', err)
-    }
-
-    document.head.appendChild(script)
-  }
+  // 最短观看时长校验(前端第一道防刷,后端二次校验)
+  _waitWatched() {
+    return new Promise((resolve) => {
+      const start = Date.now()
+      let elapsed = 0
+      const onHide = () => (elapsed += Date.now() - start)
+      document.addEventListener('visibilitychange', onHide)
+      setTimeout(() => {
+        document.removeEventListener('visibilitychange', onHide)
+        resolve(Date.now() - start >= this.minWatchMs)
+      }, this.minWatchMs)
+    })
+  },
 }
