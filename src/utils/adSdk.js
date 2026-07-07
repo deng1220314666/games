@@ -2,7 +2,7 @@
 // 配置见 src/config/ads.js;发币只经 services/reward.js,勿在此直接发币。
 import { loadScript } from '@/utils/index.js'
 import { track } from '@/utils/event.js'
-import { ADSTERRA, ONCLICK, GIGAPUB } from '@/config/ads.js'
+import { ADSTERRA, ONCLICK, GIGAPUB, ADS3 } from '@/config/ads.js'
 
 export const AdsterraAd = {
   adQueue: [],
@@ -139,6 +139,77 @@ export const GigaReward = {
       track.adError('giga_reward') // 无填充 / 播放失败
       throw new Error('广告播放失败(可能无填充):' + (e?.message || e))
     }
+  },
+}
+
+// ===== ads3 (ton-ai-sdk) 激励广告 =====
+// 官方:TonAdInit({appId,debug}) → TonAdPopupShow({blockId,onAdClick,onAdError})
+// 奖励在 onAdClick 里发放(文档口径)。
+export const Ads3Reward = {
+  loaded: false,
+  inited: false,
+
+  // 加载 SDK 脚本 + 样式(点击时按需加载,幂等去重)
+  load() {
+    if (this.loaded || document.querySelector(`script[src="${ADS3.js}"]`)) {
+      this.loaded = true
+      return
+    }
+    if (!document.querySelector(`link[href="${ADS3.css}"]`)) {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = ADS3.css
+      document.head.appendChild(link)
+    }
+    const s = document.createElement('script')
+    s.src = ADS3.js
+    document.head.appendChild(s)
+    this.loaded = true
+  },
+
+  // 等待 window.TonAISdk 就绪
+  _waitReady(timeout = 8000) {
+    return new Promise((resolve, reject) => {
+      const start = Date.now()
+      const t = setInterval(() => {
+        if (window.TonAISdk && typeof window.TonAISdk.TonAdPopupShow === 'function') {
+          clearInterval(t)
+          resolve()
+        } else if (Date.now() - start > timeout) {
+          clearInterval(t)
+          reject(new Error('ads3 SDK 未就绪(TonAISdk 未出现)'))
+        }
+      }, 200)
+    })
+  },
+
+  async _ensureInit() {
+    this.load()
+    await this._waitReady()
+    if (!this.inited) {
+      if (!ADS3.appId) throw new Error('缺少 appId:请在 config/ads.js 的 ADS3.appId 填 ads3 后台的 AppId')
+      window.TonAISdk.TonAdInit({ appId: ADS3.appId, debug: ADS3.debug })
+      this.inited = true
+    }
+  },
+
+  // 展示激励广告;resolve(true)=用户点击广告(发奖);失败抛错(不发币)。
+  async show() {
+    track.adShow('ads3_reward')
+    await this._ensureInit()
+    return new Promise((resolve, reject) => {
+      window.TonAISdk.TonAdPopupShow({
+        blockId: ADS3.blockId,
+        onAdClick: (ad) => {
+          track.adRewardComplete()
+          resolve(true)
+        },
+        onAdError: (err) => {
+          track.adError('ads3_reward')
+          reject(new Error('广告错误:' + (err?.message || JSON.stringify(err))))
+        },
+      })
+    })
   },
 }
 

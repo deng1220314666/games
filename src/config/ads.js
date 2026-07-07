@@ -36,3 +36,14 @@ export const GIGAPUB = {
   script: 'https://ad.gigapub.tech/script?id=3554',
   placement: 'main',
 }
+
+// ===== ads3 (ton-ai-sdk) 激励广告 =====
+// TonAdInit({appId,debug}) 初始化 → TonAdPopupShow({blockId,onAdClick,onAdError})
+// 奖励在 onAdClick 里发放。
+export const ADS3 = {
+  appId: '', // ⚠️ 必填:ads3 后台的 AppId,init 必需(和 blockId 不同)
+  blockId: '67a57e28d970b19778fe5946',
+  js: 'https://cdn.jsdelivr.net/npm/ton-ai-sdk/dist/index.umd.js',
+  css: 'https://cdn.jsdelivr.net/npm/ton-ai-sdk/dist/index.umd.css',
+  debug: true, // 测试:拉测试广告;上线改 false
+}
