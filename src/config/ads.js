@@ -45,5 +45,12 @@ export const ADS3 = {
   blockId: '67a57e28d970b19778fe5946',
   js: 'https://cdn.jsdelivr.net/npm/ton-ai-sdk/dist/index.umd.js',
   css: 'https://cdn.jsdelivr.net/npm/ton-ai-sdk/dist/index.umd.css',
+  // ton-ai-sdk 是 React 构建,必须先按顺序加载这些全局依赖(官方要求 React 17)
+  deps: [
+    'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js',
+    'https://unpkg.com/react@17/umd/react.production.min.js',
+    'https://unpkg.com/react-dom@17/umd/react-dom.production.min.js',
+    'https://cdn.jsdelivr.net/npm/clientjs/dist/client.min.js', // window.ClientJS
+  ],
   debug: true, // 测试:拉测试广告;上线改 false
 }

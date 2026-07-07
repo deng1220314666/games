@@ -53,19 +53,25 @@ function log(...args) {
   logs.value.push(`[${t}] ` + args.map((a) => (typeof a === 'object' ? JSON.stringify(a) : String(a))).join(' '))
 }
 
-function loadSdk() {
-  log('加载 ads3 SDK(ton-ai-sdk)...')
-  Ads3Reward.load()
-  setTimeout(probe, 1500)
+async function loadSdk() {
+  log('加载 ads3 依赖(axios/React17/ReactDOM17/ClientJS)+ SDK ...')
+  try {
+    await Ads3Reward.load()
+    log('加载完成')
+  } catch (e) {
+    log('❌ 加载失败:' + (e?.message || e))
+  }
+  probe()
 }
 
 function probe() {
   log('SDK 脚本已加载:' + Ads3Reward.loaded)
+  log('依赖:React=' + typeof window.React + ', ReactDOM=' + typeof window.ReactDOM + ', ClientJS=' + typeof window.ClientJS + ', axios=' + typeof window.axios)
   log('window.TonAISdk:' + typeof window.TonAISdk)
   if (window.TonAISdk) {
     log('  TonAdInit:' + typeof window.TonAISdk.TonAdInit + ', TonAdPopupShow:' + typeof window.TonAISdk.TonAdPopupShow)
   }
-  if (!appId) log('⚠️ appId 未填,init 会失败。去 config/ads.js 的 ADS3.appId 填上。')
+  if (!appId) log('⚠️ appId 未填,init 会失败。')
 }
 
 async function showReward() {

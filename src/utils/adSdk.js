@@ -148,23 +148,25 @@ export const GigaReward = {
 export const Ads3Reward = {
   loaded: false,
   inited: false,
+  _loadPromise: null,
 
-  // 加载 SDK 脚本 + 样式(点击时按需加载,幂等去重)
+  // 按顺序加载依赖(axios/React17/ReactDOM17/ClientJS)后再加载 SDK。幂等、缓存。
   load() {
-    if (this.loaded || document.querySelector(`script[src="${ADS3.js}"]`)) {
+    if (this._loadPromise) return this._loadPromise
+    this._loadPromise = (async () => {
+      if (!document.querySelector(`link[href="${ADS3.css}"]`)) {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = ADS3.css
+        document.head.appendChild(link)
+      }
+      for (const url of ADS3.deps) {
+        await loadScript(url) // 顺序加载,react-dom 依赖 react 先就位
+      }
+      await loadScript(ADS3.js)
       this.loaded = true
-      return
-    }
-    if (!document.querySelector(`link[href="${ADS3.css}"]`)) {
-      const link = document.createElement('link')
-      link.rel = 'stylesheet'
-      link.href = ADS3.css
-      document.head.appendChild(link)
-    }
-    const s = document.createElement('script')
-    s.src = ADS3.js
-    document.head.appendChild(s)
-    this.loaded = true
+    })()
+    return this._loadPromise
   },
 
   // 等待 window.TonAISdk 就绪
@@ -184,7 +186,7 @@ export const Ads3Reward = {
   },
 
   async _ensureInit() {
-    this.load()
+    await this.load()
     await this._waitReady()
     if (!this.inited) {
       if (!ADS3.appId) throw new Error('缺少 appId:请在 config/ads.js 的 ADS3.appId 填 ads3 后台的 AppId')
