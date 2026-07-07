@@ -6,10 +6,12 @@ import {
   ScheduleOutlined,
   AppstoreOutlined,
   WalletOutlined,
+  TeamOutlined,
   LogoutOutlined,
 } from '@ant-design/icons'
 import { auth } from '../api.js'
 import Overview from './Overview.jsx'
+import Users from './Users.jsx'
 import Tasks from './Tasks.jsx'
 import Games from './Games.jsx'
 import Withdrawals from './Withdrawals.jsx'
@@ -18,6 +20,7 @@ const menu = {
   path: '/',
   routes: [
     { path: '/', name: '概览', icon: <DashboardOutlined /> },
+    { path: '/users', name: '用户列表', icon: <TeamOutlined /> },
     { path: '/tasks', name: '签到 & 任务', icon: <ScheduleOutlined /> },
     { path: '/games', name: '游戏列表', icon: <AppstoreOutlined /> },
     { path: '/withdrawals', name: '提现审核', icon: <WalletOutlined /> },
@@ -60,6 +63,7 @@ export default function Shell() {
     >
       <Routes>
         <Route path="/" element={<Overview />} />
+        <Route path="/users" element={<Users />} />
         <Route path="/tasks" element={<Tasks />} />
         <Route path="/games" element={<Games />} />
         <Route path="/withdrawals" element={<Withdrawals />} />
