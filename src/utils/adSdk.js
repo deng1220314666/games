@@ -195,23 +195,43 @@ export const Ads3Reward = {
     }
   },
 
-  // 展示激励广告;resolve(true)=用户点击广告(发奖);失败抛错(不发币)。
-  async show() {
-    track.adShow('ads3_reward')
-    await this._ensureInit()
+  // 弹窗广告统一执行:param = { blockId } 或 { tonAd }
+  // resolve(true)=看完(onAdComplete,发奖);resolve(false)=手动关闭(未看完,不发奖);
+  // reject=错误。
+  _popup(param) {
     return new Promise((resolve, reject) => {
+      let settled = false
+      const done = (v) => {
+        if (!settled) {
+          settled = true
+          resolve(v)
+        }
+      }
       window.TonAISdk.TonAdPopupShow({
-        blockId: ADS3.blockId,
-        onAdClick: (ad) => {
+        ...param,
+        countdown: ADS3.countdown,
+        autoClose: true,
+        onAdComplete: () => {
           track.adRewardComplete()
-          resolve(true)
+          done(true) // 看完 → 发奖
         },
+        onAdClose: () => done(false), // 手动关闭 → 不发奖
         onAdError: (err) => {
-          track.adError('ads3_reward')
-          reject(new Error('广告错误:' + (err?.message || JSON.stringify(err))))
+          if (!settled) {
+            settled = true
+            track.adError('ads3')
+            reject(new Error('广告错误:' + (err?.message || JSON.stringify(err))))
+          }
         },
       })
     })
+  },
+
+  // 激励广告(按 blockId 直接拉一支弹窗)
+  async show() {
+    track.adShow('ads3_reward')
+    await this._ensureInit()
+    return this._popup({ blockId: ADS3.blockId })
   },
 
   // 拉取一组原生广告数据(自己渲染成任务/banner):{ ads: [{ adId, image, icon, brandName, text, buttonText, ... }] }
@@ -220,21 +240,11 @@ export const Ads3Reward = {
     return window.TonAISdk.GetMultiTonAd(ADS3.blockId, limit)
   },
 
-  // 展示指定的一条广告(原生/banner 点击时用),onAdClick=发奖
-  showAd(tonAd) {
-    return new Promise((resolve, reject) => {
-      window.TonAISdk.TonAdPopupShow({
-        tonAd,
-        onAdClick: () => {
-          track.adRewardComplete()
-          resolve(true)
-        },
-        onAdError: (err) => {
-          track.adError('ads3_native')
-          reject(new Error('广告错误:' + (err?.message || JSON.stringify(err))))
-        },
-      })
-    })
+  // 展示指定的一条广告(原生任务点击时用),看完(onAdComplete)发奖
+  async showAd(tonAd) {
+    track.adShow('ads3_native')
+    await this._ensureInit()
+    return this._popup({ tonAd })
   },
 }
 

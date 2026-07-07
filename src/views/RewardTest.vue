@@ -97,12 +97,18 @@ async function grant(source) {
   log(res.ok ? `${source} 发币 +${res.amount},余额 ${res.balance}` : `${source} 发币被拒(每日上限?)`)
 }
 
+// ok=true 看完发奖;ok=false 手动关闭未看完,不发奖
+async function settle(ok, source) {
+  if (ok) await grant(source)
+  else log(`${source}:未看完/已关闭,不发奖`)
+}
+
 // 示例1:激励 popup
 async function showReward() {
   try {
     log('激励广告 show() ...')
     const ok = await Ads3Reward.show()
-    if (ok) await grant('激励')
+    await settle(ok, '激励')
   } catch (e) {
     log('❌ ' + (e?.message || e))
   }
@@ -123,7 +129,7 @@ async function doTaskAd(ad) {
   try {
     log(`完成任务:TonAdPopupShow(tonAd=${ad.adId}) ...`)
     const ok = await Ads3Reward.showAd(ad)
-    if (ok) await grant('任务')
+    await settle(ok, '任务')
   } catch (e) {
     log('❌ ' + (e?.message || e))
   }
@@ -144,7 +150,7 @@ async function doBanner(ad) {
   try {
     log(`点击 Banner:TonAdPopupShow(tonAd=${ad.adId}) ...`)
     const ok = await Ads3Reward.showAd(ad)
-    if (ok) await grant('Banner')
+    await settle(ok, 'Banner')
   } catch (e) {
     log('❌ ' + (e?.message || e))
   }

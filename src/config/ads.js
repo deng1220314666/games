@@ -43,6 +43,7 @@ export const GIGAPUB = {
 export const ADS3 = {
   appId: '67a5c1a30db141eabea50e9b', // ads3 后台的 App ID(init 必需)
   blockId: '67a57e28d970b19778fe5946',
+  countdown: 10, // 广告倒计时秒数(默认10,最小10,最大30)
   js: 'https://cdn.jsdelivr.net/npm/ton-ai-sdk/dist/index.umd.js',
   css: 'https://cdn.jsdelivr.net/npm/ton-ai-sdk/dist/index.umd.css',
   // ton-ai-sdk 是 React 构建,必须先按顺序加载这些全局依赖(官方要求 React 17)
