@@ -5,6 +5,7 @@ import { getSettings, setSettings } from '../../shared/models/config.js'
 import { listTasks, upsertTask, deleteTask } from '../../shared/models/tasks.js'
 import { listGames, upsertGame, deleteGame } from '../../shared/models/games.js'
 import { listWithdrawals, reviewWithdrawal } from '../../shared/models/withdrawals.js'
+import { adjustBalance, setBan } from '../../shared/models/users.js'
 import { one, many } from '../../shared/db.js'
 
 export const manageRouter = Router()
@@ -72,11 +73,27 @@ manageRouter.get('/users', async (req, res) => {
   const total = (await one(`SELECT count(*)::int c FROM users ${where}`, params)).c
   const rows = await many(
     `SELECT id, platform, name, username, balance, streak, invite_code, referrer_id,
-            referral_earned, created_at
+            referral_earned, banned, created_at
      FROM users ${where} ORDER BY created_at DESC LIMIT ${pageSize} OFFSET ${offset}`,
     params
   )
   res.json({ data: rows.map((r) => ({ ...r, balance: Number(r.balance), referral_earned: Number(r.referral_earned) })), total })
+})
+
+// 手动调整积分
+manageRouter.post('/users/:id/adjust', async (req, res) => {
+  const amount = Number(req.body?.amount)
+  if (!amount) return res.status(400).json({ error: 'amount_required' })
+  const r = await adjustBalance(req.params.id, amount, req.body?.reason)
+  if (!r.ok) return res.status(400).json({ error: r.reason })
+  res.json({ ok: true, balance: r.balance, applied: r.applied })
+})
+
+// 封号 / 解封
+manageRouter.post('/users/:id/ban', async (req, res) => {
+  const ok = await setBan(req.params.id, !!req.body?.banned, req.body?.reason)
+  if (!ok) return res.status(404).json({ error: 'not_found' })
+  res.json({ ok: true })
 })
 
 manageRouter.get('/users/:id', async (req, res) => {

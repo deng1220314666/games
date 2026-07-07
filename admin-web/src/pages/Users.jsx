@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
-import { Card, Table, Input, Tag, Button, Drawer, Descriptions, Tabs, Spin, message } from 'antd'
+import { Card, Table, Input, Tag, Button, Drawer, Descriptions, Tabs, Spin, message, Space, Popconfirm } from 'antd'
+import { ModalForm, ProFormDigit, ProFormTextArea } from '@ant-design/pro-components'
 import { http, apiError } from '../api.js'
 
 const SRC = {
@@ -8,6 +9,7 @@ const SRC = {
   play_game: '玩游戏',
   invite: '邀请奖励',
   invite_rebate: '邀请返佣',
+  admin_adjust: '后台调整',
 }
 const WD_STATUS = { pending: { t: '待审', c: 'gold' }, approved: { t: '已通过', c: 'blue' }, done: { t: '已打款', c: 'green' }, rejected: { t: '已拒绝', c: 'red' } }
 
@@ -20,6 +22,7 @@ export default function Users() {
   const [pageSize, setPageSize] = useState(20)
   const [detail, setDetail] = useState(null)
   const [detailLoading, setDetailLoading] = useState(false)
+  const [adjustOpen, setAdjustOpen] = useState(false)
 
   const load = useCallback(async (p = page, ps = pageSize, query = q) => {
     setLoading(true)
@@ -53,10 +56,22 @@ export default function Users() {
     }
   }
 
+  const doBan = async (id, banned) => {
+    try {
+      await http.post(`/users/${id}/ban`, { banned })
+      message.success(banned ? '已封号' : '已解封')
+      openDetail(id)
+      load()
+    } catch (e) {
+      message.error(apiError(e))
+    }
+  }
+
   const cols = [
     { title: 'ID', dataIndex: 'id', ellipsis: true, width: 150 },
     { title: '昵称', dataIndex: 'name' },
     { title: '平台', dataIndex: 'platform', width: 90, render: (p) => <Tag>{p}</Tag> },
+    { title: '状态', dataIndex: 'banned', width: 76, render: (b) => (b ? <Tag color="red">封号</Tag> : <Tag color="green">正常</Tag>) },
     { title: '积分余额', dataIndex: 'balance', width: 110, render: (v) => <b>{v.toLocaleString()}</b> },
     { title: '连签', dataIndex: 'streak', width: 70 },
     { title: '邀请码', dataIndex: 'invite_code', width: 110 },
@@ -104,11 +119,37 @@ export default function Users() {
         }}
       />
 
-      <Drawer title="用户详情" width={720} open={!!detail} onClose={() => setDetail(null)}>
+      <Drawer
+        title="用户详情"
+        width={720}
+        open={!!detail}
+        onClose={() => setDetail(null)}
+        extra={
+          u ? (
+            <Space>
+              <Button onClick={() => setAdjustOpen(true)}>调整积分</Button>
+              {u.banned ? (
+                <Popconfirm title="解除封号？" onConfirm={() => doBan(u.id, false)}>
+                  <Button>解封</Button>
+                </Popconfirm>
+              ) : (
+                <Popconfirm title="封禁该用户？（将无法登录/赚币/提现）" onConfirm={() => doBan(u.id, true)}>
+                  <Button danger>封号</Button>
+                </Popconfirm>
+              )}
+            </Space>
+          ) : null
+        }
+      >
         {detailLoading || !u ? (
           <Spin />
         ) : (
           <>
+            {u.banned && (
+              <Tag color="red" style={{ marginBottom: 12 }}>
+                已封号{u.ban_reason ? '：' + u.ban_reason : ''}
+              </Tag>
+            )}
             <Descriptions bordered size="small" column={2} style={{ marginBottom: 16 }}>
               <Descriptions.Item label="ID" span={2}>{u.id}</Descriptions.Item>
               <Descriptions.Item label="昵称">{u.name}</Descriptions.Item>
@@ -137,6 +178,30 @@ export default function Users() {
           </>
         )}
       </Drawer>
+
+      <ModalForm
+        title={'调整积分：' + (u?.name || u?.id || '')}
+        open={adjustOpen}
+        onOpenChange={setAdjustOpen}
+        modalProps={{ destroyOnClose: true }}
+        onFinish={async (v) => {
+          try {
+            const r = await http.post(`/users/${u.id}/adjust`, { amount: v.amount, reason: v.reason })
+            message.success(`已调整，当前余额 ${r.balance}`)
+            setAdjustOpen(false)
+            openDetail(u.id)
+            load()
+            return true
+          } catch (e) {
+            message.error(apiError(e))
+            return false
+          }
+        }}
+      >
+        <p style={{ color: '#888' }}>正数增加、负数扣减（余额下限 0）。会记入该用户积分流水。</p>
+        <ProFormDigit name="amount" label="调整数量（+/-）" rules={[{ required: true }]} fieldProps={{ precision: 0 }} />
+        <ProFormTextArea name="reason" label="原因（记入流水）" />
+      </ModalForm>
     </Card>
   )
 }

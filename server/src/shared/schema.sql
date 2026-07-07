@@ -85,3 +85,7 @@ CREATE TABLE IF NOT EXISTS idempotency (
   key        text PRIMARY KEY,
   created_at timestamptz NOT NULL DEFAULT now()
 );
+
+-- 增量列(幂等)
+ALTER TABLE users ADD COLUMN IF NOT EXISTS banned boolean DEFAULT false;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS ban_reason text;

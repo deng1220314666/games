@@ -1,5 +1,5 @@
 import crypto from 'node:crypto'
-import { one, query } from '../db.js'
+import { one, query, pool } from '../db.js'
 import { todayKey } from '../lib/time.js'
 
 function genInvite(id) {
@@ -54,6 +54,39 @@ export function publicProfile(u) {
     platform: u.platform,
     isAnonymous: u.is_anonymous,
   }
+}
+
+// 后台手动调整积分(amount 可正可负,余额下限 0),记流水
+export async function adjustBalance(id, amount, reason) {
+  const client = await pool.connect()
+  try {
+    await client.query('BEGIN')
+    const { rows: [u] } = await client.query('SELECT balance FROM users WHERE id=$1 FOR UPDATE', [id])
+    if (!u) {
+      await client.query('ROLLBACK')
+      return { ok: false, reason: 'not_found' }
+    }
+    const delta = Math.trunc(Number(amount) || 0)
+    const newBal = Math.max(0, Number(u.balance) + delta)
+    const applied = newBal - Number(u.balance)
+    await client.query('UPDATE users SET balance=$2 WHERE id=$1', [id, newBal])
+    await client.query('INSERT INTO ledger(user_id,source,amount,meta) VALUES($1,$2,$3,$4)', [
+      id, 'admin_adjust', applied, JSON.stringify({ reason: reason || '', by: 'admin' }),
+    ])
+    await client.query('COMMIT')
+    return { ok: true, balance: newBal, applied }
+  } catch (e) {
+    await client.query('ROLLBACK')
+    throw e
+  } finally {
+    client.release()
+  }
+}
+
+// 封号 / 解封
+export async function setBan(id, banned, reason) {
+  const r = await query('UPDATE users SET banned=$2, ban_reason=$3 WHERE id=$1', [id, !!banned, reason || null])
+  return r.rowCount > 0
 }
 
 // 首次登录绑定上级 + 发注册奖励(给上级)

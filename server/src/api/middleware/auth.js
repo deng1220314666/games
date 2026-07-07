@@ -10,6 +10,7 @@ export async function requireAuth(req, res, next) {
     if (!data?.uid) return res.status(401).json({ error: 'unauthorized' })
     const u = await getUser(data.uid)
     if (!u) return res.status(401).json({ error: 'user_not_found' })
+    if (u.banned) return res.status(403).json({ error: 'banned' })
     req.user = u
     next()
   } catch (e) {

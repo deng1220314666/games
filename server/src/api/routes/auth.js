@@ -35,6 +35,8 @@ authRouter.post('/login', async (req, res) => {
       })
     }
 
+    if (user.banned) return res.status(403).json({ error: 'banned' })
+
     const inviteTask = await getTask('invite')
     await bindReferrer(user, startParam, inviteTask?.reward)
 
