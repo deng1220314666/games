@@ -1,6 +1,9 @@
 <template>
   <div class="privacy-policy max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="flex justify-between items-center mb-6">
+    <div class="flex items-center gap-2 mb-6">
+      <button class="flex h-9 w-9 items-center justify-center rounded-full text-blue-600 hover:bg-gray-100" @click="$router.back()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+      </button>
       <h1 class="text-3xl font-bold text-gray-900">{{ $t('nav.privacyPolicy') }}</h1>
     </div>
     
