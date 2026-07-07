@@ -249,15 +249,22 @@ export const Ads3Reward = {
 }
 
 // ===== 激励广告(看广告赚币核心,全站统一入口) =====
-// show() resolve(true) 表示「有效观看」,调用方据此发币。走 GigaPub 激励广告。
+// show() resolve(true)=看完发奖。GigaPub 与 ads3 交替请求;
+// 轮到的那家无填充/报错时,自动试另一家。用户中途关闭(false)则不再试。
 export const RewardedAd = {
+  _turn: 0,
+
   async show() {
-    try {
-      return await GigaReward.show()
-    } catch (e) {
-      track.adError('reward') // 无填充 / 播放失败 → 不发币
-      return false
+    const order =
+      this._turn++ % 2 === 0 ? [GigaReward, Ads3Reward] : [Ads3Reward, GigaReward]
+    for (const net of order) {
+      try {
+        return await net.show() // true=看完发奖;false=用户关闭(不再试另一家)
+      } catch (e) {
+        track.adError('reward_try') // 无填充/错误 → 试另一家
+      }
     }
+    return false
   },
 
   // 只加载 SDK 脚本(不拉广告),供页面进入时调用

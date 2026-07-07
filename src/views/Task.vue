@@ -7,6 +7,28 @@
     <div id="task-banner-box" class="mb-5 flex min-h-[100px] w-full items-center justify-center overflow-hidden rounded-xl"></div>
 
     <TgSection :header="t('nav.task')">
+      <!-- ads3 原生广告(置顶,广告即内容) -->
+      <TgRow
+        v-for="ad in nativeAds"
+        :key="ad.adId"
+        :subtitle="ad.text"
+        @click="doNativeAd(ad)"
+      >
+        <template #icon>
+          <img v-if="ad.icon" :src="ad.icon" class="h-7 w-7 rounded-md object-cover" alt="" />
+          <span v-else v-html="icons.watch_ad"></span>
+        </template>
+        {{ ad.brandName || 'Ad' }}
+        <template #value>
+          <span
+            class="rounded-full px-3.5 py-1.5 text-xs font-semibold"
+            style="background: var(--tg-button); color: var(--tg-button-text)"
+          >
+            {{ ad.buttonText || t('task.go') }}
+          </span>
+        </template>
+      </TgRow>
+
       <TgRow
         v-for="task in tasks"
         :key="task.id"
@@ -53,7 +75,7 @@ import { APP, ECONOMY } from '@/config/index.js'
 import { ADSTERRA } from '@/config/ads.js'
 import { getTasks, checkIn } from '@/services/task.js'
 import { earn } from '@/services/reward.js'
-import { RewardedAd, AdsterraAd } from '@/utils/adSdk.js'
+import { RewardedAd, AdsterraAd, Ads3Reward } from '@/utils/adSdk.js'
 import { track } from '@/utils/event.js'
 
 defineOptions({ name: 'Task' })
@@ -62,6 +84,7 @@ const { t } = useI18n()
 const router = useRouter()
 const coinSymbol = APP.coinSymbol
 const tasks = ref([])
+const nativeAds = ref([])
 
 const svg = (d) =>
   `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--tg-button)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"/></svg>`
@@ -74,6 +97,26 @@ const icons = {
 
 function refresh() {
   tasks.value = getTasks()
+}
+
+// 自动加载 ads3 原生广告(置顶列表)
+async function loadNativeAds() {
+  try {
+    const res = await Ads3Reward.getAds(5)
+    nativeAds.value = res?.ads || []
+  } catch (e) {
+    nativeAds.value = []
+  }
+}
+
+// 点击原生广告 → 看完(onAdComplete)发币
+async function doNativeAd(ad) {
+  try {
+    const ok = await Ads3Reward.showAd(ad)
+    if (ok) await earn('watch_ad', ECONOMY.reward.watchAd)
+  } catch (e) {
+    /* 无填充/错误,忽略 */
+  }
 }
 
 async function doTask(task) {
@@ -94,6 +137,7 @@ async function doTask(task) {
 onMounted(() => {
   track.page('task')
   refresh()
+  loadNativeAds()
   AdsterraAd.showBanner(
     'task-banner-box',
     { key: ADSTERRA.bannerKey, format: 'iframe', height: 250, width: 300, params: {} },
