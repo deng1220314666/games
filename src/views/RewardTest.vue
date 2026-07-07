@@ -19,11 +19,11 @@
       </div>
     </TgSection>
 
-    <!-- 示例2:原生广告 / Earn Task -->
-    <TgSection header="示例2 · 原生广告(看广告完成任务)">
+    <!-- 示例2:原生广告 / Earn Task(一次多条,广告即内容,自动加载) -->
+    <TgSection header="示例2 · 原生广告(一次5条·广告即内容·自动加载)">
       <div class="p-3">
-        <button class="mb-3 w-full rounded-xl py-2.5 text-sm font-semibold text-tg-button-text" style="background: var(--tg-button)" @click="loadNative">拉取原生广告任务</button>
-        <div v-if="nativeAds.length === 0" class="py-2 text-center text-xs text-tg-hint">(点上面按钮拉取)</div>
+        <button class="mb-3 w-full rounded-xl py-2.5 text-sm font-semibold text-tg-button-text" style="background: var(--tg-button)" @click="loadNative">重新拉取 5 条</button>
+        <div v-if="nativeAds.length === 0" class="py-2 text-center text-xs text-tg-hint">加载中 / 暂无数据</div>
         <div v-for="ad in nativeAds" :key="ad.adId" class="mb-2 flex items-center gap-3 rounded-xl p-2.5" style="background: var(--tg-secondary-bg)">
           <img v-if="ad.icon" :src="ad.icon" class="h-10 w-10 shrink-0 rounded-lg object-cover" alt="" />
           <div class="min-w-0 flex-1">
@@ -164,8 +164,14 @@ async function simulate() {
   await grant('模拟')
 }
 
-onMounted(() => {
+onMounted(async () => {
   log('页面就绪。环境:' + (inTelegram ? 'Telegram' : '浏览器'))
-  if (!appId) log('⚠️ ADS3.appId 未填')
+  if (!appId) {
+    log('⚠️ ADS3.appId 未填,无法初始化')
+    return
+  }
+  // 直接加载 SDK 并自动拉取 5 条原生广告(无需点击)
+  log('自动加载 SDK 并拉取 5 条原生广告 ...')
+  await loadNative()
 })
 </script>
