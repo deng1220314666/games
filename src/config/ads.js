@@ -41,7 +41,7 @@ export const GIGAPUB = {
 // TonAdInit({appId,debug}) 初始化 → TonAdPopupShow({blockId,onAdClick,onAdError})
 // 奖励在 onAdClick 里发放。
 export const ADS3 = {
-  appId: '', // ⚠️ 必填:ads3 后台的 AppId,init 必需(和 blockId 不同)
+  appId: '67a5c1a30db141eabea50e9b', // ads3 后台的 App ID(init 必需)
   blockId: '67a57e28d970b19778fe5946',
   js: 'https://cdn.jsdelivr.net/npm/ton-ai-sdk/dist/index.umd.js',
   css: 'https://cdn.jsdelivr.net/npm/ton-ai-sdk/dist/index.umd.css',
