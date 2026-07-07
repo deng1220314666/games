@@ -92,6 +92,7 @@ server {
     server_name $FRONT_DOMAIN;
     root $WEB;
     index index.html;
+    add_header Permissions-Policy "accelerometer=*, gyroscope=*, magnetometer=*, autoplay=*" always;
     location /.well-known/acme-challenge/ { root $WEBROOT; }
     gzip on;
     gzip_types text/css application/javascript application/json image/svg+xml;
@@ -111,6 +112,7 @@ server {
     ssl_ciphers HIGH:!aNULL:!MD5;
     root $WEB;
     index index.html;
+    add_header Permissions-Policy "accelerometer=*, gyroscope=*, magnetometer=*, autoplay=*" always;
     gzip on;
     gzip_types text/css application/javascript application/json image/svg+xml;
     location /assets/ { expires 1y; add_header Cache-Control "public, immutable"; }
