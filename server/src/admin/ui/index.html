@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>TTEarn 后台</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #f4f5f7; color: #1f2430; }
+  header { background: #2b3245; color: #fff; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; }
+  header b { font-size: 16px; }
+  nav { display: flex; gap: 4px; padding: 8px 16px; background: #fff; border-bottom: 1px solid #e6e8ec; position: sticky; top: 0; z-index: 5; }
+  nav button { border: 0; background: transparent; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 14px; color: #555; }
+  nav button.active { background: #3390ec; color: #fff; }
+  main { padding: 18px; max-width: 1100px; margin: 0 auto; }
+  .card { background: #fff; border: 1px solid #e6e8ec; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  h3 { margin: 0 0 12px; font-size: 15px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #eef0f3; vertical-align: middle; }
+  th { color: #8a94a6; font-weight: 600; }
+  input, select { padding: 7px 9px; border: 1px solid #d6dae0; border-radius: 8px; font-size: 13px; width: 100%; }
+  .row { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-bottom: 10px; }
+  .row label { font-size: 12px; color: #8a94a6; display: block; margin-bottom: 3px; }
+  button.btn { border: 0; background: #3390ec; color: #fff; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; }
+  button.sm { padding: 5px 10px; font-size: 12px; border-radius: 6px; }
+  button.danger { background: #e5484d; }
+  button.green { background: #30a46c; }
+  button.ghost { background: #eef0f3; color: #333; }
+  .stat { display: inline-block; margin-right: 24px; }
+  .stat b { display: block; font-size: 24px; }
+  .stat span { color: #8a94a6; font-size: 12px; }
+  .muted { color: #8a94a6; font-size: 12px; }
+  .pill { padding: 2px 8px; border-radius: 999px; font-size: 11px; }
+  .pill.pending { background: #fff3d6; color: #9a6700; }
+  .pill.done { background: #d6f5e3; color: #197a4b; }
+  .pill.rejected { background: #ffe0e1; color: #b42318; }
+  #login { max-width: 340px; margin: 80px auto; }
+  .hidden { display: none; }
+  img.gicon { width: 34px; height: 34px; border-radius: 6px; object-fit: cover; background: #eee; }
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #1f2430; color: #fff; padding: 10px 18px; border-radius: 10px; font-size: 13px; opacity: 0; transition: .3s; }
+  .toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<div id="login" class="card">
+  <h3>TTEarn 后台登录</h3>
+  <div class="row" style="grid-template-columns:1fr">
+    <div><label>用户名</label><input id="lu" value="admin" /></div>
+    <div><label>密码</label><input id="lp" type="password" /></div>
+  </div>
+  <button class="btn" onclick="login()">登录</button>
+  <p id="lerr" class="muted"></p>
+</div>
+
+<div id="app" class="hidden">
+  <header><b>TTEarn 后台管理</b><span><span id="who" class="muted"></span> <button class="btn sm ghost" onclick="logout()">退出</button></span></header>
+  <nav>
+    <button data-tab="overview" class="active" onclick="tab('overview')">概览</button>
+    <button data-tab="tasks" onclick="tab('tasks')">签到 & 任务</button>
+    <button data-tab="games" onclick="tab('games')">游戏列表</button>
+    <button data-tab="withdrawals" onclick="tab('withdrawals')">提现审核</button>
+  </nav>
+  <main>
+    <div id="v-overview"></div>
+    <div id="v-tasks" class="hidden"></div>
+    <div id="v-games" class="hidden"></div>
+    <div id="v-withdrawals" class="hidden"></div>
+  </main>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+const TOKEN_KEY = 'tt_admin_token'
+let token = localStorage.getItem(TOKEN_KEY) || ''
+
+function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1800) }
+async function api(path, opts={}){
+  const res = await fetch('/api'+path, { ...opts, headers: { 'Content-Type':'application/json', 'Authorization':'Bearer '+token, ...(opts.headers||{}) } })
+  if(res.status===401){ logout(); throw new Error('未登录') }
+  const data = await res.json().catch(()=>({}))
+  if(!res.ok) throw new Error(data.error||('HTTP '+res.status))
+  return data
+}
+function esc(s){ return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])) }
+
+async function login(){
+  try{
+    const r = await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:lu.value,password:lp.value})})
+    const d = await r.json(); if(!r.ok) throw new Error(d.error||'登录失败')
+    token = d.token; localStorage.setItem(TOKEN_KEY, token); document.getElementById('who').textContent=d.username
+    show()
+  }catch(e){ document.getElementById('lerr').textContent = e.message }
+}
+function logout(){ token=''; localStorage.removeItem(TOKEN_KEY); document.getElementById('app').classList.add('hidden'); document.getElementById('login').classList.remove('hidden') }
+function show(){ document.getElementById('login').classList.add('hidden'); document.getElementById('app').classList.remove('hidden'); tab('overview') }
+
+function tab(name){
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active', b.dataset.tab===name))
+  ;['overview','tasks','games','withdrawals'].forEach(v=>document.getElementById('v-'+v).classList.toggle('hidden', v!==name))
+  if(name==='overview') renderOverview()
+  if(name==='tasks') renderTasks()
+  if(name==='games') renderGames()
+  if(name==='withdrawals') renderWithdrawals()
+}
+
+// ---- overview ----
+async function renderOverview(){
+  const el=document.getElementById('v-overview'); el.innerHTML='<div class="card">加载中…</div>'
+  try{ const o=await api('/overview')
+    el.innerHTML='<div class="card"><h3>概览</h3>'
+      +stat(o.users,'用户数')+stat(o.pendingWithdrawals,'待审提现')+stat(o.totalCoins,'积分总量')+stat(o.games,'游戏数')+'</div>'
+  }catch(e){ el.innerHTML='<div class="card">'+e.message+'</div>' }
+}
+function stat(v,l){ return '<div class="stat"><b>'+v+'</b><span>'+l+'</span></div>' }
+
+// ---- tasks + settings ----
+async function renderTasks(){
+  const el=document.getElementById('v-tasks'); el.innerHTML='加载中…'
+  const s=await api('/settings'); const tasks=await api('/tasks')
+  let html='<div class="card"><h3>经济参数</h3><div class="row">'
+  const fields=[['coinPerTon','积分兑1TON'],['minWithdrawTon','最低提现TON'],['withdrawFeeTon','提现手续费TON'],['checkInStreakBonus','连签每日额外'],['inviteRebate','邀请返佣(0-1)'],['maxEarnPerCall','单次发币上限']]
+  for(const [k,l] of fields) html+='<div><label>'+l+'</label><input id="s_'+k+'" value="'+esc(s[k]??'')+'"></div>'
+  html+='</div><button class="btn" onclick="saveSettings()">保存参数</button></div>'
+  html+='<div class="card"><h3>任务 / 签到(奖励数量 & 图标)</h3><table><tr><th>ID</th><th>类型</th><th>标题</th><th>奖励</th><th>图标</th><th>每日上限</th><th>启用</th><th>排序</th><th></th></tr>'
+  for(const t of tasks){
+    html+='<tr data-id="'+t.id+'">'
+      +'<td>'+t.id+'</td>'
+      +'<td>'+t.type+'</td>'
+      +'<td><input value="'+esc(t.title)+'" data-f="title"></td>'
+      +'<td><input type="number" value="'+t.reward+'" data-f="reward" style="width:90px"></td>'
+      +'<td><input value="'+esc(t.icon)+'" data-f="icon" style="width:70px"></td>'
+      +'<td><input type="number" value="'+(t.total??'')+'" data-f="total" style="width:80px"></td>'
+      +'<td><input type="checkbox" data-f="enabled" '+(t.enabled?'checked':'')+' style="width:auto"></td>'
+      +'<td><input type="number" value="'+t.sort+'" data-f="sort" style="width:60px"></td>'
+      +'<td><button class="btn sm" onclick="saveTask(this)">保存</button></td>'
+      +'</tr>'
+  }
+  html+='</table></div>'
+  el.innerHTML=html
+}
+async function saveSettings(){
+  const body={}; ['coinPerTon','minWithdrawTon','withdrawFeeTon','checkInStreakBonus','inviteRebate','maxEarnPerCall'].forEach(k=>{ body[k]=Number(document.getElementById('s_'+k).value) })
+  await api('/settings',{method:'PUT',body:JSON.stringify(body)}); toast('参数已保存')
+}
+async function saveTask(btn){
+  const tr=btn.closest('tr'); const id=tr.dataset.id; const b={id}
+  tr.querySelectorAll('[data-f]').forEach(i=>{ const f=i.dataset.f; b[f]= i.type==='checkbox'?i.checked : (['reward','total','sort'].includes(f)? (i.value===''?null:Number(i.value)) : i.value) })
+  const type=tr.children[1].textContent; b.type=type
+  await api('/tasks/'+id,{method:'PUT',body:JSON.stringify(b)}); toast('任务已保存')
+}
+
+// ---- games ----
+let allGames=[]
+async function renderGames(){
+  const el=document.getElementById('v-games'); el.innerHTML='加载中…'
+  allGames=await api('/games')
+  el.innerHTML='<div class="card"><h3>新增游戏</h3><div class="row">'
+    +'<div><label>ID</label><input id="ng_id"></div><div><label>名称</label><input id="ng_name"></div>'
+    +'<div><label>封面URL</label><input id="ng_cover"></div><div><label>游戏URL</label><input id="ng_url"></div>'
+    +'<div><label>分类</label><input id="ng_category"></div></div><button class="btn" onclick="addGame()">添加</button></div>'
+    +'<div class="card"><h3>游戏列表('+allGames.length+')</h3><input id="gfilter" placeholder="搜索名称/ID" oninput="drawGames()" style="margin-bottom:10px"><div id="gtable"></div></div>'
+  drawGames()
+}
+function drawGames(){
+  const q=(document.getElementById('gfilter').value||'').toLowerCase()
+  const list=allGames.filter(g=>!q||g.id.toLowerCase().includes(q)||(g.name||'').toLowerCase().includes(q)).slice(0,200)
+  let html='<table><tr><th>封面</th><th>ID</th><th>名称</th><th>分类</th><th>排序</th><th>启用</th><th></th></tr>'
+  for(const g of list){
+    html+='<tr data-id="'+g.id+'">'
+      +'<td><img class="gicon" src="'+esc(g.cover)+'"></td>'
+      +'<td class="muted">'+g.id+'</td>'
+      +'<td><input value="'+esc(g.name)+'" data-f="name"></td>'
+      +'<td><input value="'+esc(g.category)+'" data-f="category" style="width:110px"></td>'
+      +'<td><input type="number" value="'+g.sort+'" data-f="sort" style="width:70px"></td>'
+      +'<td><input type="checkbox" data-f="enabled" '+(g.enabled?'checked':'')+' style="width:auto"></td>'
+      +'<td><button class="btn sm" onclick="saveGame(this)">保存</button> <button class="btn sm danger" onclick="delGame(\''+g.id+'\')">删</button></td>'
+      +'</tr>'
+  }
+  html+='</table>'; if(allGames.length>200) html+='<p class="muted">仅显示前200条,用搜索定位。</p>'
+  document.getElementById('gtable').innerHTML=html
+}
+async function addGame(){
+  const b={id:ng_id.value,name:ng_name.value,cover:ng_cover.value,url:ng_url.value,category:ng_category.value}
+  if(!b.id||!b.name) return toast('ID和名称必填')
+  await api('/games',{method:'POST',body:JSON.stringify(b)}); toast('已添加'); renderGames()
+}
+async function saveGame(btn){
+  const tr=btn.closest('tr'); const id=tr.dataset.id; const g=allGames.find(x=>x.id===id)||{}; const b={id,cover:g.cover,url:g.url}
+  tr.querySelectorAll('[data-f]').forEach(i=>{ b[i.dataset.f]= i.type==='checkbox'?i.checked : (i.dataset.f==='sort'?Number(i.value):i.value) })
+  await api('/games/'+id,{method:'PUT',body:JSON.stringify(b)}); toast('已保存')
+}
+async function delGame(id){ if(!confirm('删除 '+id+' ?'))return; await api('/games/'+id,{method:'DELETE'}); toast('已删除'); renderGames() }
+
+// ---- withdrawals ----
+async function renderWithdrawals(){
+  const el=document.getElementById('v-withdrawals'); el.innerHTML='加载中…'
+  const st=window._wdStatus||'pending'
+  const list=await api('/withdrawals'+(st?'?status='+st:''))
+  let html='<div class="card"><h3>提现审核</h3>'
+    +['pending','done','rejected',''].map(s=>'<button class="btn sm '+(s===st?'':'ghost')+'" onclick="_wdStatus=\''+s+'\';renderWithdrawals()">'+({pending:'待审',done:'已打款',rejected:'已拒绝','':'全部'}[s])+'</button>').join(' ')
+    +'<table style="margin-top:12px"><tr><th>时间</th><th>用户</th><th>金额</th><th>扣积分</th><th>地址</th><th>状态</th><th>操作</th></tr>'
+  for(const w of list){
+    html+='<tr><td class="muted">'+new Date(w.created_at).toLocaleString()+'</td>'
+      +'<td>'+esc(w.name||w.user_id)+'<div class="muted">'+w.platform+'</div></td>'
+      +'<td><b>'+w.amount_ton+' TON</b></td><td>'+w.coins+'</td>'
+      +'<td style="max-width:180px;word-break:break-all" class="muted">'+esc(w.address)+'</td>'
+      +'<td><span class="pill '+w.status+'">'+w.status+'</span></td>'
+      +'<td>'+(w.status==='pending'||w.status==='approved'
+          ? '<button class="btn sm green" onclick="review(\''+w.id+'\',\'pay\')">通过打款</button> <button class="btn sm danger" onclick="review(\''+w.id+'\',\'reject\')">拒绝退还</button>'
+          : (w.tx_hash?('<span class="muted">'+esc(w.tx_hash)+'</span>'):'-'))+'</td></tr>'
+  }
+  html+='</table></div>'; el.innerHTML=html
+}
+async function review(id, action){
+  let txHash=''
+  if(action==='pay') txHash = prompt('打款完成后填交易哈希(可留空):','')||''
+  if(action==='reject' && !confirm('拒绝并退还积分?')) return
+  await api('/withdrawals/'+id+'/review',{method:'POST',body:JSON.stringify({action,txHash})}); toast('已处理'); renderWithdrawals()
+}
+
+// boot
+if(token){ api('/overview').then(()=>show()).catch(()=>logout()) }
+</script>
+</body>
+</html>

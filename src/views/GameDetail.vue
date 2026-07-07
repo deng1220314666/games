@@ -57,7 +57,7 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useGameStore } from '@/stores/gameStore.js'
-import { getGames } from '@/api/mock.js'
+import { fetchGames } from '@/services/content.js'
 import { earn } from '@/services/reward.js'
 import { ECONOMY } from '@/config/index.js'
 import { track } from '@/utils/event.js'
@@ -80,7 +80,7 @@ const progressPct = computed(() => Math.min(100, (secondsInMinute.value / 60) * 
 let timer = null
 
 async function loadGame() {
-  if (!gameStore.games.length) gameStore.games = await getGames()
+  if (!gameStore.games.length) gameStore.games = await fetchGames()
   const found = gameStore.games.find((g) => g.game_id === route.params.id)
   if (found) {
     game.value = found

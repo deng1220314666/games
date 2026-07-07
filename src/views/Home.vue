@@ -49,7 +49,7 @@ import BalanceCard from '@/components/BalanceCard.vue'
 import CheckInBar from '@/components/CheckInBar.vue'
 import GameCard from '@/components/GameCard.vue'
 import { useGameStore } from '@/stores/gameStore.js'
-import { getGames } from '@/api/mock.js'
+import { fetchGames } from '@/services/content.js'
 import { AdsterraAd, RewardedAd } from '@/utils/adSdk.js'
 import { earn } from '@/services/reward.js'
 import { APP, ECONOMY } from '@/config/index.js'
@@ -83,7 +83,7 @@ async function watchAd() {
 
 onMounted(async () => {
   track.page('home')
-  gameStore.games = await getGames()
+  gameStore.games = await fetchGames()
   games.value = gameStore.games.slice(0, 12)
   await gameStore.setRecommendGame()
   AdsterraAd.showBanner(
