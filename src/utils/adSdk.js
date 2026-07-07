@@ -253,17 +253,27 @@ export const Ads3Reward = {
 // 轮到的那家无填充/报错时,自动试另一家。用户中途关闭(false)则不再试。
 export const RewardedAd = {
   _turn: 0,
+  lastNetwork: null,
+  lastError: null,
 
   async show() {
-    const order =
-      this._turn++ % 2 === 0 ? [GigaReward, Ads3Reward] : [Ads3Reward, GigaReward]
-    for (const net of order) {
+    const pairs =
+      this._turn++ % 2 === 0
+        ? [['giga', GigaReward], ['ads3', Ads3Reward]]
+        : [['ads3', Ads3Reward], ['giga', GigaReward]]
+    this.lastError = null
+    for (const [name, net] of pairs) {
       try {
-        return await net.show() // true=看完发奖;false=用户关闭(不再试另一家)
+        const ok = await net.show() // true=看完发奖;false=用户关闭
+        this.lastNetwork = ok ? name : null
+        return ok
       } catch (e) {
-        track.adError('reward_try') // 无填充/错误 → 试另一家
+        this.lastError = `${name}: ${e?.message || e}`
+        track.adError('reward_' + name + '_fail')
+        console.warn('[RewardedAd] ' + name + ' 失败,尝试下一家:', e?.message || e)
       }
     }
+    this.lastNetwork = null
     return false
   },
 

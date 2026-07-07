@@ -12,10 +12,12 @@
       <span class="tabular text-xl font-bold" style="color: var(--tg-button)">{{ user.balance }}</span>
     </div>
 
-    <!-- 示例1:激励广告 popup -->
-    <TgSection header="示例1 · 激励广告(popup)">
-      <div class="p-3">
-        <button class="w-full rounded-xl py-3 text-sm font-semibold text-tg-button-text" style="background:#34c759" @click="showReward">展示激励广告 → 看完发币</button>
+    <!-- 激励广告网络对比 -->
+    <TgSection header="激励广告(网络对比)">
+      <div class="grid grid-cols-3 gap-2 p-3">
+        <button class="rounded-xl py-2.5 text-xs font-semibold text-tg-button-text" style="background:#3390ec" @click="testGiga">单独测 Giga</button>
+        <button class="rounded-xl py-2.5 text-xs font-semibold text-tg-button-text" style="background:#722ed1" @click="showReward">单独测 ads3</button>
+        <button class="rounded-xl py-2.5 text-xs font-semibold text-tg-button-text" style="background:#34c759" @click="testAlt">交替入口</button>
       </div>
     </TgSection>
 
@@ -73,8 +75,8 @@
 import { ref, onMounted } from 'vue'
 import { useUserStore } from '@/stores/userStore.js'
 import TgSection from '@/components/TgSection.vue'
-import { ADS3 } from '@/config/ads.js'
-import { Ads3Reward } from '@/utils/adSdk.js'
+import { ADS3, GIGAPUB } from '@/config/ads.js'
+import { Ads3Reward, GigaReward, RewardedAd } from '@/utils/adSdk.js'
 import { earn } from '@/services/reward.js'
 import { ECONOMY } from '@/config/index.js'
 import { platform } from '@/utils/platform.js'
@@ -106,9 +108,32 @@ async function settle(ok, source) {
 // 示例1:激励 popup
 async function showReward() {
   try {
-    log('激励广告 show() ...')
+    log('ads3 激励 Ads3Reward.show() ...')
     const ok = await Ads3Reward.show()
-    await settle(ok, '激励')
+    await settle(ok, 'ads3')
+  } catch (e) {
+    log('❌ ads3: ' + (e?.message || e))
+  }
+}
+
+async function testGiga() {
+  log('Giga: 脚本 ' + GIGAPUB.script)
+  log('window.showGiga 当前类型: ' + typeof window.showGiga)
+  try {
+    const ok = await GigaReward.show()
+    log('Giga 播完: ' + ok)
+    await settle(ok, 'Giga')
+  } catch (e) {
+    log('❌ Giga 失败: ' + (e?.message || e))
+  }
+}
+
+async function testAlt() {
+  try {
+    log('交替入口 RewardedAd.show()(本轮 turn=' + RewardedAd._turn + ')...')
+    const ok = await RewardedAd.show()
+    log('本次用了: ' + (RewardedAd.lastNetwork || '(都失败/关闭)') + (RewardedAd.lastError ? ' | 途中失败: ' + RewardedAd.lastError : ''))
+    await settle(ok, RewardedAd.lastNetwork || '激励')
   } catch (e) {
     log('❌ ' + (e?.message || e))
   }
