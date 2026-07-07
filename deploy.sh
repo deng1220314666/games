@@ -26,6 +26,7 @@ echo "==> 打包源码..."
 tar -C "$PROJECT_ROOT" \
   --exclude='./node_modules' --exclude='./dist' --exclude='./.git' \
   --exclude='./.idea' --exclude='./server/node_modules' --exclude='./server/data' \
+  --exclude='./admin-web/node_modules' --exclude='./admin-web/dist' \
   --exclude='./.env' --exclude='./.env.local' --exclude='./server/.env' \
   --exclude='./.deploy.local' \
   -czf "$LOCAL_TARBALL" .

@@ -17,7 +17,8 @@ STATS_PORT=3003
 CERT_EMAIL="admin@ttgame.fun"
 
 SRC=/var/www/ttearn-src
-WEB=/var/www/ttearn
+WEB=/var/www/ttearn                # 前端静态
+ADMIN_WEB=/var/www/ttearn-admin    # 后台前端静态(admin-web)
 BASE=/var/www/ttearn-server        # 含 db.env / cache.env
 API=/var/www/ttearn-server/server  # 后端代码
 WEBROOT=/var/www/certbot
@@ -37,6 +38,11 @@ mkdir -p "$SRC"; tar -xzf "$TARBALL" -C "$SRC"; rm -f "$TARBALL"
 log "构建前端"
 cd "$SRC"; npm install --no-audit --no-fund; npm run build
 mkdir -p "$WEB"; rsync -a --delete "$SRC/dist/" "$WEB/"
+
+# ---------- 后台前端(admin-web) ----------
+log "构建后台前端(admin-web / antd)"
+cd "$SRC/admin-web"; npm install --no-audit --no-fund; npm run build
+mkdir -p "$ADMIN_WEB"; rsync -a --delete "$SRC/admin-web/dist/" "$ADMIN_WEB/"
 
 # ---------- 后端代码 ----------
 log "同步后端代码(保留 .env / db.env / cache.env)"
@@ -113,7 +119,7 @@ server {
     location / { try_files \$uri \$uri/ /index.html; }
 }
 CONF
-  [ "$https" = 1 ] && cat <<CONF
+  if [ "$https" = 1 ]; then cat <<CONF
 server {
     listen 443 ssl http2; listen [::]:443 ssl http2; server_name $domain;
     ssl_certificate /etc/letsencrypt/live/$domain/fullchain.pem;
@@ -127,6 +133,7 @@ server {
     location / { try_files \$uri \$uri/ /index.html; }
 }
 CONF
+  fi
   } > /etc/nginx/sites-available/$domain
 }
 # 反向代理(后端服务)
@@ -140,7 +147,7 @@ server {
     location / { proxy_pass http://127.0.0.1:$port; proxy_http_version 1.1; proxy_set_header Host \$host; proxy_set_header X-Real-IP \$remote_addr; proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for; proxy_set_header X-Forwarded-Proto \$scheme; }
 }
 CONF
-  [ "$https" = 1 ] && cat <<CONF
+  if [ "$https" = 1 ]; then cat <<CONF
 server {
     listen 443 ssl http2; listen [::]:443 ssl http2; server_name $domain;
     ssl_certificate /etc/letsencrypt/live/$domain/fullchain.pem;
@@ -150,14 +157,42 @@ server {
     location / { proxy_pass http://127.0.0.1:$port; proxy_http_version 1.1; proxy_set_header Host \$host; proxy_set_header X-Real-IP \$remote_addr; proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for; proxy_set_header X-Forwarded-Proto \$scheme; }
 }
 CONF
+  fi
   } > /etc/nginx/sites-available/$domain
+}
+
+# 后台:静态 SPA + /api 代理到 admin 服务
+write_admin() {
+  local https="$1"
+  { cat <<CONF
+server {
+    listen 80; server_name $ADMIN_DOMAIN;
+    root $ADMIN_WEB; index index.html;
+    location /.well-known/acme-challenge/ { root $WEBROOT; }
+    location /api/ { proxy_pass http://127.0.0.1:$ADMIN_PORT; proxy_http_version 1.1; proxy_set_header Host \$host; proxy_set_header X-Real-IP \$remote_addr; proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for; proxy_set_header X-Forwarded-Proto \$scheme; }
+    location / { try_files \$uri \$uri/ /index.html; }
+}
+CONF
+  if [ "$https" = 1 ]; then cat <<CONF
+server {
+    listen 443 ssl http2; listen [::]:443 ssl http2; server_name $ADMIN_DOMAIN;
+    ssl_certificate /etc/letsencrypt/live/$ADMIN_DOMAIN/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/$ADMIN_DOMAIN/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3; ssl_ciphers HIGH:!aNULL:!MD5;
+    root $ADMIN_WEB; index index.html;
+    location /api/ { proxy_pass http://127.0.0.1:$ADMIN_PORT; proxy_http_version 1.1; proxy_set_header Host \$host; proxy_set_header X-Real-IP \$remote_addr; proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for; proxy_set_header X-Forwarded-Proto \$scheme; }
+    location / { try_files \$uri \$uri/ /index.html; }
+}
+CONF
+  fi
+  } > /etc/nginx/sites-available/$ADMIN_DOMAIN
 }
 
 gen_nginx() {
   local https="$1"
   write_static "$FRONT_DOMAIN" "$https"
   write_proxy  "$API_DOMAIN"   "$API_PORT"   "$https"
-  write_proxy  "$ADMIN_DOMAIN" "$ADMIN_PORT" "$https"
+  write_admin  "$https"
   ln -sf /etc/nginx/sites-available/$FRONT_DOMAIN /etc/nginx/sites-enabled/
   ln -sf /etc/nginx/sites-available/$API_DOMAIN   /etc/nginx/sites-enabled/
   ln -sf /etc/nginx/sites-available/$ADMIN_DOMAIN /etc/nginx/sites-enabled/
