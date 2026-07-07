@@ -11,6 +11,9 @@
 
     <BottomNav v-if="showTab" />
     <RewardToast />
+
+    <!-- OnClickA 激励广告 spot 6122201 的 selector 锚点(全局存在,填 #tma-reward) -->
+    <div id="tma-reward" aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden"></div>
   </div>
 </template>
 

@@ -16,7 +16,7 @@
     <div class="mb-4 grid grid-cols-2 gap-2">
       <button class="rounded-xl py-3 text-sm font-semibold text-tg-button-text" style="background: var(--tg-button)" @click="loadSdk">1. 加载 SDK 脚本</button>
       <button class="rounded-xl py-3 text-sm font-semibold text-tg-button-text" style="background: var(--tg-button)" @click="probe">探测全局</button>
-      <button id="tma-reward" class="tma-reward-btn col-span-2 rounded-xl py-3 text-sm font-semibold text-tg-button-text" style="background:#34c759" @click="showReward">2. 展示激励广告(点击时拉广告)→ 看完发币</button>
+      <button class="tma-reward-btn col-span-2 rounded-xl py-3 text-sm font-semibold text-tg-button-text" style="background:#34c759" @click="showReward">2. 展示激励广告(点击时拉广告)→ 看完发币</button>
       <button class="col-span-2 rounded-xl py-2.5 text-sm font-semibold text-tg-hint" style="background: var(--tg-section-bg); border:1px solid var(--tg-separator)" @click="simulate">模拟发奖(仅测下游发币)</button>
     </div>
 
