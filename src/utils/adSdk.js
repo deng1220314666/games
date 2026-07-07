@@ -213,6 +213,29 @@ export const Ads3Reward = {
       })
     })
   },
+
+  // 拉取一组原生广告数据(自己渲染成任务/banner):{ ads: [{ adId, image, icon, brandName, text, buttonText, ... }] }
+  async getAds(limit = 5) {
+    await this._ensureInit()
+    return window.TonAISdk.GetMultiTonAd(ADS3.blockId, limit)
+  },
+
+  // 展示指定的一条广告(原生/banner 点击时用),onAdClick=发奖
+  showAd(tonAd) {
+    return new Promise((resolve, reject) => {
+      window.TonAISdk.TonAdPopupShow({
+        tonAd,
+        onAdClick: () => {
+          track.adRewardComplete()
+          resolve(true)
+        },
+        onAdError: (err) => {
+          track.adError('ads3_native')
+          reject(new Error('广告错误:' + (err?.message || JSON.stringify(err))))
+        },
+      })
+    })
+  },
 }
 
 // ===== 激励广告(看广告赚币核心,全站统一入口) =====
