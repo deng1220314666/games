@@ -19,7 +19,9 @@
       "daily_checkin": "Daily Check-in",
       "watch_ad": "Watch Ad",
       "play_game": "Play Game",
-      "invite": "Invite Friend"
+      "invite": "Invite Friend",
+      "invite_rebate": "Invite Rebate",
+      "admin_adjust": "Adjustment"
     }
   },
   "home": {
@@ -83,6 +85,7 @@
     "wallet": "My wallet",
     "task": "Task center",
     "privacy": "Privacy policy",
+    "coinHistory": "Coin history",
     "history": "Coin history",
     "noHistory": "No records yet"
   },

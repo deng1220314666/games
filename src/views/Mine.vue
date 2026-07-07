@@ -39,17 +39,6 @@
       </TgRow>
     </TgSection>
 
-    <!-- 积分流水 -->
-    <TgSection :header="t('mine.history')">
-      <div v-if="user.coinHistory.length === 0" class="py-8 text-center text-sm text-tg-hint">
-        {{ t('mine.noHistory') }}
-      </div>
-      <div v-for="h in user.coinHistory.slice(0, 20)" :key="h.id" class="tg-row">
-        <div class="min-w-0 flex-1 text-[15px] text-tg-text">{{ t('earn.source.' + h.source, h.source) }}</div>
-        <span class="tabular text-[15px] font-semibold" style="color: var(--tg-button)">+{{ h.amount }}</span>
-      </div>
-    </TgSection>
-
     <div class="mt-5 flex justify-center">
       <LanguageSwitcher />
     </div>
@@ -77,6 +66,7 @@ const ic = (d) =>
   `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"/></svg>`
 
 const menus = [
+  { key: 'coin', bg: '#f7b500', icon: ic('M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zM9.5 9a2.5 2 0 0 1 5 0M9 15a3 2.5 0 0 0 6 0M12 7v1M12 16v1'), label: 'mine.coinHistory', action: () => router.push('/coin-history') },
   { key: 'invite', bg: '#34c759', icon: ic('M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM19 8v6M22 11h-6'), label: 'mine.invite', action: () => router.push('/invite') },
   { key: 'wallet', bg: '#3390ec', icon: ic('M3 8a2 2 0 0 1 2-2h13a1 1 0 0 1 1 1v2M3 8v9a2 2 0 0 0 2 2h13a1 1 0 0 0 1-1v-3M3 8h16'), label: 'mine.wallet', action: () => router.push('/wallet') },
   { key: 'task', bg: '#ff9500', icon: ic('M8 6h11M8 12h11M8 18h11M3.5 6h.01M3.5 12h.01M3.5 18h.01'), label: 'mine.task', action: () => router.push('/task') },

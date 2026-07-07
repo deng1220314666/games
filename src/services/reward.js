@@ -74,3 +74,19 @@ export async function spend(amount) {
   user._applySpend(amount)
   return user.balance
 }
+
+// 金币记录:后端拉权威流水;mock 用本地
+export async function getHistory() {
+  const user = useUserStore()
+  if (USE_MOCK) return user.coinHistory
+  try {
+    const res = await client.get('/reward/history')
+    return (res.history || []).map((h) => ({
+      source: h.source,
+      amount: Number(h.amount),
+      time: h.created_at,
+    }))
+  } catch (e) {
+    return user.coinHistory
+  }
+}

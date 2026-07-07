@@ -19,7 +19,9 @@
       "daily_checkin": "每日签到",
       "watch_ad": "观看广告",
       "play_game": "玩游戏",
-      "invite": "邀请好友"
+      "invite": "邀请好友",
+      "invite_rebate": "邀请返佣",
+      "admin_adjust": "系统调整"
     }
   },
   "home": {
@@ -83,6 +85,7 @@
     "wallet": "我的钱包",
     "task": "任务中心",
     "privacy": "隐私政策",
+    "coinHistory": "金币记录",
     "history": "积分流水",
     "noHistory": "暂无记录"
   },
