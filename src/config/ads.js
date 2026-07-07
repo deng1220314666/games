@@ -24,11 +24,15 @@ export const ONCLICK = {
   // 各广告位 zone（data-admpid）
   bannerZone: '441212',
   videoZone: '444023',
-  // TMA 激励(reward)广告:用 in-stream tma.js + initCdTma({id})，无需容器 div
-  // id 传的是 Spot ID(不是广告 ID 447259)
-  rewardSpotId: 6122201,
-  rewardTmaScript: 'https://js.onclckvd.com/in-stream-ad-admanager/tma.js',
   // AdManager（Popunder/Interstitial）
   adManager: 'https://js.wpadmngr.com/static/adManager.js',
   adManagerZone: '440816',
+}
+
+// ===== GigaPub 激励广告(TMA)=====
+// head 引入 script?id=<id>,点击时 window.showGiga(placement) → Promise(看完 resolve)
+export const GIGAPUB = {
+  id: 3554,
+  script: 'https://ad.gigapub.tech/script?id=3554',
+  placement: 'main',
 }

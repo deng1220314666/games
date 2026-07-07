@@ -2,8 +2,7 @@
 // 配置见 src/config/ads.js;发币只经 services/reward.js,勿在此直接发币。
 import { loadScript } from '@/utils/index.js'
 import { track } from '@/utils/event.js'
-import { platform } from '@/utils/platform.js'
-import { ADSTERRA, ONCLICK } from '@/config/ads.js'
+import { ADSTERRA, ONCLICK, GIGAPUB } from '@/config/ads.js'
 
 export const AdsterraAd = {
   adQueue: [],
@@ -93,92 +92,70 @@ export const OnClickA = {
 }
 
 // ===== OnClick TMA 激励(reward)广告 =====
-// 官方集成:加载 in-stream tma.js -> window.initCdTma({id}) -> Promise<show>
-//          -> window.show() -> Promise(看完 resolve)。无需容器 div。
-// ⚠️ tg_app 类型广告通常只在 Telegram 小程序内才能真正展示。
-export const OnClickReward = {
+// GigaPub 官方集成:head 引入 script?id=<id> -> window.showGiga(placement)
+//   -> Promise(看完 resolve;失败/无填充 reject)。无需容器 div。
+export const GigaReward = {
   loaded: false,
 
-  // 预加载 SDK 脚本(仅 tma.js 本身,不拉广告)。
-  // index.html 的 <head> 已静态引入,这里兜底/去重;可在进页面时调。
+  // 加载 SDK 脚本(index.html <head> 已静态引入,这里兜底/去重)
   load() {
-    if (this.loaded || document.querySelector(`script[src="${ONCLICK.rewardTmaScript}"]`)) {
+    if (this.loaded || document.querySelector(`script[src="${GIGAPUB.script}"]`)) {
       this.loaded = true
       return
     }
     const s = document.createElement('script')
-    s.src = ONCLICK.rewardTmaScript
+    s.src = GIGAPUB.script
     document.head.appendChild(s)
     this.loaded = true
   },
 
-  // 等待 initCdTma 就绪(脚本加载完)
-  _waitInit(timeout = 8000) {
+  // 等待 showGiga 就绪(脚本加载完)
+  _waitReady(timeout = 8000) {
     return new Promise((resolve, reject) => {
       const start = Date.now()
       const t = setInterval(() => {
-        if (typeof window.initCdTma === 'function') {
+        if (typeof window.showGiga === 'function') {
           clearInterval(t)
           resolve()
         } else if (Date.now() - start > timeout) {
           clearInterval(t)
-          reject(new Error('reward SDK 未就绪(initCdTma 未出现)'))
+          reject(new Error('Giga SDK 未就绪(showGiga 未出现)'))
         }
       }, 200)
     })
   },
 
-  // 展示激励广告(点击时才拉广告):initCdTma({id}) → show()。
+  // 展示激励广告(点击时才拉广告):showGiga(placement)。
   // resolve(true)=看完拿奖励;失败抛错(调用方据此不发币)。
   async show() {
-    track.adShow('onclick_reward')
+    track.adShow('giga_reward')
     this.load()
-    await this._waitInit()
-
-    let showFn
+    await this._waitReady()
     try {
-      showFn = await window.initCdTma({ id: Number(ONCLICK.rewardSpotId) })
-    } catch (e) {
-      track.adError('reward_init')
-      throw new Error('拉取广告失败:' + (e?.message || e))
-    }
-    if (typeof showFn !== 'function') {
-      track.adError('reward_nofill')
-      throw new Error('NO_FILL:暂无广告填充')
-    }
-    window.show = showFn
-
-    try {
-      await showFn()
+      await window.showGiga(GIGAPUB.placement)
       track.adRewardComplete()
       return true
     } catch (e) {
-      // SDK 内部报错(常见于无填充/会话失效,如 "e is not a function")
-      throw new Error('广告播放失败(可能无填充或会话已失效):' + (e?.message || e))
+      track.adError('giga_reward') // 无填充 / 播放失败
+      throw new Error('广告播放失败(可能无填充):' + (e?.message || e))
     }
   },
 }
 
 // ===== 激励广告(看广告赚币核心,全站统一入口) =====
-// show() resolve(true) 表示「有效观看」,调用方据此发币。
-// 只走 OnClick 真·TMA 激励广告(tg_app);非 Telegram 环境不可用,
-// 不再加载 Adsterra popunder,避免无关的 403 请求。
+// show() resolve(true) 表示「有效观看」,调用方据此发币。走 GigaPub 激励广告。
 export const RewardedAd = {
   async show() {
-    if (!platform.isTelegram) {
-      track.adError('reward_no_tg') // 需在 Telegram 小程序内
-      return false
-    }
     try {
-      return await OnClickReward.show()
+      return await GigaReward.show()
     } catch (e) {
-      track.adError('reward_tma') // 无填充 / 播放失败 → 不发币
+      track.adError('reward') // 无填充 / 播放失败 → 不发币
       return false
     }
   },
 
-  // 只预加载 SDK 脚本(不拉广告),供页面进入时调用
+  // 只加载 SDK 脚本(不拉广告),供页面进入时调用
   preloadSdk() {
-    OnClickReward.load()
+    GigaReward.load()
   },
 }
