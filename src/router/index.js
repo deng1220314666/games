@@ -12,9 +12,9 @@ import CoinHistory from '@/views/CoinHistory.vue'
 const routes = [
   { path: '/', name: 'Home', component: Home, meta: { title: '首页', tab: true } },
   { path: '/task', name: 'Task', component: Task, meta: { title: '任务', tab: true } },
-  { path: '/wallet', name: 'Wallet', component: Wallet, meta: { title: '钱包', tab: true } },
+  { path: '/wallet', name: 'Wallet', component: Wallet, meta: { title: '钱包' } },
   { path: '/mine', name: 'Mine', component: Mine, meta: { title: '我的', tab: true } },
-  { path: '/invite', name: 'Invite', component: Invite, meta: { title: '邀请' } },
+  { path: '/invite', name: 'Invite', component: Invite, meta: { title: '邀请', tab: true } },
   { path: '/coin-history', name: 'CoinHistory', component: CoinHistory, meta: { title: '金币记录' } },
   { path: '/game/:id', name: 'GameDetail', component: GameDetail, meta: { title: '游戏' } },
   { path: '/privacy', name: 'PrivacyPolicy', component: PrivacyPolicy, meta: { title: '隐私政策' } },

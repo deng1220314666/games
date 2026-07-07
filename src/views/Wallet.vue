@@ -1,6 +1,11 @@
 <template>
   <div class="flex-1 overflow-y-auto px-4 pb-24 pt-4">
-    <h1 class="mb-4 px-1 text-[22px] font-bold text-tg-text">{{ t('nav.wallet') }}</h1>
+    <div class="mb-4 flex items-center gap-2">
+      <button class="flex h-8 w-8 items-center justify-center text-tg-button" @click="$router.back()">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+      </button>
+      <h1 class="text-[22px] font-bold text-tg-text">{{ t('nav.wallet') }}</h1>
+    </div>
 
     <BalanceCard class="mb-5" />
 

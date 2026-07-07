@@ -56,6 +56,6 @@ export const USE_MOCK =
 export const TABS = [
   { path: '/', key: 'home' },
   { path: '/task', key: 'task' },
-  { path: '/wallet', key: 'wallet' },
+  { path: '/invite', key: 'invite' },
   { path: '/mine', key: 'mine' },
 ]

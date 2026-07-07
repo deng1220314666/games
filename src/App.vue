@@ -4,7 +4,7 @@
     :style="{ minHeight: 'calc(var(--vh, 1vh) * 100)' }"
   >
     <router-view v-slot="{ Component }">
-      <keep-alive include="Home,Task,Wallet,Mine">
+      <keep-alive include="Home,Task,Invite,Mine">
         <component :is="Component" />
       </keep-alive>
     </router-view>

@@ -1,11 +1,6 @@
 <template>
   <div class="flex-1 overflow-y-auto px-4 pb-24 pt-4">
-    <div class="mb-4 flex items-center gap-2">
-      <button class="flex h-8 w-8 items-center justify-center text-tg-button" @click="$router.back()">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
-      </button>
-      <h1 class="text-[22px] font-bold text-tg-text">{{ t('nav.invite') }}</h1>
-    </div>
+    <h1 class="mb-4 px-1 text-[22px] font-bold text-tg-text">{{ t('nav.invite') }}</h1>
 
     <!-- 奖励说明卡 -->
     <div class="tg-section mb-5 p-5" style="background: var(--tg-button); color: var(--tg-button-text)">
@@ -59,6 +54,8 @@ import TgSection from '@/components/TgSection.vue'
 import { APP, ECONOMY } from '@/config/index.js'
 import { getInviteLinks, share, getReferrals, loadReferrals } from '@/services/referral.js'
 import { track } from '@/utils/event.js'
+
+defineOptions({ name: 'Invite' })
 
 const { t } = useI18n()
 const coinSymbol = APP.coinSymbol
