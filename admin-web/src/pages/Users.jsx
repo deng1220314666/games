@@ -1,16 +1,10 @@
 import { useEffect, useState, useCallback } from 'react'
 import { Card, Table, Input, Tag, Button, Drawer, Descriptions, Tabs, Spin, message, Space, Popconfirm } from 'antd'
+import { DownloadOutlined } from '@ant-design/icons'
 import { ModalForm, ProFormDigit, ProFormTextArea } from '@ant-design/pro-components'
-import { http, apiError } from '../api.js'
+import { http, apiError, downloadCsv } from '../api.js'
+import UserLedger from './UserLedger.jsx'
 
-const SRC = {
-  daily_checkin: '签到',
-  watch_ad: '看广告',
-  play_game: '玩游戏',
-  invite: '邀请奖励',
-  invite_rebate: '邀请返佣',
-  admin_adjust: '后台调整',
-}
 const WD_STATUS = { pending: { t: '待审', c: 'gold' }, approved: { t: '已通过', c: 'blue' }, done: { t: '已打款', c: 'green' }, rejected: { t: '已拒绝', c: 'red' } }
 
 export default function Users() {
@@ -80,11 +74,6 @@ export default function Users() {
     { title: '', width: 70, render: (_, r) => <a onClick={() => openDetail(r.id)}>详情</a> },
   ]
 
-  const ledgerCols = [
-    { title: '时间', dataIndex: 'created_at', render: (t) => new Date(t).toLocaleString() },
-    { title: '来源', dataIndex: 'source', render: (s) => SRC[s] || s },
-    { title: '积分', dataIndex: 'amount', render: (v) => <span style={{ color: v > 0 ? '#52c41a' : '#e5484d' }}>{v > 0 ? '+' : ''}{v}</span> },
-  ]
   const wdCols = [
     { title: '时间', dataIndex: 'created_at', render: (t) => new Date(t).toLocaleString() },
     { title: '金额', dataIndex: 'amount_ton', render: (v) => <b>{v} TON</b> },
@@ -98,7 +87,17 @@ export default function Users() {
   const s = detail?.summary
 
   return (
-    <Card title="用户列表" extra={<Input.Search placeholder="搜索 ID/昵称/邀请码" allowClear style={{ width: 260 }} onSearch={setQ} />}>
+    <Card
+      title="用户列表"
+      extra={
+        <Space>
+          <Input.Search placeholder="搜索 ID/昵称/邀请码" allowClear style={{ width: 240 }} onSearch={setQ} />
+          <Button icon={<DownloadOutlined />} onClick={() => downloadCsv('/users/export', { q }, 'users.csv')}>
+            导出CSV
+          </Button>
+        </Space>
+      }
+    >
       <Table
         rowKey="id"
         loading={loading}
@@ -165,8 +164,8 @@ export default function Users() {
               items={[
                 {
                   key: 'ledger',
-                  label: `积分记录（${detail.ledger.length}）`,
-                  children: <Table rowKey={(r, i) => i} size="small" columns={ledgerCols} dataSource={detail.ledger} pagination={{ pageSize: 10 }} />,
+                  label: '积分记录',
+                  children: <UserLedger userId={u.id} />,
                 },
                 {
                   key: 'wd',

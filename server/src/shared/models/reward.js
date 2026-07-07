@@ -122,3 +122,30 @@ export async function ledgerOf(userId, limit = 50) {
   )
   return rows
 }
+
+// 后台:按来源/时间筛选 + 分页
+export async function ledgerFiltered(userId, { source, from, to, page = 1, pageSize = 20 } = {}) {
+  const limit = Math.min(Number(pageSize) || 20, 200)
+  const offset = (Math.max(Number(page) || 1, 1) - 1) * limit
+  const conds = ['user_id=$1']
+  const params = [userId]
+  if (source) {
+    params.push(source)
+    conds.push(`source=$${params.length}`)
+  }
+  if (from) {
+    params.push(from)
+    conds.push(`created_at >= $${params.length}`)
+  }
+  if (to) {
+    params.push(to)
+    conds.push(`created_at <= $${params.length}`)
+  }
+  const where = 'WHERE ' + conds.join(' AND ')
+  const total = (await pool.query(`SELECT count(*)::int c FROM ledger ${where}`, params)).rows[0].c
+  const { rows } = await pool.query(
+    `SELECT source, amount, meta, created_at FROM ledger ${where} ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}`,
+    params
+  )
+  return { data: rows.map((r) => ({ ...r, amount: Number(r.amount) })), total }
+}

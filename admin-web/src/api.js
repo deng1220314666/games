@@ -35,3 +35,14 @@ http.interceptors.response.use(
 export function apiError(e) {
   return e?.response?.data?.error || e?.message || '请求失败'
 }
+
+// 带鉴权下载 CSV(后端返回 text/csv)
+export async function downloadCsv(path, params, filename) {
+  const blob = await http.get(path, { params, responseType: 'blob' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = filename
+  a.click()
+  URL.revokeObjectURL(url)
+}

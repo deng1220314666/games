@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Card, Table, Tabs, Tag, Button, Popconfirm, message, Space, Typography } from 'antd'
+import { DownloadOutlined } from '@ant-design/icons'
 import { ModalForm, ProFormText } from '@ant-design/pro-components'
-import { http, apiError } from '../api.js'
+import { http, apiError, downloadCsv } from '../api.js'
 
 const STATUS = { pending: { text: '待审', color: 'gold' }, approved: { text: '已通过', color: 'blue' }, done: { text: '已打款', color: 'green' }, rejected: { text: '已拒绝', color: 'red' } }
 
@@ -53,7 +54,14 @@ export default function Withdrawals() {
   ]
 
   return (
-    <Card title="提现审核">
+    <Card
+      title="提现审核"
+      extra={
+        <Button icon={<DownloadOutlined />} onClick={() => downloadCsv('/withdrawals/export', { status }, 'withdrawals.csv')}>
+          导出CSV
+        </Button>
+      }
+    >
       <Tabs
         activeKey={status}
         onChange={setStatus}

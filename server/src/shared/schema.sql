@@ -89,3 +89,15 @@ CREATE TABLE IF NOT EXISTS idempotency (
 -- 增量列(幂等)
 ALTER TABLE users ADD COLUMN IF NOT EXISTS banned boolean DEFAULT false;
 ALTER TABLE users ADD COLUMN IF NOT EXISTS ban_reason text;
+
+-- 操作审计日志
+CREATE TABLE IF NOT EXISTS audit_log (
+  id         bigserial PRIMARY KEY,
+  admin      text NOT NULL,
+  action     text NOT NULL,
+  target     text,
+  detail     jsonb,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_audit_time ON audit_log(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_ledger_source ON ledger(user_id, source, created_at DESC);
