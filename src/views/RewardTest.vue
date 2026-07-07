@@ -84,7 +84,6 @@ async function simulate() {
 
 onMounted(() => {
   log('页面就绪。环境:' + (inTelegram ? 'Telegram' : '浏览器'))
-  log('SDK 脚本已在 head 预加载。点「2. 展示激励广告」才会拉广告。')
-  OnClickReward.load() // 只确保脚本就位,不拉广告
+  log('SDK 脚本随页面(head)正常加载。点「2. 展示激励广告」才会拉广告。')
 })
 </script>

@@ -53,7 +53,7 @@ import { APP, ECONOMY } from '@/config/index.js'
 import { ADSTERRA } from '@/config/ads.js'
 import { getTasks, checkIn } from '@/services/task.js'
 import { earn } from '@/services/reward.js'
-import { RewardedAd, AdsterraAd, OnClickReward } from '@/utils/adSdk.js'
+import { RewardedAd, AdsterraAd } from '@/utils/adSdk.js'
 import { track } from '@/utils/event.js'
 
 defineOptions({ name: 'Task' })
@@ -76,11 +76,6 @@ function refresh() {
   tasks.value = getTasks()
 }
 
-// 进入页面时只预加载 SDK 脚本(不拉广告;广告在点击时才请求)
-function warmAd() {
-  OnClickReward.load()
-}
-
 async function doTask(task) {
   if (task.done) return
   if (task.type === 'checkin') {
@@ -99,15 +94,11 @@ async function doTask(task) {
 onMounted(() => {
   track.page('task')
   refresh()
-  warmAd()
   AdsterraAd.showBanner(
     'task-banner-box',
     { key: ADSTERRA.bannerKey, format: 'iframe', height: 250, width: 300, params: {} },
     `https://www.highperformanceformat.com/${ADSTERRA.bannerKey}/invoke.js`
   )
 })
-onActivated(() => {
-  refresh()
-  warmAd()
-})
+onActivated(refresh)
 </script>

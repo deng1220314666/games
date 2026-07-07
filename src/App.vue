@@ -24,7 +24,6 @@ import { initVhUnit } from '@/utils/init.js'
 import { initGA } from '@/utils/event.js'
 import { registerPwa } from '@/utils/pwa.js'
 import { initPlatform } from '@/utils/platform.js'
-import { OnClickReward } from '@/utils/adSdk.js'
 import { login } from '@/services/user.js'
 import { bindReferrerFromStart } from '@/services/referral.js'
 import { restoreWallet } from '@/services/wallet.js'
@@ -46,8 +45,5 @@ onMounted(async () => {
   await login()
   await bindReferrerFromStart()
   restoreWallet()
-
-  // 提前加载激励广告 SDK 脚本(仅脚本,不拉广告;广告在点击时才请求)
-  OnClickReward.load()
 })
 </script>
