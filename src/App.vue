@@ -1,6 +1,6 @@
 <template>
   <div
-    class="app-shell max-w-xl m-auto flex flex-col bg-tg-secondary text-tg-text"
+    class="app-shell bg-web3 max-w-xl m-auto flex flex-col text-tg-text"
     :style="{ minHeight: 'calc(var(--vh, 1vh) * 100)' }"
   >
     <router-view v-slot="{ Component }">

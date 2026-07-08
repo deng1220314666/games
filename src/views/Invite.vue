@@ -3,10 +3,15 @@
     <h1 class="mb-4 px-1 text-[22px] font-bold text-tg-text">{{ t('nav.invite') }}</h1>
 
     <!-- 奖励说明卡 -->
-    <div class="tg-section mb-5 p-5" style="background: var(--tg-button); color: var(--tg-button-text)">
-      <div class="text-[13px] opacity-85">{{ t('invite.headline') }}</div>
-      <div class="tabular mt-1 text-[32px] font-bold leading-none">+{{ inviteReward }} {{ coinSymbol }}</div>
-      <div class="mt-1.5 text-[13px] opacity-85">{{ t('invite.rebate', { pct: rebatePct }) }}</div>
+    <div class="card-neon shimmer glow-primary fade-up relative mb-5 overflow-hidden p-5 text-white">
+      <div class="pointer-events-none absolute -right-6 -top-8 h-28 w-28 rounded-full opacity-40 blur-2xl" style="background: var(--grad-gold)"></div>
+      <div class="relative text-[13px] opacity-80">{{ t('invite.headline') }}</div>
+      <div class="tabular relative mt-1 flex items-center gap-2 text-[34px] font-extrabold leading-none">
+        <span class="coin-bounce">🎁</span>
+        <span class="grad-primary bg-clip-text text-transparent" style="-webkit-background-clip:text;background-image:var(--grad-gold)">+{{ inviteReward }}</span>
+        <span class="text-gold text-2xl">{{ coinSymbol }}</span>
+      </div>
+      <div class="relative mt-1.5 text-[13px] opacity-80">{{ t('invite.rebate', { pct: rebatePct }) }}</div>
     </div>
 
     <!-- 邀请码 -->
@@ -25,11 +30,10 @@
           </button>
         </div>
         <button
-          class="mt-3 w-full rounded-xl py-3 text-[15px] font-semibold transition active:scale-[0.99]"
-          style="background: var(--tg-button); color: var(--tg-button-text)"
+          class="tap grad-primary glow-primary glow-pulse mt-3 w-full rounded-xl py-3 text-[15px] font-bold text-white"
           @click="onShare"
         >
-          {{ t('invite.share') }}
+          🚀 {{ t('invite.share') }}
         </button>
       </div>
     </TgSection>

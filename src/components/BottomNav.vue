@@ -1,20 +1,30 @@
 <template>
   <nav
-    class="fixed bottom-0 left-0 right-0 z-50 mx-auto flex max-w-xl items-stretch justify-around border-t border-tg-separator bg-tg-bg"
+    class="fixed bottom-0 left-0 right-0 z-50 mx-auto flex max-w-xl items-stretch justify-around border-t border-white/10 bg-[#0b0c22]/85 backdrop-blur-xl"
     style="padding-bottom: env(safe-area-inset-bottom, 0px)"
   >
     <button
       v-for="item in items"
       :key="item.path"
-      class="flex min-h-[49px] flex-1 flex-col items-center justify-center gap-0.5 pt-1.5 transition-colors"
-      :class="isActive(item.path) ? 'text-tg-button' : 'text-tg-hint'"
+      class="tap relative flex min-h-[52px] flex-1 flex-col items-center justify-center gap-0.5 pt-1.5"
+      :class="isActive(item.path) ? 'text-white' : 'text-tg-hint'"
       :aria-label="t('nav.' + item.key)"
       @click="go(item.path)"
     >
-      <svg class="h-6 w-6" viewBox="0 0 24 24" :fill="isActive(item.path) ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <path :d="item.icon" />
-      </svg>
-      <span class="text-[10px] font-medium leading-none">{{ t('nav.' + item.key) }}</span>
+      <span
+        v-if="isActive(item.path)"
+        class="absolute top-0 h-1 w-8 rounded-full grad-primary"
+        style="box-shadow: 0 0 12px 2px rgba(108,92,255,0.7)"
+      ></span>
+      <span
+        class="flex h-8 w-8 items-center justify-center rounded-xl transition-all duration-200"
+        :class="isActive(item.path) ? 'grad-primary glow-primary' : ''"
+      >
+        <svg class="h-[22px] w-[22px]" viewBox="0 0 24 24" :fill="isActive(item.path) ? 'none' : 'none'" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+          <path :d="item.icon" />
+        </svg>
+      </span>
+      <span class="text-[10px] font-semibold leading-none">{{ t('nav.' + item.key) }}</span>
     </button>
   </nav>
 </template>

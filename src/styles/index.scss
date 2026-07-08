@@ -5,45 +5,30 @@
 @use './variables.scss';
 
 /* =========================================================
-   Telegram 主题令牌层
-   - 在 Telegram 内:telegram-web-app.js 会注入 --tg-theme-*,
-     下面的语义令牌自动跟随用户主题(含深色)。
-   - 在普通浏览器:--tg-theme-* 不存在,用回退值(浅色),
-     并在 prefers-color-scheme: dark 下切深色回退。
+   Web3 网赚主题(深色霓虹)。语义令牌沿用 --tg-*,
+   全站组件无需改类名即可换风格;金色用于金币。
    ========================================================= */
 :root {
-  --tg-bg: var(--tg-theme-bg-color, #ffffff);
-  --tg-secondary-bg: var(--tg-theme-secondary-bg-color, #efeff4);
-  --tg-section-bg: var(--tg-theme-section-bg-color, var(--tg-theme-bg-color, #ffffff));
-  --tg-text: var(--tg-theme-text-color, #000000);
-  --tg-hint: var(--tg-theme-hint-color, #999999);
-  --tg-subtitle: var(--tg-theme-subtitle-text-color, #999999);
-  --tg-link: var(--tg-theme-link-color, #2481cc);
-  --tg-button: var(--tg-theme-button-color, #3390ec);
-  --tg-button-text: var(--tg-theme-button-text-color, #ffffff);
-  --tg-section-header: var(--tg-theme-section-header-text-color, #6d6d72);
-  --tg-accent: var(--tg-theme-accent-text-color, var(--tg-theme-button-color, #3390ec));
-  --tg-destructive: var(--tg-theme-destructive-text-color, #ff3b30);
-  --tg-separator: var(--tg-separator-color, rgba(0, 0, 0, 0.08));
-}
+  --tg-secondary: #07081a;          /* 屏幕底 */
+  --tg-bg: #12142e;                 /* 卡片 */
+  --tg-section: #14172f;            /* 分组卡 */
+  --tg-text: #f3f4fb;
+  --tg-hint: #8b90bf;
+  --tg-subtitle: #8b90bf;
+  --tg-link: #7aa2ff;
+  --tg-button: #6c5cff;             /* 主强调 */
+  --tg-button-text: #ffffff;
+  --tg-section-header: #7d83b4;
+  --tg-accent: #6c5cff;
+  --tg-destructive: #ff5c7c;
+  --tg-separator: rgba(255, 255, 255, 0.08);
 
-/* 浏览器深色回退(Telegram 内因变量已存在,不会命中这里) */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --tg-bg: var(--tg-theme-bg-color, #1c1c1e);
-    --tg-secondary-bg: var(--tg-theme-secondary-bg-color, #000000);
-    --tg-section-bg: var(--tg-theme-section-bg-color, var(--tg-theme-bg-color, #1c1c1e));
-    --tg-text: var(--tg-theme-text-color, #ffffff);
-    --tg-hint: var(--tg-theme-hint-color, #98989e);
-    --tg-subtitle: var(--tg-theme-subtitle-text-color, #98989e);
-    --tg-link: var(--tg-theme-link-color, #2ea6ff);
-    --tg-button: var(--tg-theme-button-color, #2ea6ff);
-    --tg-button-text: var(--tg-theme-button-text-color, #ffffff);
-    --tg-section-header: var(--tg-theme-section-header-text-color, #98989e);
-    --tg-accent: var(--tg-theme-accent-text-color, var(--tg-theme-button-color, #2ea6ff));
-    --tg-destructive: var(--tg-theme-destructive-text-color, #ff453a);
-    --tg-separator: var(--tg-separator-color, rgba(255, 255, 255, 0.12));
-  }
+  --gold: #ffd24a;
+  --grad-primary: linear-gradient(135deg, #7c5cff 0%, #4d84ff 100%);
+  --grad-gold: linear-gradient(135deg, #ffe17a 0%, #ffb13e 100%);
+  --grad-cyan: linear-gradient(135deg, #33d9ff 0%, #6c5cff 100%);
+  --glow-primary: 0 10px 34px -8px rgba(108, 92, 255, 0.55);
+  --glow-gold: 0 10px 30px -6px rgba(255, 178, 62, 0.5);
 }
 
 html,
@@ -52,70 +37,149 @@ body {
   height: calc(var(--vh, 1vh) * 100);
   margin: 0;
   padding: 0;
-  background: var(--tg-secondary-bg);
+  background: var(--tg-secondary);
   color: var(--tg-text);
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI',
-    'Roboto', 'Helvetica Neue', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+* { box-sizing: border-box; }
 
-* {
-  box-sizing: border-box;
+.tabular { font-variant-numeric: tabular-nums; font-feature-settings: 'tnum'; }
+img { -webkit-user-drag: none; user-select: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+
+/* ===== 背景光晕(App 外壳用) ===== */
+.bg-web3 {
+  position: relative;
+  background: radial-gradient(120% 80% at 50% -10%, #1b1740 0%, #0b0c22 45%, #07081a 100%);
+}
+.bg-web3::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(38% 24% at 12% 8%, rgba(108, 92, 255, 0.28), transparent 70%),
+    radial-gradient(34% 22% at 92% 4%, rgba(51, 217, 255, 0.18), transparent 70%),
+    radial-gradient(46% 30% at 80% 96%, rgba(255, 178, 62, 0.12), transparent 70%);
+  z-index: 0;
 }
 
-/* 数据/金额用等宽数字,避免跳动 */
-.tabular {
-  font-variant-numeric: tabular-nums;
-  font-feature-settings: 'tnum';
-}
-
-img {
-  -webkit-user-drag: none;
-  user-select: none;
-}
-
-.hide-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
-/* =========================================================
-   Telegram 分组列表通用样式
-   ========================================================= */
+/* ===== 卡片 / 列表(玻璃霓虹) ===== */
 .tg-section {
-  background: var(--tg-section-bg);
-  border-radius: 12px;
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.015));
+  border: 1px solid var(--tg-separator);
+  border-radius: 16px;
   overflow: hidden;
+  backdrop-filter: blur(6px);
 }
 .tg-section-header {
   color: var(--tg-section-header);
-  font-size: 13px;
-  padding: 0 16px 6px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 0 14px 7px;
   text-transform: uppercase;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.06em;
 }
 .tg-row {
   display: flex;
   align-items: center;
   gap: 12px;
-  min-height: 48px;
-  padding: 10px 16px;
+  min-height: 50px;
+  padding: 11px 14px;
   position: relative;
 }
-/* 分隔线从图标右侧缩进(iOS 风格) */
 .tg-row:not(:last-child)::after {
   content: '';
   position: absolute;
-  left: 16px;
+  left: 14px;
   right: 0;
   bottom: 0;
   height: 1px;
   background: var(--tg-separator);
 }
-.tg-row.inset::after {
-  left: 52px;
+.tg-row.inset::after { left: 52px; }
+
+/* ===== Web3 工具类 ===== */
+.grad-primary { background: var(--grad-primary); }
+.grad-gold { background: var(--grad-gold); }
+.grad-cyan { background: var(--grad-cyan); }
+.text-gold { color: var(--gold); }
+.glow-primary { box-shadow: var(--glow-primary); }
+.glow-gold { box-shadow: var(--glow-gold); }
+.tap { transition: transform 0.12s ease; }
+.tap:active { transform: scale(0.96); }
+
+/* 渐变描边卡 */
+.card-neon {
+  position: relative;
+  border-radius: 20px;
+  background: linear-gradient(150deg, #201b4d 0%, #14152f 60%);
+  border: 1px solid rgba(124, 92, 255, 0.35);
+}
+
+/* ===== 动画 keyframes ===== */
+@keyframes shimmer {
+  0% { transform: translateX(-120%); }
+  100% { transform: translateX(220%); }
+}
+.shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.25) 50%, transparent 65%);
+  transform: translateX(-120%);
+  animation: shimmer 3.2s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(108, 92, 255, 0.5); }
+  50% { box-shadow: 0 0 18px 3px rgba(108, 92, 255, 0.55); }
+}
+.glow-pulse { animation: glowPulse 2.2s ease-in-out infinite; }
+
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.float { animation: floatY 3.5s ease-in-out infinite; }
+
+@keyframes coinBounce {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.25) rotate(-8deg); }
+  60% { transform: scale(0.92) rotate(6deg); }
+  100% { transform: scale(1); }
+}
+.coin-bounce { animation: coinBounce 0.6s ease; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+@keyframes popIn {
+  0% { opacity: 0; transform: translate(-50%, -8px) scale(0.8); }
+  60% { transform: translate(-50%, 0) scale(1.06); }
+  100% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+}
+
+/* Vue <Transition name="pop"> */
+.pop-enter-active { animation: popIn 0.32s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.pop-leave-active { transition: opacity 0.2s, transform 0.2s; }
+.pop-leave-to { opacity: 0; transform: translate(-50%, -8px) scale(0.9); }
+
+/* ===== 无障碍:减少动画 ===== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }

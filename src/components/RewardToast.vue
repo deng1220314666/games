@@ -2,10 +2,9 @@
   <transition name="reward-pop">
     <div
       v-if="visible"
-      class="tabular fixed left-1/2 top-20 z-[9999] -translate-x-1/2 rounded-full px-6 py-3 text-lg font-bold shadow-xl"
-      style="background: var(--tg-button); color: var(--tg-button-text)"
+      class="tabular grad-gold glow-gold fixed left-1/2 top-20 z-[9999] -translate-x-1/2 rounded-full px-6 py-3 text-lg font-extrabold text-[#4a2c00]"
     >
-      +{{ amount }} {{ coinSymbol }}
+      <span class="coin-bounce mr-1 inline-block">🪙</span>+{{ amount }}
     </div>
   </transition>
 </template>

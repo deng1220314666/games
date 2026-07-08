@@ -1,8 +1,10 @@
 <template>
   <div class="flex-1 overflow-y-auto px-4 pb-24 pt-4">
-    <h1 class="mb-4 px-1 text-[22px] font-bold text-tg-text">{{ t('nav.task') }}</h1>
+    <h1 class="mb-4 px-1 text-[22px] font-bold">
+      <span class="bg-gradient-to-r from-[#8f7bff] to-[#33d9ff] bg-clip-text text-transparent">⚡ {{ t('nav.task') }}</span>
+    </h1>
 
-    <CheckInBar class="mb-5" />
+    <CheckInBar class="mb-5 fade-up" />
 
     <div id="task-banner-box" class="mb-5 flex min-h-[100px] w-full items-center justify-center overflow-hidden rounded-xl"></div>
 

@@ -1,61 +1,53 @@
 <template>
   <div class="tg-section p-4">
     <div class="mb-3 flex items-center justify-between">
-      <h3 class="text-[15px] font-semibold text-tg-text">{{ t('checkin.title') }}</h3>
-      <span class="text-xs text-tg-hint">{{ t('checkin.streak', { n: user.streak }) }}</span>
+      <h3 class="flex items-center gap-1.5 text-[15px] font-bold text-tg-text">
+        <span class="text-lg">📅</span> {{ t('checkin.title') }}
+      </h3>
+      <span class="rounded-full bg-white/5 px-2.5 py-1 text-xs text-gold">🔥 {{ t('checkin.streak', { n: user.streak }) }}</span>
     </div>
+
     <div class="mb-3 flex justify-between gap-1.5">
       <div
         v-for="d in 7"
         :key="d"
-        class="flex flex-1 flex-col items-center gap-1 rounded-lg py-2"
-        :style="
-          d <= user.streak
-            ? { background: 'color-mix(in srgb, var(--tg-button) 14%, transparent)' }
-            : { background: 'var(--tg-secondary-bg)' }
-        "
+        class="relative flex flex-1 flex-col items-center gap-1 rounded-xl py-2 transition-all"
+        :class="d <= user.streak ? 'grad-gold text-[#4a2c00]' : 'bg-white/5 text-tg-hint'"
+        :style="d <= user.streak ? 'box-shadow:0 4px 14px -4px rgba(255,178,62,.6)' : ''"
       >
-        <svg
-          v-if="d <= user.streak"
-          class="h-4 w-4 text-tg-button"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="M20 6 9 17l-5-5" />
-        </svg>
-        <span v-else class="h-4 w-4 rounded-full border-2 border-dashed" style="border-color: var(--tg-separator)"></span>
-        <span class="text-[10px] text-tg-hint">D{{ d }}</span>
+        <span class="text-base" :class="{ 'coin-bounce': bounced && d === user.streak }">
+          {{ d <= user.streak ? '🪙' : '🎁' }}
+        </span>
+        <span class="text-[10px] font-semibold">D{{ d }}</span>
       </div>
     </div>
+
     <button
-      class="w-full rounded-xl py-3 text-[15px] font-semibold transition active:scale-[0.99]"
-      :class="user.checkedInToday ? 'text-tg-hint' : 'text-tg-button-text'"
-      :style="
-        user.checkedInToday
-          ? { background: 'var(--tg-secondary-bg)' }
-          : { background: 'var(--tg-button)' }
-      "
+      class="tap w-full rounded-2xl py-3 text-[15px] font-bold transition"
+      :class="user.checkedInToday ? 'bg-white/5 text-tg-hint' : 'grad-primary glow-primary text-white glow-pulse'"
       :disabled="user.checkedInToday"
       @click="onCheckIn"
     >
-      {{ user.checkedInToday ? t('checkin.done') : t('checkin.action') }}
+      {{ user.checkedInToday ? '✅ ' + t('checkin.done') : '🎉 ' + t('checkin.action') }}
     </button>
   </div>
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useUserStore } from '@/stores/userStore.js'
 import { checkIn } from '@/services/task.js'
 
 const { t } = useI18n()
 const user = useUserStore()
+const bounced = ref(false)
 
 async function onCheckIn() {
-  await checkIn()
+  const r = await checkIn()
+  if (r.ok) {
+    bounced.value = true
+    setTimeout(() => (bounced.value = false), 700)
+  }
 }
 </script>
